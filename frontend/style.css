@@ -1,0 +1,46 @@
+css
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 100px;
+    background-color: #232323;
+}
+
+h1 {
+    color: #0539d3;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    background-color: #0539d3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0539d3;
+}
+
+a {
+    text-decoration: none;
+}
+
+nav {
+    background-color: #0539d3;
+    display: flex;
+    justify-content: center;
+}
+
+nav a {
+    color: white;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+nav a:hover {
+        background-color: #0e2158;
+}
