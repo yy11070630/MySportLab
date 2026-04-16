@@ -70,3 +70,8 @@ button:hover {
 .startbutton:hover {
     background-color: #142e7c;
 }
+
+.menu a.active {
+    background-color: #142e7c;
+    border-radius: 5px;
+}
