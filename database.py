@@ -1,36 +1,24 @@
-import sqlite3
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
-conn = sqlite3.connect("database.db")
-cursor = conn.cursor()
+db = SQLAlchemy()
 
-#USER TABLE <LOGIN AND REGISTER>#
+class User(db.Model):
+    __tablename__ = 'users'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(120), unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS User (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
-""")
-                #AUTO INCREASE123/
-conn.commit()
-
-#PROFILE TABLE#
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS Profile(
-    profile_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTERGER UNIQUE,
-    height REAL,
-    weight REAL,
-    preference  TEXT,
-    FOREIGN KEY (user_id)REFERENCE User (user_id)
-)
-""")    
-
-conn.commit
-
-
-
+class Profile(db.Model):
+    __tablename__ = 'profiles'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
+    height = db.Column(db.Float)
+    weight = db.Column(db.Float)
+    fitness_level = db.Column(db.String(50))
+    profile_picture = db.Column(db.String(500))  
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
