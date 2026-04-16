@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
 from datetime import datetime, timedelta   # Processing time (Token expiration time)
+from database import db, User
 import jwt                                 # Create and check tokens (used for login verification)
 import hashlib                             # Hashing passwords
 
@@ -11,22 +12,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # Database conf
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'MY-SPORT-LAB-MINIITCSP1123'  # Secret key for JWT
 
-db = SQLAlchemy(app)
+db.init_app(app)    # Connect the database to your Flask application.
 CORS(app)   # Allow the frontend to call the API
-
-
-#================================================
-# User table
-#================================================
-
-class User(db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-    email = db.Column(db.String(120), unique=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 #================================================
