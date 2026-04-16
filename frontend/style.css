@@ -1,9 +1,12 @@
-css
+p, label {
+    color: #1f2937;
+}
+
 body {
     font-family: Arial, sans-serif;
     text-align: center;
-    margin-top: 100px;
-    background-color: #232323;
+    margin: 0;
+    background-color: #f5f7fa;
 }
 
 h1 {
@@ -22,25 +25,48 @@ button {
 }
 
 button:hover {
-    background-color: #0539d3;
+    background-color: #142e7c;
 }
 
-a {
-    text-decoration: none;
-}
-
-nav {
-    background-color: #0539d3;
+.navbar {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #0539d3;
 }
 
-nav a {
-    color: white;
-    padding: 14px 20px;
+.logo a {
+    color: #e0e0e0;
+    font-size: 20px;
+    font-weight: bold;
     text-decoration: none;
 }
 
-nav a:hover {
-        background-color: #0e2158;
+.menu a {
+    color: #e0e0e0;
+    margin-left: 20px;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    background-color: #142e7c;
+}
+
+.startbutton {
+    margin-top: 20px;
+    padding: 12px 30px;
+    font-size: 18px;
+    background-color: #0539d3;
+    color: #e0e0e0;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.startbutton:hover {
+    background-color: #142e7c;
 }
