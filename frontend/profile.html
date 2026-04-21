@@ -1,24 +1,58 @@
-profile.html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Profile - MySportLab</title>
+    <title>Profile Page</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>My Profile</h1>
-    <div id="profileInfo"></div>
-    
-    <h2>Edit Profile</h2>
-    <form id="profileForm">
-        <input type="password" id="newPassword" placeholder="New Password"><br>
-        <input type="file" id="profilePicture"><br>
-        <button type="submit">Update Profile</button>
-    </form>
-    
-    <div id="message"></div>
-    <a href="dashboard.html">Back to Dashboard</a>
-    
+
+<h1>My Profile</h1>
+
+<form>
+  
+    <label>Profile Picture:</label><br>
+    <input type="file" name="avatar" accept="image/*"><br><br>
+
+    <label>Full Name:</label><br>
+    <input type="text" name="fullname" placeholder="Enter your name" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" placeholder="Enter your email" required><br><br>
+
+<label>Gender:</label><br>
+<select name="gender">
+    <option value="">-- Select Gender --</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+    <option value="na">Prefer not to say</option>
+</select><br><br>
+
+    <label>Date of Birth:</label><br>
+    <input type="date" name="dob"><br><br>
+
+    <label>Country:</label><br>
+    <select name="country">
+        <option value="malaysia">Malaysia</option>
+        <option value="singapore">Singapore</option>
+        <option value="indonesia">Indonesia</option>
+        <option value="other">Other</option>
+    </select><br><br>
+
+    <label>Sports Interests:</label><br>
+    <input type="checkbox" name="sports" value="football"> Football
+    <input type="checkbox" name="sports" value="basketball"> Basketball
+    <input type="checkbox" name="sports" value="gym"> Gym
+    <input type="checkbox" name="sports" value="running"> Running
+    <input type="checkbox" name="sports" value="other"> Other
+    <br><br>
+
+    <label>About Me:</label><br>
+    <textarea name="about" rows="4" placeholder="Tell something about yourself"></textarea><br><br>
+
+    <button type="submit">Save Profile</button>
+
+</form>
     <script src="script.js"></script>
 </body>
-</html>
+</html
