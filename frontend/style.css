@@ -75,3 +75,29 @@ button:hover {
     background-color: #142e7c;
     border-radius: 5px;
 }
+
+.dashboard {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    width: 180px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.normal {
+    color: green;
+}
+.overweight {
+    color: red;
+}
+.underweight {
+    color: orange;
+}
