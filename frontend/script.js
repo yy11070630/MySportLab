@@ -99,3 +99,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 });
+
+const user = JSON.parse(localStorage.getItem("user"));
+const height = localStorage.getItem("height");
+const weight = localStorage.getItem("weight");
+
+if (user) {
+    const usernameEl = document.getElementById("username");
+    if (usernameEl) {
+        usernameEl.innerText = user.username;
+    }
+}
+
+if (height && weight) {
+    const h = height / 100;
+    const bmi = weight / (h * h);
+
+    document.getElementById("height").innerText = height + " cm";
+    document.getElementById("weight").innerText = weight + " kg";
+    document.getElementById("bmi").innerText = bmi.toFixed(1);
+}
