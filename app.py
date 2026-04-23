@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
 from datetime import datetime, timedelta   # Processing time (Token expiration time)
-from database import db, User
+from database import db, User, UserProfile
 import jwt                                 # Create and check tokens (used for login verification)
 import os                                  # File handling (for avatar uploads)
 import re                                  # Hashing passwords
@@ -116,6 +116,11 @@ def register():
     # Create user
     new_user = User(username=username, password=hashed_password, email=email)
     db.session.add(new_user)
+    db.session.flush()  
+    
+    new_profile = UserProfile(user_id=new_user.id)
+    db.session.add(new_profile)
+    
     db.session.commit()
 
     # Generate Token
