@@ -195,26 +195,28 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # ================================================
 @app.route('/api/profile', methods=['GET'])
 def get_profile():
-
     user, error = verify_token(request)
-
     if error:
         return jsonify({'success': False, 'message': error}), 401
-
+    
+    profile = user.profile  
+    
     return jsonify({
         'success': True,
         'user': {
             'id': user.id,
             'username': user.username,
-            'email': user.email,
-            'avatar': user.avatar,
-            'gender': user.gender,
-            'height': user.height,
-            'weight': user.weight,
-            'fitness_level': user.fitness_level,
-            'country': user.country,
-            'bio': user.bio,
-            'date_of_birth': str(user.date_of_birth)
+            'email': user.email
+        },
+        'profile': {
+            'avatar': profile.avatar if profile else None,
+            'gender': profile.gender if profile else None,
+            'height': profile.height if profile else None,
+            'weight': profile.weight if profile else None,
+            'fitness_level': profile.fitness_level if profile else None,
+            'country': profile.country if profile else None,
+            'bio': profile.bio if profile else None,
+            'date_of_birth': str(profile.date_of_birth) if profile and profile.date_of_birth else None
         }
     })
 
@@ -224,38 +226,40 @@ def get_profile():
 # ================================================
 @app.route('/api/profile', methods=['PUT'])
 def update_profile():
-
     user, error = verify_token(request)
-
     if error:
         return jsonify({'success': False, 'message': error}), 401
-
+    
+    profile = user.profile
+    if not profile:
+        profile = UserProfile(user_id=user.id)
+        db.session.add(profile)
+    
     form = request.form
-
-    user.gender = form.get('gender')
-    user.height = form.get('height')
-    user.weight = form.get('weight')
-    user.fitness_level = form.get('fitness_level')
-    user.country = form.get('country')
-    user.bio = form.get('bio')
-
+    
+    profile.gender = form.get('gender')
+    profile.height = form.get('height')
+    profile.weight = form.get('weight')
+    profile.fitness_level = form.get('fitness_level')
+    profile.country = form.get('country')
+    profile.bio = form.get('bio')
+    
     dob = form.get('date_of_birth')
     if dob:
-        user.date_of_birth = datetime.strptime(dob, "%Y-%m-%d")
-
+        from datetime import datetime
+        profile.date_of_birth = datetime.strptime(dob, "%Y-%m-%d")
+    
     file = request.files.get('avatar')
     if file:
+        import os
         filename = f"user_{user.id}.png"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
-        user.avatar = f"/{filepath}"
-
+        profile.avatar = f"/{filepath}"
+    
     db.session.commit()
-
-    return jsonify({
-        'success': True,
-        'message': 'Profile updated successfully'
-    })
+    
+    return jsonify({'success': True, 'message': 'Profile updated successfully'})
 
 
 #================================================
