@@ -14,7 +14,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime, nullable=True)
     
-    profile = db.relationship('UserProfile', backref='user', uselist=False, cascade='all, delete-orphan')
+    profile = db.relationship('UserProfile', backref='user', uselist=False, cascade='all, delete-orphan') #hhh
     
     def to_dict(self):
         return {
