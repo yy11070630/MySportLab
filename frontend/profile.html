@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Profile Page</title>
+    <title>Profile - MySportLab</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <nav class="navbar">
-
     <div class="logo">
         <a href="index.html">MySportLab</a>
     </div>
@@ -20,32 +19,44 @@
         <a href="login.html">Log In</a>
         <a href="#" class="active">Profile</a>
     </div>
-
 </nav>
 
 <h1>My Profile</h1>
 
-<form>
-  
+<form id="profileForm" enctype="multipart/form-data">
+
     <label>Profile Picture:</label><br>
     <input type="file" name="avatar" accept="image/*"><br><br>
 
-    <label>Full Name:</label><br>
-    <input type="text" name="fullname" placeholder="Enter your name" required><br><br>
+    <label>Gender:</label><br>
+    <select name="gender">
+        <option value="">-- Select Gender --</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="na">Prefer not to say</option>
+    </select><br><br>
 
-    <label>Email:</label><br>
-    <input type="email" name="email" placeholder="Enter your email" required><br><br>
+    <label>About Me:</label><br>
+    <textarea name="bio" rows="4" placeholder="Tell something about yourself"></textarea><br><br>
 
-<label>Gender:</label><br>
-<select name="gender">
-    <option value="">-- Select Gender --</option>
-    <option value="male">Male</option>
-    <option value="female">Female</option>
-    <option value="na">Prefer not to say</option>
-</select><br><br>
+
+    <label>Height (cm):</label><br>
+    <input type="number" name="height" placeholder="Enter height"><br><br>
+
+    <label>Weight (kg):</label><br>
+    <input type="number" name="weight" placeholder="Enter weight"><br><br>
+
+    <label>Fitness Level:</label><br>
+    <select name="fitness_level">
+        <option value="beginner">Beginner</option>
+        <option value="casual active">Casual Active</option>
+        <option value="regular active">Regular Active</option>
+        <option value="fitness enthusiast">Fitness Enthusiast</option>
+        <option value="advanced">Advanced</option>
+    </select><br><br>
 
     <label>Date of Birth:</label><br>
-    <input type="date" name="dob"><br><br>
+    <input type="date" id="dob" name="dob"><br><br>
 
     <label>Country:</label><br>
     <select name="country">
@@ -55,20 +66,11 @@
         <option value="other">Other</option>
     </select><br><br>
 
-    <label>Sports Interests:</label><br>
-    <input type="checkbox" name="sports" value="football"> Football
-    <input type="checkbox" name="sports" value="basketball"> Basketball
-    <input type="checkbox" name="sports" value="gym"> Gym
-    <input type="checkbox" name="sports" value="running"> Running
-    <input type="checkbox" name="sports" value="other"> Other
-    <br><br>
-
-    <label>About Me:</label><br>
-    <textarea name="about" rows="4" placeholder="Tell something about yourself"></textarea><br><br>
-
     <button type="submit">Save Profile</button>
 
 </form>
-    <script src="script.js"></script>
+
+<script src="script.js"></script>
+
 </body>
-</html
+</html>
