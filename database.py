@@ -41,12 +41,12 @@ class UserProfile(db.Model):
     date_of_birth = db.Column(db.Date, nullable=True)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    
 class Admin(db.Model):
-    _tablename_ = 'admins'
+    __tablename__ = 'admin'
     
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False) #hhh
+
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

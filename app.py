@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
 from datetime import datetime, timedelta   # Processing time (Token expiration time)
-from database import db, User, UserProfile
+from database import db, User, UserProfile, Admin
 import jwt                                 # Create and check tokens (used for login verification)
 import os                                  # File handling (for avatar uploads)
 import re                                  # Hashing passwords
@@ -195,26 +195,28 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # ================================================
 @app.route('/api/profile', methods=['GET'])
 def get_profile():
-
     user, error = verify_token(request)
-
     if error:
         return jsonify({'success': False, 'message': error}), 401
-
+    
+    profile = user.profile  
+    
     return jsonify({
         'success': True,
         'user': {
             'id': user.id,
             'username': user.username,
-            'email': user.email,
-            'avatar': user.avatar,
-            'gender': user.gender,
-            'height': user.height,
-            'weight': user.weight,
-            'fitness_level': user.fitness_level,
-            'country': user.country,
-            'bio': user.bio,
-            'date_of_birth': str(user.date_of_birth)
+            'email': user.email
+        },
+        'profile': {
+            'avatar': profile.avatar if profile else None,
+            'gender': profile.gender if profile else None,
+            'height': profile.height if profile else None,
+            'weight': profile.weight if profile else None,
+            'fitness_level': profile.fitness_level if profile else None,
+            'country': profile.country if profile else None,
+            'bio': profile.bio if profile else None,
+            'date_of_birth': str(profile.date_of_birth) if profile and profile.date_of_birth else None
         }
     })
 
@@ -224,38 +226,127 @@ def get_profile():
 # ================================================
 @app.route('/api/profile', methods=['PUT'])
 def update_profile():
-
     user, error = verify_token(request)
-
     if error:
         return jsonify({'success': False, 'message': error}), 401
-
+    
+    profile = user.profile
+    if not profile:
+        profile = UserProfile(user_id=user.id)
+        db.session.add(profile)
+    
     form = request.form
-
-    user.gender = form.get('gender')
-    user.height = form.get('height')
-    user.weight = form.get('weight')
-    user.fitness_level = form.get('fitness_level')
-    user.country = form.get('country')
-    user.bio = form.get('bio')
-
+    
+    profile.gender = form.get('gender')
+    profile.height = form.get('height')
+    profile.weight = form.get('weight')
+    profile.fitness_level = form.get('fitness_level')
+    profile.country = form.get('country')
+    profile.bio = form.get('bio')
+    
     dob = form.get('date_of_birth')
     if dob:
-        user.date_of_birth = datetime.strptime(dob, "%Y-%m-%d")
-
+        from datetime import datetime
+        profile.date_of_birth = datetime.strptime(dob, "%Y-%m-%d")
+    
     file = request.files.get('avatar')
     if file:
+        import os
         filename = f"user_{user.id}.png"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
-        user.avatar = f"/{filepath}"
-
+        profile.avatar = f"/{filepath}"
+    
     db.session.commit()
+    
+    return jsonify({'success': True, 'message': 'Profile updated successfully'})
 
+
+# ================================================
+# Admin Token Verification
+# ================================================
+def verify_admin_token(request):
+    auth_header = request.headers.get('Authorization')
+
+    if not auth_header:
+        return None, 'Token missing'
+
+    try:
+        token = auth_header.split(" ")[1]
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        
+        # Check if the user is an admin
+        if data.get('role') != 'admin':
+            return None, 'Admin access required'
+        
+        admin = Admin.query.get(data.get('admin_id'))
+        if not admin:
+            return None, 'Admin not found'
+
+        return admin, None
+
+    except Exception:
+        return None, 'Invalid or expired token'
+    
+
+# ================================================
+# Admin Login API
+# ================================================
+@app.route('/api/admin/login', methods=['POST'])
+def admin_login():
+    data = request.get_json()
+    
+    username = data.get('username')
+    password = data.get('password')
+    
+    if not username or not password:
+        return jsonify({'success': False, 'message': 'Username and password required'}), 400
+    
+    # Find admin
+    admin = Admin.query.filter_by(username=username).first()
+    
+    if not admin:
+        return jsonify({'success': False, 'message': 'Invalid admin credentials'}), 401
+    
+    if not check_password_hash(admin.password, password):
+        return jsonify({'success': False, 'message': 'Invalid admin credentials'}), 401
+    
+    # Create Token（have role info in token to distinguish from user token）
+    token = jwt.encode({
+        'admin_id': admin.id,
+        'role': 'admin',
+        'exp': datetime.utcnow() + timedelta(days=7)
+    }, app.config['SECRET_KEY'], algorithm='HS256')
+    
     return jsonify({
         'success': True,
-        'message': 'Profile updated successfully'
-    })
+        'message': 'Admin login successful',
+        'token': token,
+        'admin': {
+            'id': admin.id,
+            'username': admin.username,
+            'email': admin.email
+        }
+    }), 200
+
+
+# ================================================
+# Admin - Get All Users
+# ================================================
+@app.route('/api/admin/users', methods=['GET'])
+def admin_get_users():
+    admin, error = verify_admin_token(request)
+    
+    if error:
+        return jsonify({'success': False, 'message': error}), 401
+    
+    # Get all regular users
+    users = User.query.all()
+    
+    return jsonify({
+        'success': True,
+        'users': [user.to_dict() for user in users]
+    }), 200
 
 
 #================================================
