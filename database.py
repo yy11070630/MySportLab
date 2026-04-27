@@ -16,6 +16,9 @@ class User(db.Model):
     
     profile = db.relationship('UserProfile', backref='user', uselist=False, cascade='all, delete-orphan') #hhh
     
+    #Link questionnaire answers.
+    questionnaire = db.relationship('QuestionnaireAnswer', backref='user', uselist=False, cascade='all, delete-orphan')
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -40,6 +43,18 @@ class UserProfile(db.Model):
     bio = db.Column(db.Text, nullable=True)
     date_of_birth = db.Column(db.Date, nullable=True)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+ 
+    #Add: Record whether the user has completed the questionnaire (for quick lookup).
+    has_completed_questionnaire = db.Column(db.Boolean, default=False)
+
+class QuestionnaireAnswer(db.Model):
+    _tablename_ = 'questionnaire_answers'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
+    answers = db.Column(db.Text, nullable=True) 
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
 
 class Admin(db.Model):
     __tablename__ = 'admin'
@@ -49,4 +64,3 @@ class Admin(db.Model):
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
