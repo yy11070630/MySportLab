@@ -184,6 +184,90 @@ def login():
 
 
 # ================================================
+# Check user status (questionnaire) API
+# ================================================
+@app.route('/api/user/status', methods=['GET'])
+def get_user_status():
+    user, error = verify_token(request)
+    if error:
+        return jsonify({'success': False, 'message': error}), 401
+    
+    # 检查用户是否已完成问卷
+    # 方法：检查 UserProfile 中的 has_completed_questionnaire 字段
+    # 注意：你需要在 UserProfile 模型中添加这个字段
+    has_completed = False
+    if user.profile and hasattr(user.profile, 'has_completed_questionnaire'):
+        has_completed = user.profile.has_completed_questionnaire
+    
+    return jsonify({
+        'success': True,
+        'has_completed_questionnaire': has_completed
+    }), 200
+
+
+# ================================================
+# Submit Questionnaire API
+# ================================================
+@app.route('/api/questionnaire', methods=['POST'])
+def submit_questionnaire():
+    user, error = verify_token(request)
+    if error:
+        return jsonify({'success': False, 'message': error}), 401
+    
+    data = request.get_json()
+    answers = data.get('answers')
+    
+    # 获取或创建用户的 profile
+    profile = user.profile
+    if not profile:
+        profile = UserProfile(user_id=user.id)
+        db.session.add(profile)
+    
+    # 标记用户已完成问卷
+    profile.has_completed_questionnaire = True
+    
+    # 可选：存储问卷答案（如果需要，可以在 UserProfile 中添加 answers 字段）
+    if hasattr(profile, 'answers'):
+        profile.answers = answers if answers else {}
+    
+    # 如果上面的 answers 字段不存在，你也可以单独创建一个 QuestionnaireAnswer 表
+    # 或者简单起见，先用 JSON 字符串存到 profile 中
+    profile.questionnaire_answers = str(answers) if answers else ''
+    
+    db.session.commit()
+    
+    return jsonify({
+        'success': True,
+        'message': 'Questionnaire submitted successfully'
+    }), 200
+
+
+# ================================================
+# Get Questionnaire Answers (for preview)
+# ================================================
+@app.route('/api/questionnaire', methods=['GET'])
+def get_questionnaire():
+    user, error = verify_token(request)
+    if error:
+        return jsonify({'success': False, 'message': error}), 401
+    
+    profile = user.profile
+    answers = None
+    has_submitted = False
+    
+    if profile:
+        has_submitted = profile.has_completed_questionnaire if hasattr(profile, 'has_completed_questionnaire') else False
+        if hasattr(profile, 'questionnaire_answers') and profile.questionnaire_answers:
+            answers = profile.questionnaire_answers
+    
+    return jsonify({
+        'success': True,
+        'has_submitted': has_submitted,
+        'answers': answers
+    }), 200
+
+
+# ================================================
 # Upload folder
 # ================================================
 UPLOAD_FOLDER = 'static/uploads'
@@ -216,7 +300,8 @@ def get_profile():
             'fitness_level': profile.fitness_level if profile else None,
             'country': profile.country if profile else None,
             'bio': profile.bio if profile else None,
-            'date_of_birth': str(profile.date_of_birth) if profile and profile.date_of_birth else None
+            'date_of_birth': str(profile.date_of_birth) if profile and profile.date_of_birth else None,
+            'has_completed_questionnaire': profile.has_completed_questionnaire if profile else False
         }
     })
 
