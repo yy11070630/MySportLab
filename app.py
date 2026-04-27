@@ -4,6 +4,7 @@ from flask_cors import CORS                # Allow the frontend (on a different 
 from datetime import datetime, timedelta   # Processing time (Token expiration time)
 from database import db, User, UserProfile, Admin
 import jwt                                 # Create and check tokens (used for login verification)
+import json
 import os                                  # File handling (for avatar uploads)
 import re                                  # Hashing passwords
 from werkzeug.security import generate_password_hash, check_password_hash # Hashing passwords
@@ -192,16 +193,25 @@ def get_user_status():
     if error:
         return jsonify({'success': False, 'message': error}), 401
     
-    # 检查用户是否已完成问卷
-    # 方法：检查 UserProfile 中的 has_completed_questionnaire 字段
-    # 注意：你需要在 UserProfile 模型中添加这个字段
+    # Check user has completed questionnaire
+    # Note: you need to add this field to the UserProfile 
     has_completed = False
-    if user.profile and hasattr(user.profile, 'has_completed_questionnaire'):
-        has_completed = user.profile.has_completed_questionnaire
+    age_rannge = None
+
+    if user.profile:
+        has_completed = user.profile.has_completed_questionnaire if hasattr(user.profile, 'has_completed_questionnaire') else False
+
+        if hasattr(user.profile, 'questionnaire_answers') and user.profile.questionnaire_answers:
+            try:
+                answers = json.loads(user.profile.questionnaire_answers) if isinstance(user.profile.questionnaire_answers, str) else user.profile.questionnaire_answers
+                age_range = answers.get('age_range') if answers else None
+            except:
+                pass
     
     return jsonify({
         'success': True,
-        'has_completed_questionnaire': has_completed
+        'has_completed_questionnaire': has_completed,
+        'age_range': age_range
     }), 200
 
 
@@ -217,22 +227,29 @@ def submit_questionnaire():
     data = request.get_json()
     answers = data.get('answers')
     
-    # 获取或创建用户的 profile
+    # Create or update the user's profile
     profile = user.profile
     if not profile:
         profile = UserProfile(user_id=user.id)
         db.session.add(profile)
     
-    # 标记用户已完成问卷
+    # Mark the user as having completed the questionnaire
     profile.has_completed_questionnaire = True
     
-    # 可选：存储问卷答案（如果需要，可以在 UserProfile 中添加 answers 字段）
-    if hasattr(profile, 'answers'):
-        profile.answers = answers if answers else {}
-    
-    # 如果上面的 answers 字段不存在，你也可以单独创建一个 QuestionnaireAnswer 表
-    # 或者简单起见，先用 JSON 字符串存到 profile 中
-    profile.questionnaire_answers = str(answers) if answers else ''
+    profile.questionnaire_answers = json.dumps(answers) if answers else '{}'
+
+    # Save questionnaire answers to the corresponding fields in the profile
+    if answers:
+        if answers.get('gender'):
+            profile.gender = answers.get('gender')
+        if answers.get('height'):
+            profile.height = float(answers.get('height')) if answers.get('height') else None
+        if answers.get('weight'):
+            profile.weight = float(answers.get('weight')) if answers.get('weight') else None
+        if answers.get('fitness_level'):
+            profile.fitness_level = answers.get('fitness_level')
+        if answers.get('country'):
+            profile.country = answers.get('country')
     
     db.session.commit()
     
@@ -264,6 +281,49 @@ def get_questionnaire():
         'success': True,
         'has_submitted': has_submitted,
         'answers': answers
+    }), 200
+
+
+# ================================================
+# Get User Info (for Dashboard)
+# ================================================
+@app.route('/api/user/info', methods=['GET'])
+def get_user_info():
+    user, error = verify_token(request)
+    if error:
+        return jsonify({'success': False, 'message': error}), 401
+    
+    profile = user.profile
+    
+    # Get age range from questionnaire answers
+    age_range = None
+    if profile and hasattr(profile, 'questionnaire_answers') and profile.questionnaire_answers:
+        try:
+            import json
+            answers = json.loads(profile.questionnaire_answers) if isinstance(profile.questionnaire_answers, str) else profile.questionnaire_answers
+            age_range = answers.get('age_range') if answers else None
+        except:
+            pass
+    
+    return jsonify({
+        'success': True,
+        'user': {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        },
+        'profile': {
+            'avatar': profile.avatar if profile else None,
+            'gender': profile.gender if profile else None,
+            'height': profile.height if profile else None,
+            'weight': profile.weight if profile else None,
+            'fitness_level': profile.fitness_level if profile else None,
+            'country': profile.country if profile else None,
+            'bio': profile.bio if profile else None,
+            'date_of_birth': str(profile.date_of_birth) if profile and profile.date_of_birth else None,
+            'has_completed_questionnaire': profile.has_completed_questionnaire if profile else False,
+            'age_range': age_range  
+        }
     }), 200
 
 
