@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // ✅ 新增：前端密码规则验证
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9\s]).{12,18}$/;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9\s]).{8,12}$/;
             if (!passwordRegex.test(password)) {
-                document.getElementById('message').innerHTML = '<p style="color:red">❌ Password must be 12-18 characters, include uppercase, lowercase, number and symbol (no spaces)</p>';
+                document.getElementById('message').innerHTML = '<p style="color:red">❌ Password must be 8-12 characters, include uppercase, lowercase, number and symbol (no spaces)</p>';
                 return;
             }
             
