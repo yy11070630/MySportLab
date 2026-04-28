@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire - MySportLab</title>
+    <link rel="stylesheet" href="style-question.css">
+</head>
+<body>
+    <div class="container">
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Question 1 / 7</div>
+        </div>
+
+        <div class="card">
+            <div class="question-number" id="questionNumber">Q1</div>
+            <div class="question-text" id="questionText">What's your age?</div>
+
+            <div id="dynamicContent"></div>
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="backBtn">← Back</button>
+                <button class="btn btn-primary" id="nextBtn">Next →</button>
+                <button class="btn btn-primary" id="submitBtn" style="display: none;">Submit ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API 地址（改成你的实际 IP）
+        const API_URL = 'http://localhost:5000';
+
+        // ========== 全球国家列表（A-Z 排序） ==========
+        const countryList = [
+            "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", 
+            "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", 
+            "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", 
+            "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", 
+            "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", 
+            "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", 
+            "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", 
+            "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", 
+            "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", 
+            "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", 
+            "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", 
+            "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", 
+            "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", 
+            "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", 
+            "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", 
+            "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", 
+            "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", 
+            "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", 
+            "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", 
+            "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Sudan", "Spain", 
+            "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", 
+            "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", 
+            "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", 
+            "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+        ];
+
+        // 问题配置（7个问题）
+        const questions = [
+            {
+                number: "Q1",
+                text: "What's your age?",
+                type: "options",
+                options: [
+                    { value: "0-17", label: "🧒 Less than 18 (0-17)" },
+                    { value: "18-64", label: "👨 Between 18 and 64 (18-64)" },
+                    { value: "65+", label: "👴 65 or Above (65+)" }
+                ]
+            },
+            {
+                number: "Q2",
+                text: "What's your gender?",
+                type: "options",
+                options: [
+                    { value: "male", label: "👨 Male" },
+                    { value: "female", label: "👩 Female" },
+                    { value: "prefer_not", label: "🤐 Prefer not to say" }
+                ]
+            },
+            {
+                number: "Q3",
+                text: "What's your height?",
+                type: "number",
+                placeholder: "Enter your height in cm",
+                unit: "cm",
+                min: 50,
+                max: 300
+            },
+            {
+                number: "Q4",
+                text: "What's your weight?",
+                type: "number",
+                placeholder: "Enter your weight in kg",
+                unit: "kg",
+                min: 10,
+                max: 500
+            },
+            {
+                number: "Q5",
+                text: "Your fitness level!",
+                type: "options",
+                options: [
+                    { value: "beginner", label: "🏃 Beginner" },
+                    { value: "casual", label: "🚶 Casual" },
+                    { value: "active", label: "💪 Active" },
+                    { value: "pro", label: "🏆 Pro" },
+                    { value: "fitness_enthusiast", label: "🔥 Fitness Enthusiast" }
+                ]
+            },
+            {
+                number: "Q6",
+                text: "Your Country",
+                type: "select",
+                options: countryList.map(country => ({ value: country, label: country }))
+            },
+            // ✅ 新增 Q7: Date of Birth
+            {
+                number: "Q7",
+                text: "What's your date of birth?",
+                type: "date",
+                placeholder: "YYYY-MM-DD"
+            }
+        ];
+
+        // 存储所有答案（加上 date_of_birth）
+        let answers = {
+            age_range: '',
+            gender: '',
+            height: '',
+            weight: '',
+            fitness_level: '',
+            country: '',
+            date_of_birth: ''      // ✅ 新增
+        };
+
+        let currentIndex = 0;
+        const totalQuestions = questions.length;
+
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const questionNumber = document.getElementById('questionNumber');
+        const questionText = document.getElementById('questionText');
+        const dynamicContent = document.getElementById('dynamicContent');
+        const errorMessage = document.getElementById('errorMessage');
+        const backBtn = document.getElementById('backBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // ✅ 新增：根据出生日期计算年龄范围
+        function calculateAgeRangeFromDOB(dateOfBirth) {
+            if (!dateOfBirth) return null;
+            
+            const today = new Date();
+            const birthDate = new Date(dateOfBirth);
+            
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            
+            if (age < 18) return '0-17';
+            if (age >= 18 && age <= 64) return '18-64';
+            return '65+';
+        }
+
+        function getAnswerKey(index) {
+            const mapping = {
+                0: 'age_range',
+                1: 'gender',
+                2: 'height',
+                3: 'weight',
+                4: 'fitness_level',
+                5: 'country',
+                6: 'date_of_birth'      // ✅ 新增
+            };
+            return mapping[index];
+        }
+
+        function renderCurrentQuestion() {
+            const q = questions[currentIndex];
+            questionNumber.textContent = q.number;
+            questionText.textContent = q.text;
+
+            let html = '';
+
+            if (q.type === 'options') {
+                html = `<div class="options-group" id="optionsGroup">`;
+                q.options.forEach(opt => {
+                    const isSelected = (answers[getAnswerKey(currentIndex)] === opt.value);
+                    const selectedClass = isSelected ? 'selected' : '';
+                    html += `
+                        <div class="option ${selectedClass}" data-value="${opt.value}">
+                            <label>${opt.label}</label>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            } 
+            else if (q.type === 'number') {
+                const currentValue = answers[getAnswerKey(currentIndex)] || '';
+                html = `
+                    <input type="number" 
+                           id="numberInput" 
+                           class="input-field" 
+                           placeholder="${q.placeholder}"
+                           value="${currentValue}"
+                           min="${q.min || ''}"
+                           max="${q.max || ''}"
+                           step="1">
+                    <div style="color:#a0aec0; font-size:0.8rem; margin-top:-1rem; margin-bottom:0.5rem;">Unit: ${q.unit}</div>
+                `;
+            }
+            else if (q.type === 'select') {
+                const currentValue = answers[getAnswerKey(currentIndex)] || '';
+                html = `<select id="selectInput" class="select-field">`;
+                html += `<option value="">-- Select your country --</option>`;
+                q.options.forEach(opt => {
+                    const selected = (currentValue === opt.value) ? 'selected' : '';
+                    html += `<option value="${opt.value}" ${selected}>${opt.label}</option>`;
+                });
+                html += `</select>`;
+            }
+            // ✅ 新增：date 类型渲染
+            else if (q.type === 'date') {
+                const currentValue = answers[getAnswerKey(currentIndex)] || '';
+                const today = new Date().toISOString().split('T')[0];
+                html = `
+                    <input type="date" 
+                           id="dateInput" 
+                           class="input-field" 
+                           value="${currentValue}"
+                           max="${today}">
+                    <div style="color:#a0aec0; font-size:0.8rem; margin-top:-1rem; margin-bottom:0.5rem;">Format: YYYY-MM-DD</div>
+                `;
+            }
+
+            dynamicContent.innerHTML = html;
+
+            if (q.type === 'options') {
+                const options = document.querySelectorAll('.option');
+                options.forEach(opt => {
+                    opt.addEventListener('click', () => {
+                        options.forEach(o => o.classList.remove('selected'));
+                        opt.classList.add('selected');
+                        const value = opt.getAttribute('data-value');
+                        const key = getAnswerKey(currentIndex);
+                        answers[key] = value;
+                        errorMessage.textContent = '';
+                    });
+                });
+            }
+
+            updateProgress();
+            updateButtons();
+        }
+
+        function saveCurrentAnswer() {
+            const q = questions[currentIndex];
+            const key = getAnswerKey(currentIndex);
+
+            if (q.type === 'options') {
+                const selected = document.querySelector('.option.selected');
+                if (selected) {
+                    answers[key] = selected.getAttribute('data-value');
+                }
+            } 
+            else if (q.type === 'number') {
+                const input = document.getElementById('numberInput');
+                if (input && input.value) {
+                    answers[key] = parseFloat(input.value);
+                } else {
+                    answers[key] = '';
+                }
+            }
+            else if (q.type === 'select') {
+                const select = document.getElementById('selectInput');
+                if (select) {
+                    answers[key] = select.value;
+                }
+            }
+            // ✅ 新增：保存 date 类型
+            else if (q.type === 'date') {
+                const input = document.getElementById('dateInput');
+                if (input && input.value) {
+                    answers[key] = input.value;
+                } else {
+                    answers[key] = '';
+                }
+            }
+        }
+
+        function validateCurrentAnswer() {
+            const q = questions[currentIndex];
+            const key = getAnswerKey(currentIndex);
+            const value = answers[key];
+
+            if (q.type === 'options') {
+                if (!value) {
+                    errorMessage.textContent = 'Please select an option';
+                    return false;
+                }
+                
+                // ✅ 新增：如果当前是 Q1 (age_range)，且 Q7 已经有值，验证是否一致
+                if (key === 'age_range' && answers.date_of_birth) {
+                    const calculatedRange = calculateAgeRangeFromDOB(answers.date_of_birth);
+                    if (calculatedRange && calculatedRange !== value) {
+                        errorMessage.textContent = '⚠️ Your selected age range does not match your date of birth. Please correct.';
+                        return false;
+                    }
+                }
+            }
+            else if (q.type === 'number') {
+                if (!value || value === '') {
+                    errorMessage.textContent = `Please enter your ${q.text.toLowerCase()}`;
+                    return false;
+                }
+                if (q.min && value < q.min) {
+                    errorMessage.textContent = `Value cannot be less than ${q.min}`;
+                    return false;
+                }
+                if (q.max && value > q.max) {
+                    errorMessage.textContent = `Value cannot be greater than ${q.max}`;
+                    return false;
+                }
+            }
+            else if (q.type === 'select') {
+                if (!value || value === '') {
+                    errorMessage.textContent = 'Please select a country';
+                    return false;
+                }
+            }
+            // ✅ 新增：验证 date 类型（包含与 Q1 的互相验证）
+            else if (q.type === 'date') {
+                if (!value || value === '') {
+                    errorMessage.textContent = 'Please enter your date of birth';
+                    return false;
+                }
+                
+                const date = new Date(value);
+                if (isNaN(date.getTime())) {
+                    errorMessage.textContent = 'Please enter a valid date';
+                    return false;
+                }
+                
+                if (date > new Date()) {
+                    errorMessage.textContent = 'Date of birth cannot be in the future';
+                    return false;
+                }
+                
+                // ✅ 验证日期是否与 Q1 选择的年龄范围一致
+                if (answers.age_range) {
+                    const calculatedRange = calculateAgeRangeFromDOB(value);
+                    if (calculatedRange && calculatedRange !== answers.age_range) {
+                        let dobText = '';
+                        if (calculatedRange === '0-17') dobText = 'under 18';
+                        else if (calculatedRange === '18-64') dobText = 'between 18 and 64';
+                        else dobText = '65 or older';
+                        
+                        let selectedText = '';
+                        if (answers.age_range === '0-17') selectedText = 'under 18';
+                        else if (answers.age_range === '18-64') selectedText = '18-64';
+                        else selectedText = '65+';
+                        
+                        errorMessage.textContent = `⚠️ Your date of birth shows you are ${dobText}, but you selected ${selectedText}. Please correct.`;
+                        return false;
+                    }
+                }
+            }
+
+            errorMessage.textContent = '';
+            return true;
+        }
+
+        function updateProgress() {
+            const progress = ((currentIndex + 1) / totalQuestions) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `Question ${currentIndex + 1} / ${totalQuestions}`;
+        }
+
+        function updateButtons() {
+            if (currentIndex === 0) {
+                backBtn.style.opacity = '0.5';
+                backBtn.style.cursor = 'not-allowed';
+            } else {
+                backBtn.style.opacity = '1';
+                backBtn.style.cursor = 'pointer';
+            }
+
+            if (currentIndex === totalQuestions - 1) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function nextQuestion() {
+            saveCurrentAnswer();
+            if (!validateCurrentAnswer()) return;
+
+            if (currentIndex < totalQuestions - 1) {
+                currentIndex++;
+                renderCurrentQuestion();
+            }
+        }
+
+        function backQuestion() {
+            if (currentIndex > 0) {
+                saveCurrentAnswer();
+                currentIndex--;
+                renderCurrentQuestion();
+            }
+        }
+
+        async function submitQuestionnaire() {
+            saveCurrentAnswer();
+            if (!validateCurrentAnswer()) return;
+
+            // ✅ 最终验证：确保 age_range 和 date_of_birth 一致
+            if (answers.age_range && answers.date_of_birth) {
+                const calculatedRange = calculateAgeRangeFromDOB(answers.date_of_birth);
+                if (calculatedRange !== answers.age_range) {
+                    errorMessage.textContent = 'Your age range and date of birth do not match. Please go back and correct.';
+                    return;
+                }
+            }
+
+            // 检查所有答案是否完整（加上 date_of_birth）
+            const required = ['age_range', 'gender', 'height', 'weight', 'fitness_level', 'country', 'date_of_birth'];
+            for (let field of required) {
+                if (!answers[field]) {
+                    errorMessage.textContent = 'Please complete all questions before submitting';
+                    return;
+                }
+            }
+
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                // 1. 更新 Profile（保存身高体重等信息，包括 date_of_birth）
+                const profileFormData = new FormData();
+                profileFormData.append('gender', answers.gender);
+                profileFormData.append('height', answers.height);
+                profileFormData.append('weight', answers.weight);
+                profileFormData.append('fitness_level', answers.fitness_level);
+                profileFormData.append('country', answers.country);
+                profileFormData.append('date_of_birth', answers.date_of_birth);  // ✅ 新增
+
+                await fetch(`${API_URL}/api/profile`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: profileFormData
+                });
+
+                // 2. 提交问卷答案
+                const response = await fetch(`${API_URL}/api/questionnaire`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ answers: answers })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // ✅ 保存年龄范围到 localStorage（供 BMI 计算使用）
+                    localStorage.setItem('user_age_range', answers.age_range);
+                    
+                    errorMessage.textContent = '';
+                    errorMessage.style.color = '#51cf66';
+                    errorMessage.textContent = '✅ Questionnaire submitted successfully! Redirecting...';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    errorMessage.textContent = 'Submission failed: ' + data.message;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit ✓';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.textContent = 'Cannot connect to server. Please try again.';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit ✓';
+            }
+        }
+
+        // 检查登录状态和是否已提交过问卷
+        async function checkAuthAndRedirect() {
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/user/status`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+
+                if (data.success && data.has_completed_questionnaire) {
+                    alert('You have already completed the questionnaire!');
+                    window.location.href = 'dashboard.html';
+                    return false;
+                }
+                return true;
+            } catch (err) {
+                console.error('Status check failed:', err);
+                return true;
+            }
+        }
+
+        // 初始化
+        async function init() {
+            const allowed = await checkAuthAndRedirect();
+            if (!allowed) return;
+
+            renderCurrentQuestion();
+
+            backBtn.addEventListener('click', backQuestion);
+            nextBtn.addEventListener('click', nextQuestion);
+            submitBtn.addEventListener('click', submitQuestionnaire);
+        }
+
+        init();
+    </script>
+</body>
+</html>
