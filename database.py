@@ -14,7 +14,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     last_login = db.Column(db.DateTime, nullable=True)
     
-    profile = db.relationship('UserProfile', backref='user', uselist=False, cascade='all, delete-orphan') #hhh
+    profile = db.relationship('UserProfile', backref='user', uselist=False, cascade='all, delete-orphan')
     
     #Link questionnaire answers.
     questionnaire = db.relationship('QuestionnaireAnswer', backref='user', uselist=False, cascade='all, delete-orphan')
@@ -47,14 +47,7 @@ class UserProfile(db.Model):
     #Add: Record whether the user has completed the questionnaire (for quick lookup).
     has_completed_questionnaire = db.Column(db.Boolean, default=False)
 
-class QuestionnaireAnswer(db.Model):
-    _tablename_ = 'questionnaire_answers'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
-    answers = db.Column(db.Text, nullable=True) 
-    submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow) 
+
 
 class Admin(db.Model):
     __tablename__ = 'admin'
