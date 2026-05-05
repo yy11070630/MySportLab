@@ -307,13 +307,34 @@ def dashboard():
     user = User.query.get(session['user_id'])
     profile = user.profile
 
-    bmi, category = calculate_bmi(profile)
+    bmi = None
+    category = None
 
-    return render_template('dashboard.html',
-                           user=user,
-                           profile=profile,
-                           bmi=round(bmi,2),
-                           category=category)
+    if profile and profile.height and profile.weight:
+        bmi = profile.weight / ((profile.height / 100) ** 2)
+
+        if profile.age_range == "65+":
+            if bmi < 18.5:
+                category = "Low"
+            elif bmi < 25:
+                category = "Normal"
+            else:
+                category = "High"
+
+        elif profile.age_range == "0-17":
+            category = "Child BMI (use percentile)"
+
+        else:
+            if bmi < 18.5:
+                category = "Underweight"
+            elif bmi < 23:
+                category = "Normal"
+            elif bmi < 27.5:
+                category = "Overweight"
+            else:
+                category = "Obese"
+
+    return render_template('dashboard.html', bmi=bmi, category=category)
 
 # ================================================
 # Upload folder
@@ -325,9 +346,31 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # ================================================
 # Update Profile (Protected + Avatar upload)
 # ================================================
-@app.route('/profile', methods=['GET','POST'])
+@app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
+    user = User.query.get(session['user_id'])
+    profile = user.profile
+
+    if request.method == 'POST':
+
+        profile.bio = request.form.get('bio')
+
+        file = request.files.get('avatar')
+        if file:
+            filename = f"user_{user.id}.png"
+            filepath = os.path.join('static/uploads', filename)
+            file.save(filepath)
+            profile.avatar = filepath
+
+        db.session.commit()
+        return redirect(url_for('profile'))
+
+    return render_template('profile.html', profile=profile, user=user)
+
+#@app.route('/profile', methods=['GET','POST'])
+#@login_required
+#def profile():
     user = User.query.get(session['user_id'])
     profile = user.profile
 
@@ -351,7 +394,7 @@ def profile():
 # ================================================
 # BMI
 # ================================================
-def calculate_bmi(profile):
+#def calculate_bmi(profile):
     bmi = profile.weight / ((profile.height/100) ** 2)
 
     # 0–17
@@ -436,4 +479,3 @@ if __name__ == '__main__':
             print("Admin created!")
 
     app.run(debug=True)
-    
