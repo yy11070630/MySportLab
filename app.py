@@ -384,19 +384,6 @@ def calculate_bmi(profile):
             return bmi, "Overweight"
         else:
             return bmi, "Obese"
-# ================================================
-# Admin 
-# ================================================
-with app.app_context():
-    if not Admin.query.filter_by(username='admin').first():
-        admin = Admin(
-            username='admin',
-            email='admin@gmail.com',
-            password=generate_password_hash('admin123')
-        )
-        db.session.add(admin)
-        db.session.commit()
-        print("Admin created!")
 
 
 # ================================================
@@ -435,5 +422,18 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         print('Database created!')
+
+        # Create default admin if not exists
+        if not Admin.query.filter_by(username='admin').first():
+            admin = Admin(
+                username='admin',
+                email='admin@gmail.com',
+                password=generate_password_hash('admin123')
+            )
+
+            db.session.add(admin)
+            db.session.commit()
+            print("Admin created!")
+
     app.run(debug=True)
     
