@@ -1,38 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MySportLab - Home</title>
-    <link rel="stylesheet" href="style.css">
-
+    <title>MySportLab</title>
+    <link rel="stylesheet" href="{{ url_for( 'static', filename='style.css') }}">
 </head>
 
 <body>
 
-<nav class="navbar">
+<div class="navbar">
 
-    <div class="logo">
-        <a href="#">MySportLab</a>
-    </div>
+    <a href="/">Home</a>
+    <a href="/plan">Plan</a>
+    <a href="/chat">Chat</a>
 
-    <div class="menu">
-        <a href="plan.html">Plan</a>
-        <a href="chat.html">Chat</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="login.html">Log In</a>
-        <a href="profile.html">Profile</a>
-    </div>
+    {% if logged_in %}
+        <a href="/profile">Profile</a>
+    {% else %}
+        <a href="/login">Login</a>
+    {% endif %}
 
-</nav>
-
-<div class="slogan">
-    <h1>Train Smarter. Get Stronger.</h1>
-    <p>Your personal sports companion</p>
-
-    <a href="question.html">
-        <button class="startbutton">Start</button>
-    </a>
 </div>
 
-    <script src="script.js"></script>
+<div class="container">
+
+    <h1>Welcome to MySportLab</h1>
+    <p>Your fitness journey starts here.</p>
+
+    <form action="/start">
+        <button class="btn">Start</button>
+    </form>
+
+    {% if not logged_in %}
+        <p>Please login to continue.</p>
+
+    {% elif not completed %}
+        <p>Please complete your questionnaire.</p>
+
+    {% else %}
+        <p>Welcome back! Go to your dashboard.</p>
+    {% endif %}
+
+</div>
+
 </body>
 </html>
