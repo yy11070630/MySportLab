@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, session, url_for, j
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
 from datetime import datetime, timedelta   # Processing time (Token expiration time)
-from database import db, User, UserProfile
+from database import db, User, UserProfile, Admin
 from functools import wraps
 import os                                  # File handling (for avatar uploads)
 import re                                  # Hashing passwords
