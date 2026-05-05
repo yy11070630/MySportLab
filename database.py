@@ -3,57 +3,65 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
-
+# =========================
+# User Table
+# =========================
 class User(db.Model):
-    __tablename__ = 'users'
-    
+    __tablename__ = 'user'
+
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
+
+    username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)  
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    last_login = db.Column(db.DateTime, nullable=True)
-    
-    profile = db.relationship('UserProfile', backref='user', uselist=False, cascade='all, delete-orphan')
-    
-    #Link questionnaire answers.
-    questionnaire = db.relationship('QuestionnaireAnswer', backref='user', uselist=False, cascade='all, delete-orphan')
+    password = db.Column(db.String(200), nullable=False)
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'email': self.email,
-            'created_at': self.created_at.isoformat() if self.created_at else None
-        }
+    # One-to-One relationship with profile
+    profile = db.relationship('UserProfile', backref='user', uselist=False)
 
+    def __repr__(self):
+        return f"<User {self.username}>"
 
+# =========================
+# User Profile Table
+# =========================
 class UserProfile(db.Model):
-    __tablename__ = 'user_profiles'
-    
+    __tablename__ = 'user_profile'
+
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
-    
-    avatar = db.Column(db.String(200), nullable=True)
-    gender = db.Column(db.String(20), nullable=True)
-    height = db.Column(db.Float, nullable=True)
-    weight = db.Column(db.Float, nullable=True)
-    fitness_level = db.Column(db.String(50), nullable=True)
-    country = db.Column(db.String(100), nullable=True)
-    bio = db.Column(db.Text, nullable=True)
-    date_of_birth = db.Column(db.Date, nullable=True)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
- 
-    #Add: Record whether the user has completed the questionnaire (for quick lookup).
-    has_completed_questionnaire = db.Column(db.Boolean, default=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    # Basic info
+    age_range = db.Column(db.String(20))
+    gender = db.Column(db.String(10))
+    height = db.Column(db.Float)     # cm
+    weight = db.Column(db.Float)     # kg
+    fitness_level = db.Column(db.String(50))
+    country = db.Column(db.String(50))
+    date_of_birth = db.Column(db.Date)
 
 
+    # Extra profile
+    bio = db.Column(db.Text)
+    avatar = db.Column(db.String(200))
 
+    # Questionnaire status
+    has_completed_question = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return f"<Profile user_id={self.user_id}>"
+
+
+# =========================
+# Admin Table
+# =========================
 class Admin(db.Model):
     __tablename__ = 'admin'
-    
+
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(120))
     password = db.Column(db.String(200), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Admin {self.username}>"
