@@ -8,27 +8,54 @@
 <body>
 
 <div class="container">
+    <div class="navbar">
+
+    <a href="/">Home</a>
+    <a href="/plan">Plan</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/chat">Chat</a>
+
+    {% if logged_in %}
+        <a href="/profile">Profile</a>
+    {% else %}
+        <a href="/login">Login</a>
+    {% endif %}
+
+    </div>
+    
     <div class="box">
 
-        <h2>Your Profile</h2>
+    <h2>Profile</h2>
 
-        {% if profile.avatar %}
-            <img src="{{ url_for('static', filename=profile.avatar.split('static/')[-1]) }}">
-        {% else %}
-            <img src="https://via.placeholder.com/120">
-        {% endif %}
+    <!-- Avatar -->
+    {% if profile.avatar %}
+        <img src="/{{ profile.avatar }}">
+    {% else %}
+        <img src="{{ url_for('static', filename='default.png') }}">
+    {% endif %}
 
-        <form method="POST" enctype="multipart/form-data">
+    <!-- Upload avatar -->
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="avatar">
 
-            <input type="text" name="bio" placeholder="Bio" value="{{ profile.bio or '' }}">
-            <input type="text" name="country" placeholder="Country" value="{{ profile.country or '' }}">
+        <!-- Bio -->
+        <textarea name="bio" placeholder="Write your bio...">{{ profile.bio }}</textarea>
 
-            <input type="file" name="avatar">
+        <button class="btn">Update</button>
+    </form>
 
-            <button type="submit">Update Profile</button>
-        </form>
+    <hr>
 
-        <a href="/dashboard">Back to Dashboard</a>
+    <!-- Info -->
+    <p>Username: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Gender: {{ profile.gender }}</p>
+    <p>Height: {{ profile.height }}</p>
+    <p>Weight: {{ profile.weight }}</p>
+    <p>Country: {{ profile.country }}</p>
+    <p>DOB: {{ profile.date_of_birth }}</p>
+
+</div>
         <a href="/logout">Logout</a>
 
     </div>

@@ -9,65 +9,21 @@
 
 <div class="navbar">
     <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
     <a href="/plan">Plan</a>
     <a href="/chat">Chat</a>
     <a href="/profile">Profile</a>
-    <a href="/logout">Logout</a>
 </div>
 
-<div class="container">
+<div class="box">
+    <h2>Your BMI</h2>
 
-    <div class="card">
-        <h2>Welcome, {{ user.username }}</h2>
-
-        {% if profile.avatar %}
-            <img src="{{ url_for('static', filename=profile.avatar.split('static/')[-1]) }}">
-        {% else %}
-            <img src="https://via.placeholder.com/100">
-        {% endif %}
-
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Country:</strong> {{ profile.country or 'Not set' }}</p>
-        <p><strong>Bio:</strong> {{ profile.bio or 'No bio yet' }}</p>
-    </div>
-
-    <div class="card">
-        <h3>Your Body Data</h3>
-
-        <p>Height: {{ profile.height or '-' }} cm</p>
-        <p>Weight: {{ profile.weight or '-' }} kg</p>
-        <p>Gender: {{ profile.gender or '-' }}</p>
-        <p>Fitness Level: {{ profile.fitness_level or '-' }}</p>
-    </div>
-
-    <div class="card">
-        <h3>Your BMI</h3>
-
-        {% if profile.height and profile.weight %}
-            {% set bmi = (profile.weight / ((profile.height/100)**2)) %}
-            <p><strong>{{ bmi | round(2) }}</strong></p>
-
-            {% if bmi < 18.5 %}
-                <p>Underweight - Try strength training</p>
-            {% elif bmi < 25 %}
-                <p>Normal - Keep it up 👍</p>
-            {% elif bmi < 30 %}
-                <p>Overweight - Do more cardio</p>
-            {% else %}
-                <p>Obese - Focus on fat loss</p>
-            {% endif %}
-        {% else %}
-            <p>Please complete your questionnaire first.</p>
-        {% endif %}
-    </div>
-
-    <div class="card">
-        <h3>Actions</h3>
-
-        <a href="/question"><button class="btn">Update Info</button></a>
-        <a href="/result"><button class="btn">View Full Result</button></a>
-    </div>
-
+    {% if bmi %}
+        <h1>{{ bmi|round(2) }}</h1>
+        <p>{{ category }}</p>
+    {% else %}
+        <p>Please complete questionnaire first</p>
+    {% endif %}
 </div>
 
 </body>
