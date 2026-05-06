@@ -157,22 +157,32 @@ def register():
 #================================================
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+        profile = user.profile
+
+        if not profile or not profile.has_completed_question:
+            return redirect(url_for('question'))
+        else:
+            return redirect(url_for('dashboard'))
+    
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
         
-        # Search user
-        user = User.query.filter_by(username=username).first()
 
         if not username or not password:
-            return jsonify({'success': False, 'message': 'Username and password required'}), 400
-    
+            return "Username and password required"
+        
+        # Search user
+        user = User.query.filter_by(username=username).first()
+        
         # Verify password
         if not user:
-            return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
+            return "Invalid username or password"
     
         if not check_password_hash(user.password, password):
-            return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
+            return "Invalid username or password"   
     
         session['user_id'] = user.id
 
@@ -180,7 +190,6 @@ def login():
 
         if not profile or not profile.has_completed_question:
             return redirect(url_for('question'))
-        
         else:
             return redirect(url_for('dashboard'))
 
@@ -252,12 +261,20 @@ def chat():
 # Submit Question API
 # ================================================
 @app.route('/question', methods=['GET','POST'])
+@login_required 
 def question():
     user = User.query.get(session['user_id'])
     profile = user.profile
 
-    if request.method == 'POST':
+    if not profile:
+        profile = UserProfile(user_id=user.id)
+        db.session.add(profile)
+        db.session.commit()
 
+    if profile.has_completed_question:
+        return redirect(url_for('dashboard'))
+
+    if request.method == 'POST':
         age_range = request.form.get('age_range')
         gender = request.form.get('gender')
         height = float(request.form.get('height'))
@@ -266,10 +283,18 @@ def question():
         country = request.form.get('country')
         dob = request.form.get('dob')
 
+        if not all([age_range, gender, height, weight, dob]):
+            return "Please fill all required fields"
+        
+        height = float(height)
+        weight = float(weight)
+
         # Count age from dob
         birth_date = datetime.strptime(dob, "%Y-%m-%d")
         today = datetime.today()
-        age = today.year - birth_date.year
+        age = today.year - birth_date.year - (
+            (today.month, today.day) < (birth_date.month, birth_date.day)
+        )
 
         # Check age and age_range consistency
         if age < 18 and age_range != "0-17":
@@ -281,6 +306,7 @@ def question():
         if age >= 65 and age_range != "65+":
             return "Age does not match age range"
 
+
         # Store in database
         profile.age_range = age_range
         profile.gender = gender
@@ -289,7 +315,8 @@ def question():
         profile.fitness_level = fitness
         profile.country = country
         profile.date_of_birth = birth_date
-        profile.has_completed_questionnaire = True
+
+        profile.has_completed_question = True
 
         db.session.commit()
 
@@ -299,7 +326,7 @@ def question():
 
 
 # ================================================
-# Dashboard
+# Dashboard (LTYY)
 # ================================================
 @app.route('/dashboard')
 @login_required
@@ -337,14 +364,14 @@ def dashboard():
     return render_template('dashboard.html', bmi=bmi, category=category)
 
 # ================================================
-# Upload folder
+# Upload folder (LTYY)
 # ================================================
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # ================================================
-# Update Profile (Protected + Avatar upload)
+# Update Profile (Protected + Avatar upload) (LTYY)
 # ================================================
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -368,69 +395,9 @@ def profile():
 
     return render_template('profile.html', profile=profile, user=user)
 
-#@app.route('/profile', methods=['GET','POST'])
-#@login_required
-#def profile():
-    user = User.query.get(session['user_id'])
-    profile = user.profile
-
-    if request.method == 'POST':
-        profile.bio = request.form.get('bio')
-        profile.country = request.form.get('country')
-
-        file = request.files.get('avatar')
-        if file:
-            filename = f"user_{user.id}.png"
-            filepath = os.path.join('static/uploads', filename)
-            file.save(filepath)
-            profile.avatar = filepath
-
-        db.session.commit()
-        return redirect(url_for('dashboard'))
-
-    return render_template('profile.html', profile=profile)
-
 
 # ================================================
-# BMI
-# ================================================
-#def calculate_bmi(profile):
-    bmi = profile.weight / ((profile.height/100) ** 2)
-
-    # 0–17
-    if profile.age_range == "0-17":
-        if bmi < 18:
-            return bmi, "Underweight (Child)"
-        elif bmi < 25:
-            return bmi, "Normal (Child)"
-        elif bmi < 30:
-            return bmi, "Overweight (Child)"
-        else:
-            return bmi, "Obese (Child)"
-
-    # 65+
-    elif profile.age_range == "65+":
-        if bmi < 18.5:
-            return bmi, "Low"
-        elif bmi < 25:
-            return bmi, "Normal"
-        else:
-            return bmi, "High"
-
-    # 18–64
-    else:
-        if bmi < 18.5:
-            return bmi, "Underweight"
-        elif bmi < 23:
-            return bmi, "Normal"
-        elif bmi < 27.5:
-            return bmi, "Overweight"
-        else:
-            return bmi, "Obese"
-
-
-# ================================================
-# Admin Login API
+# Admin Login API (LTYY)
 # ================================================
 @app.route('/admin/login', methods=['GET','POST'])
 def admin_login():
@@ -449,7 +416,7 @@ def admin_login():
 
 
 # ================================================
-# Admin Dashboard
+# Admin Dashboard (LTYY)
 # ================================================
 @app.route('/admin/dashboard')
 @admin_required
@@ -459,7 +426,7 @@ def admin_dashboard():
 
 
 #================================================
-# Start
+# Start (LTYY)
 #================================================
 if __name__ == '__main__':
     with app.app_context():
