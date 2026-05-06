@@ -4,7 +4,7 @@ from datetime import datetime
 db = SQLAlchemy()
 
 # =========================
-# User Table
+# User Table (ALOYSIUS)
 # =========================
 class User(db.Model):
     __tablename__ = 'user'
@@ -22,7 +22,7 @@ class User(db.Model):
         return f"<User {self.username}>"
 
 # =========================
-# User Profile Table
+# User Profile Table (ALOYSIUS)
 # =========================
 class UserProfile(db.Model):
     __tablename__ = 'user_profile'
@@ -53,7 +53,7 @@ class UserProfile(db.Model):
 
 
 # =========================
-# Admin Table
+# Admin Table (ALOYSIUS)
 # =========================
 class Admin(db.Model):
     __tablename__ = 'admin'
