@@ -329,6 +329,31 @@ def question():
 
 
 # ================================================
+# Reset Questionnaire API
+# ================================================
+@app.route('/reset_questionnaire', methods=['POST'])
+def reset_questionnaire():
+    # check user login
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    user = User.query.get(session['user_id'])
+    if not user:
+        return redirect(url_for('login'))
+    
+    # restart questionnaire
+    if user.profile:
+        user.profile.has_completed_question = False
+        # clean questionnaire answers (if any)
+        if hasattr(user.profile, 'questionnaire_answers'):
+            user.profile.questionnaire_answers = None
+        db.session.commit()
+    
+    # redirect to question page
+    return redirect(url_for('question'))
+
+
+# ================================================
 # Dashboard 
 # ================================================
 @app.route('/dashboard')
@@ -337,22 +362,45 @@ def dashboard():
     user = User.query.get(session['user_id'])
     profile = user.profile
 
+    height = None
+    weight = None
     bmi = None
     category = None
-
+    
     if profile and profile.height and profile.weight:
+        height = profile.height
+        weight = profile.weight
         bmi = profile.weight / ((profile.height / 100) ** 2)
 
         if profile.age_range == "65+":
             if bmi < 18.5:
-                category = "Low"
+                category = "Underweight (Low)"
             elif bmi < 25:
                 category = "Normal"
             else:
-                category = "High"
+                category = "Overweight (High)"
 
         elif profile.age_range == "0-17":
-            category = "Child BMI (use percentile)"
+            if profile.gender == "male":
+                if bmi < 5:
+                    category = "Underweight"
+                elif bmi < 85:
+                    category = "Normal"
+                elif bmi < 95:
+                    category = "Overweight"
+                else:
+                    category = "Obese"
+            else:  
+                if bmi < 5:
+                    category = "Underweight"
+                elif bmi < 85:
+                    category = "Normal"
+                elif bmi < 95:
+                    category = "Overweight"
+                else:
+                    category = "Obese"
+
+            category = category or "Child BMI (requires percentile table)"
 
         else:
             if bmi < 18.5:
@@ -364,7 +412,11 @@ def dashboard():
             else:
                 category = "Obese"
 
-    return render_template('dashboard.html', bmi=bmi, category=category)
+    return render_template('dashboard.html', 
+                           bmi=bmi, 
+                           category=category,
+                           height=profile.height,
+                           weight=profile.weight)
 
 # ================================================
 # Upload folder 

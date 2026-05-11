@@ -16,6 +16,12 @@
 </div>
 
 <div class="box">
+    <h2>Your Body Data</h2>
+    <p>Height: {{ height if height else 'Not set' }} cm</p>
+    <p>Weight: {{ weight if weight else 'Not set' }} kg</p>
+</div>
+
+<div class="box">
     <h2>Your BMI</h2>
 
     {% if bmi %}
