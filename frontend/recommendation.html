@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommendation - MySportLab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/plan">Plan</a>
+    <a href="/chat">Chat</a>
+    <a href="/profile">Profile</a>
+</div>
+
+<div class="box">
+    <h1>Recommendation Sport</h1>
+
+     <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <form method="POST">
+
+        <!-- Step 1 -->
+        <div class="step active">
+            <h2>What are you good at physically?</h2>
+
+            <label>
+                <input type="checkbox" name="physically" value="Running fast">
+                Running fast
+            </label>
+
+            <label>
+                <input type="checkbox" name="physically" value="Long stamina">
+                Long stamina
+            </label>
+
+            <label>
+                <input type="checkbox" name="physically" value="Strong upper body">
+                Strong upper body
+            </label>
+
+            <label>
+                <input type="checkbox" name="physically" value="Flexible body">
+                Flexible body
+            </label>
+
+            <label>
+                <input type="checkbox" name="physically" value="Good balance">
+                Good balance
+            </label>
+
+            <label>
+                <input type="checkbox" name="physically" value="Quick reflexes">
+                Quick reflexes
+            </label>
+
+            <div class="progress">
+                <div id="progress-bar"></div>
+            </div>
+
+            <button type="button" onclick="nextStep()">Next</button>
+        </div>
+
+
+        <!-- Step 2 -->
+        <div class="step">
+            <h2>Which activity do you enjoy the most?</h2>
+
+            <label>
+                <input type="checkbox" name="activity_type" value="Team activities">
+                Team activities
+            </label>
+
+            <label>
+                <input type="checkbox" name="activity_type" value="Solo activities">
+                Solo activities
+            </label>
+
+            <label>
+                <input type="checkbox" name="activity_type" value="Indoor activities">
+                Indoor activities
+            </label>
+
+            <label>
+                <input type="checkbox" name="activity_type" value="Outdoor activities">
+                Outdoor activities
+            </label>
+
+            <div class="progress">
+                <div id="progress-bar"></div>
+            </div>
+
+            <button type="button" onclick="prevStep()">Back</button>
+            <button type="button" onclick="nextStep()">Next</button>
+        </div>
+
+
+        <!-- Step 3 -->
+        <div class="step">
+            <h2>How active are you in daily life?</h2>
+
+            <select name="daily_activity">
+                <option value="Very active">Very active</option>
+                <option value="Moderately active">Moderately active</option>
+                <option value="Slightly active">Slightly active</option>
+                <option value="Rarely active">Rarely active</option>
+            </select>
+
+            <br><br>
+            <div class="progress">
+                <div id="progress-bar"></div>
+            </div>
+
+            <button type="button" onclick="prevStep()">Back</button>
+            <button type="button" onclick="nextStep()">Next</button>
+        </div>
+
+
+        <!-- Step 4 -->
+        <div class="step">
+            <h2>What is your goal?</h2>
+
+            <select name="goal">
+                <option value="Lose weight">Lose weight</option>
+                <option value="Build muscle">Build muscle</option>
+                <option value="Improve stamina">Improve stamina</option>
+                <option value="Reduce stress">Reduce stress</option>
+                <option value="Have fun & socialize">Have fun & socialize</option>
+            </select>
+
+            <br><br>
+            <div class="progress">
+                <div id="progress-bar"></div>
+            </div>
+
+            <button type="button" onclick="prevStep()">Back</button>
+            <button type="submit">Get Recommendation</button>
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+
+let currentStep = 0;
+
+const steps = document.querySelectorAll(".step");
+
+const progressBar = document.getElementById("progress-bar");
+
+function showStep(index){
+
+    steps.forEach(step => {
+        step.classList.remove("active");
+    });
+
+    steps[index].classList.add("active");
+
+    updateProgressBar();
+}
+
+function nextStep(){
+
+    if(currentStep < steps.length - 1){
+
+        currentStep++;
+
+        showStep(currentStep);
+    }
+}
+
+function prevStep(){
+
+    if(currentStep > 0){
+
+        currentStep--;
+
+        showStep(currentStep);
+    }
+}
+
+function updateProgressBar(){
+
+    let progress = ((currentStep + 1) / steps.length) * 100;
+
+    progressBar.style.width = progress + "%";
+}
+
+showStep(currentStep);
+
+</script>
+
+</body>
+</html>

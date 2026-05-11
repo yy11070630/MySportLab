@@ -428,6 +428,169 @@ def admin_dashboard():
     return render_template('admin_dashboard.html', users=users)
 
 
+# ================================================
+# Recommendation Sport API
+# ================================================
+@app.route('/recommendation', methods=['GET','POST'])
+@login_required
+def recommendation():
+    if request.method == 'POST':
+        physically = request.form.getlist('physically')
+        activity_type = request.form.getlist('activity_type')
+        daily_activity = request.form.get('daily_activity')
+        goal = request.form.get('goal')
+
+        # store in session (temporary, no DB needed)
+        session['rec_input'] = {
+            "physically": physically,
+            "activity_type": activity_type,
+            "daily_activity": daily_activity,
+            "goal": goal
+        }
+
+        return redirect(url_for('recommendation_result'))
+
+    return render_template('recommendation.html')
+
+
+# ================================================
+# Recommendation Result API
+# ================================================
+@app.route('/recommendation-result')
+@login_required
+def recommendation_result():
+    data = session.get('rec_input')
+
+    if not data:
+        return redirect(url_for('recommendation'))
+
+    physically = data['physically']
+    activity_type = data['activity_type']
+    daily = data['daily_activity']
+    goal = data['goal']
+
+    scores = {
+        "Football": 0,
+        "Basketball": 0,
+        "Gym": 0,
+        "Swimming": 0,
+        "Badminton": 0,
+        "Cycling": 0,
+        "Running": 0
+    }
+
+    #=========================
+    # Physically Ability
+    #=========================
+    if "Running fast" in physically:
+        scores["Football"] += 2
+        scores["Basketball"] += 2
+        scores["Running"] += 2
+
+    if "Long stamina" in physically:
+        scores["Running"] += 2
+        scores["Cycling"] += 2
+        scores["Football"] += 1
+        scores["Basketball"] += 1
+
+    if "Strong upper body" in physically:
+        scores["Gym"] += 3
+        scores["Swimming"] += 2
+
+    if "Flexible body" in physically:
+        scores["Swimming"] += 2
+        scores["Badminton"] += 2
+
+    if "Good balance" in physically:
+        scores["Cycling"] += 2
+        scores["Badminton"] += 2
+
+    if "Quick reflexes" in physically:
+        scores["Basketball"] += 2
+        scores["Football"] += 2
+        scores["Badminton"] += 2
+
+    #=========================
+    # Activity Preference
+    #=========================
+    if "Team activities" in activity_type:
+        scores["Football"] += 2
+        scores["Basketball"] += 2
+
+    if "Solo activities" in activity_type:
+        scores["Gym"] += 2
+        scores["Swimming"] += 2
+
+    if "Indoor activities" in activity_type:
+        scores["Gym"] += 1
+        scores["Badminton"] += 1
+
+    if "Outdoor activities" in activity_type:
+        scores["Cycling"] += 2
+        scores["Running"] += 2
+
+    #=========================
+    # Daily Activity Level
+    #=========================
+    if daily == "Very active":
+        scores["Football"] += 2
+        scores["Basketball"] += 2
+        scores["Running"] += 2
+
+    elif daily == "Moderately active":
+        scores["Badminton"] += 2
+        scores["Swimming"] += 2
+        scores["Gym"] += 2
+
+    elif daily == "Slightly active":
+        scores["Gym"] += 2
+        scores["Swimming"] += 1
+
+    elif daily == "Rarely active":
+        scores["Swimming"] += 2
+        scores["Gym"] += 2
+
+    #=========================
+    # Goal
+    #=========================
+    if goal == "Lose weight":
+        scores["Running"] += 2
+        scores["Cycling"] += 2
+        scores["Swimming"] += 2
+
+    if goal == "Build muscle":
+        scores["Gym"] += 3
+
+    if goal == "Improve stamina":
+        scores["Running"] += 3
+        scores["Football"] += 2
+
+    if goal == "Reduce stress":
+        scores["Swimming"] += 2
+        scores["Yoga"] = scores.get("Yoga", 0) + 3
+
+    if goal == "Have fun & socialize":
+        scores["Basketball"] += 2
+        scores["Football"] += 2
+        scores["Badminton"] += 2
+
+    #=========================
+    # Result Calculation
+    #=========================
+    best_sport = max(scores, key=scores.get)
+
+    # match percentage
+    max_score = scores[best_sport]
+    percentage = min(100, max_score * 10)
+
+    return render_template(
+        "recommendation_result.html",
+        sport=best_sport,
+        percentage=percentage,
+        scores=scores
+    )
+
+
 #================================================
 # Start 
 #================================================
