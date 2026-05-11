@@ -101,3 +101,28 @@ button:hover {
 .underweight {
     color: orange;
 }
+
+/*recommendation progress bar*/
+.step{
+    display:none;
+}
+
+.step.active{
+    display:block;
+}
+
+.progress-container{
+    width: 65%;
+    height: 8px;
+    background:#ddd;
+    border-radius:20px;
+    margin: 15px auto; 
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#28a745;
+    transition:0.3s;
+}
