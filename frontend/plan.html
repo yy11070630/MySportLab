@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MySportLab - Planner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .time-box{
+    display:none;
+    margin-left:30px;
+    margin-top:10px;}
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/plan">Plan</a>
+    <a href="/chat">Chat</a>
+    <a href="/profile">Profile</a>
+</div>
+
+<div class="container">
+
+    <h1>Smart Sport Planning System</h1>
+
+    <form method="POST">
+
+        <!-- AVAILABLE DAYS -->
+        <div class="card">
+
+            <h2>1. Select Your Available Days & Time</h2>
+
+            <div class="checkbox-group">
+
+                <!-- Monday -->
+                <label>
+                    <input type="checkbox"
+                           name="days"
+                           value="Monday"
+                           onchange="toggleTime('monday-time', this)">
+
+                    Monday
+                </label>
+
+                <div id="monday-time" class="time-box">
+
+                    From:
+                    <input type="time" name="monday_from">
+
+                    To:
+                    <input type="time" name="monday_to">
+
+                </div>
+
+                <!-- Tuesday -->
+                <label>
+                    <input type="checkbox"
+                           name="days"
+                           value="Tuesday"
+                           onchange="toggleTime('tuesday-time', this)">
+
+                    Tuesday
+                </label>
+
+                <div id="tuesday-time" class="time-box">
+
+                    From:
+                    <input type="time" name="tuesday_from">
+
+                    To:
+                    <input type="time" name="tuesday_to">
+
+                </div>
+
+                <!-- Wednesday -->
+                <label>
+                    <input type="checkbox"
+                           name="days"
+                           value="Wednesday"
+                           onchange="toggleTime('wednesday-time', this)">
+
+                    Wednesday
+                </label>
+
+                <div id="wednesday-time" class="time-box">
+
+                    From:
+                    <input type="time" name="wednesday_from">
+
+                    To:
+                    <input type="time" name="wednesday_to">
+
+                </div>
+
+                <!-- Thursday -->
+                <label>
+                    <input type="checkbox"
+                           name="days"
+                           value="Thursday"
+                           onchange="toggleTime('thursday-time', this)">
+
+                    Thursday
+                </label>
+
+                <div id="thursday-time" class="time-box">
+
+                    From:
+                    <input type="time" name="thursday_from">
+
+                    To:
+                    <input type="time" name="thursday_to">
+
+                </div>
+
+                <!-- Friday -->
+                <label>
+                    <input type="checkbox"
+                           name="days"
+                           value="Friday"
+                           onchange="toggleTime('friday-time', this)">
+
+                    Friday
+                </label>
+
+                <div id="friday-time" class="time-box">
+
+                    From:
+                    <input type="time" name="friday_from">
+
+                    To:
+                    <input type="time" name="friday_to">
+
+                </div>
+
+                <!-- Saturday -->
+                <label>
+                    <input type="checkbox"
+                           name="days"
+                           value="Saturday"
+                           onchange="toggleTime('saturday-time', this)">
+
+                    Saturday
+                </label>
+
+                <div id="saturday-time" class="time-box">
+
+                    From:
+                    <input type="time" name="saturday_from">
+
+                    To:
+                    <input type="time" name="saturday_to">
+
+                </div>
+
+                <!-- Sunday -->
+                <label>
+                    <input type="checkbox"
+                           name="days"
+                           value="Sunday"
+                           onchange="toggleTime('sunday-time', this)">
+
+                    Sunday
+                </label>
+
+                <div id="sunday-time" class="time-box">
+
+                    From:
+                    <input type="time" name="sunday_from">
+
+                    To:
+                    <input type="time" name="sunday_to">
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SPORTS -->
+        <div class="card">
+
+            <h2>3. Select Your Preferred Sports</h2>
+
+            <div class="checkbox-group">
+
+                <label>
+                    <input type="checkbox" name="sports" value="Basketball">
+                    Basketball
+                </label>
+
+                <label>
+                    <input type="checkbox" name="sports" value="Football">
+                    Football
+                </label>
+
+                <label>
+                    <input type="checkbox" name="sports" value="Badminton">
+                    Badminton
+                </label>
+
+                <label>
+                    <input type="checkbox" name="sports" value="Swimming">
+                    Swimming
+                </label>
+
+                <label>
+                    <input type="checkbox" name="sports" value="Gym">
+                    Gym
+                </label>
+
+                <label>
+                    <input type="checkbox" name="sports" value="Cycling">
+                    Cycling
+                </label>
+
+                <label>
+                    <input type="checkbox" name="sports" value="Running">
+                    Running
+                </label>
+
+            </div>
+
+        </div>
+
+        <!-- BUTTON -->
+        <button type="submit" class="generate-btn">
+            Generate Weekly Schedule
+        </button>
+
+    </form>
+
+    <!-- GENERATED SCHEDULE -->
+    {% if schedule %}
+
+    <h1 class="schedule-title">Weekly Schedule</h1>
+
+    <div class="schedule-grid">
+
+        {% for item in schedule %}
+
+        <div class="schedule-card">
+
+            <h3>{{ item.day }}</h3>
+
+            <p><strong>Sport:</strong> {{ item.sport }}</p>
+
+            <p><strong>Time:</strong>
+                {{ item.from }} - {{ item.to }}
+            </p>
+
+            <p><strong>Duration:</strong>
+                {{ item.duration }}
+            </p>
+
+            <p class="intensity">
+                {{ item.intensity }} Intensity
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="calendar">
+
+        <h2>Weekly Calendar</h2>
+
+        <div class="calendar-grid">
+
+            {% for item in schedule %}
+
+            <div class="calendar-day">
+
+                <h4>{{ item.day }}</h4>
+
+                <p>{{ item.sport }}</p>
+
+                <p>{{ item.from }}</p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+
+function toggleTime(id, checkbox){
+
+    const box = document.getElementById(id);
+
+    if(checkbox.checked){
+
+        box.style.display = "block";
+
+    } else {
+
+        box.style.display = "none";
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
