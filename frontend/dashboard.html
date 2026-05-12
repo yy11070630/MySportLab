@@ -32,6 +32,51 @@
     {% endif %}
 </div>
 
+<div class="analytics-container">
+
+    <!-- Greeting Card -->
+    <div class="greeting-card">
+
+        <h1>
+            Good Evening, {{ user.username if user else 'Athlete' }} 
+        </h1>
+
+        <p>
+            Stay consistent and achieve your fitness goals today.
+        </p>
+
+    </div>
+
+    <!-- Today's Plan -->
+    <div class="today-plan-card">
+
+        <div class="plan-header">
+            <h2>Today's Plan</h2>
+        </div>
+
+        <div class="plan-content">
+
+            <div class="plan-item">
+                <h3>Preferred Sport</h3>
+                <p>{{ today_sport if today_sport else 'No plan generated' }}</p>
+            </div>
+
+            <div class="plan-item">
+                <h3>Available Time</h3>
+                <p>{{ today_time if today_time else 'Go to Planner →' }}</p>
+            </div>
+
+        </div>
+
+        <a href="/plan">
+            <button class="planner-btn">
+                View Full Planner
+            </button>
+        </a>
+
+    </div>
+</div>
+
 <div class="box">
 <a href="/recommendation">
     <button>Recommendation Sports</button>
@@ -40,3 +85,4 @@
 
 </body>
 </html>
+

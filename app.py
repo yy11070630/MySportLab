@@ -5,6 +5,7 @@ from datetime import datetime, timedelta   # Processing time (Token expiration t
 from database import db, User, UserProfile, Admin
 from functools import wraps
 import os                                  # File handling (for avatar uploads)
+import random                                
 import re                                  # Hashing passwords
 from werkzeug.security import generate_password_hash, check_password_hash # Hashing passwords
                
@@ -227,22 +228,6 @@ def start():
 
 
 # ================================================
-# Plan btn (check question status) (LAWRENCE)
-# ================================================
-@app.route('/plan')
-def plan():
-    user = get_user()
-
-    if not user:
-        return redirect(url_for('login'))
-
-    if not user.profile.has_completed_question:
-        return redirect(url_for('question'))
-
-    return render_template('plan.html')
-
-
-# ================================================
 # Chat btn (check question status) (LAWRENCE)
 # ================================================
 @app.route('/chat')
@@ -364,6 +349,8 @@ def dashboard():
     weight = None
     bmi = None
     category = None
+    today_sport = "Not set"
+    today_time = "Not set"
     
     if profile and profile.height and profile.weight:
         height = profile.height
@@ -410,11 +397,41 @@ def dashboard():
             else:
                 category = "Obese"
 
-    return render_template('dashboard.html', 
+    schedule = session.get('schedule', [])
+    if schedule:
+     
+        weekday = datetime.now().strftime('%A')
+    
+        today_plan = next((item for item in schedule if item.get('day') == weekday), None)
+        if today_plan:
+            today_sport = today_plan.get('sport', 'Rest Day')
+            today_time = f"{today_plan.get('from', '--')} - {today_plan.get('to', '--')}"
+        else:
+            today_sport = "Rest Day"
+            today_time = "No schedule"
+    else:
+  
+        today_sport = "No plan generated"
+        today_time = "Go to Planner →"
+
+    return render_template('dashboard.html',
+                           user=user, 
                            bmi=bmi, 
                            category=category,
                            height=profile.height,
-                           weight=profile.weight)
+                           weight=profile.weight,
+                           today_sport=today_sport,
+                           today_time=today_time
+                           )
+
+
+
+
+
+
+
+
+
 
 # ================================================
 # Upload folder (LAWRENCE)
@@ -639,8 +656,102 @@ def recommendation_result():
         percentage=percentage,
         scores=scores
     )
+#================================================
+# Plan (check question status + generate schedule)
+#================================================
+@app.route('/plan', methods=['GET','POST'])
+@login_required
+def plan():
+    
+    user = User.query.get(session['user_id'])
 
+    # Get fitness level from questionnaire profile
+    fitness = user.profile.fitness_level
+    
+    if not user:
+        return redirect(url_for('login'))
+    
+    # Check questionnaire completed
+    if not user.profile.has_completed_question:
+        return redirect(url_for('question'))
+    
+    # =========================================
+    # POST
+    # =========================================
+    if request.method == 'POST':
 
+        sports = request.form.getlist('sports')
+        days = request.form.getlist('days')
+
+        schedule = []
+
+        #==================================
+        # Duration based on fitness level
+        #==================================
+        if fitness == "Beginner":
+
+            duration = "30-45 mins"
+            intensity = "Light"
+
+        elif fitness == "Intermediate":
+
+            duration = "45-60 mins"
+            intensity = "Medium"
+
+        else:
+
+            duration = "60-90 mins"
+            intensity = "High"
+
+        #==================================
+        # Generate Schedule
+        #==================================
+        for day in days:
+
+            # Random preferred sport
+            sport = random.choice(sports)
+
+            # Get selected time
+            start = request.form.get(f"{day.lower()}_from")
+            end = request.form.get(f"{day.lower()}_to")
+
+            schedule.append({
+
+                "day": day,
+
+                "sport": sport,
+
+                "duration": duration,
+
+                "intensity": intensity,
+
+                "from": start,
+
+                "to": end
+
+            })
+
+        # ==================================
+        # Save into session
+        # ==================================
+        session['schedule'] = schedule
+
+        return render_template(
+            'plan.html',
+            user=user,
+            schedule=schedule
+        )
+
+    # =========================================
+    # GET existing schedule
+    # =========================================
+    saved_schedule = session.get('schedule')
+
+    return render_template(
+        'plan.html',
+        user=user,
+        schedule=saved_schedule
+    )
 #================================================
 # Start (LAWRENCE)
 #================================================
