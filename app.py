@@ -8,12 +8,9 @@ import os                                  # File handling (for avatar uploads)
 import re                                  # Hashing passwords
 from werkzeug.security import generate_password_hash, check_password_hash # Hashing passwords
                
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# LAWRENCE TAN YANG YI (252FC251VC)
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # ================================================
-# APP SETUP
+# APP SETUP (LAWRENCE)
 # ================================================
 app = Flask(__name__, template_folder='frontend')
 
@@ -26,7 +23,7 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 #================================================
-# Login Required Decorator (User & Admin)
+# Login Required Decorator (User & Admin) (LAWRENCE)
 #================================================
 # User login 
 def get_user():
@@ -55,7 +52,7 @@ def admin_required(f):
     return wrapper
 
 # =========================
-# Home
+# Home (LAWRENCE)
 # =========================
 @app.route('/')
 def home():
@@ -74,7 +71,7 @@ def home():
 
 
 #================================================
-# Registration API
+# Registration API (LAWRENCE)
 #================================================
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -86,53 +83,53 @@ def register():
 
         # Username validation
         if not username:
-            return jsonify({'success': False, 'message': 'Username is required'}), 400
+            return render_template('register.html', error='Username is required')
 
         if " " in username:
-            return jsonify({'success': False, 'message': 'Username cannot contain spaces'}), 400
+            return render_template('register.html', error='Username cannot contain spaces')
 
         if len(username) > 30:
-            return jsonify({'success': False, 'message': 'Username max 30 characters'}), 400
+            return render_template('register.html', error='Username max 30 characters')
 
         if User.query.filter_by(username=username).first():
-            return jsonify({'success': False, 'message': 'Username already exists'}), 400
+            return render_template('register.html', error='Username already exists')
     
 
         # Email validation   
         if not email:
-            return jsonify({'success': False, 'message': 'Email is required'}), 400
+            return render_template('register.html', error='Email is required')
 
         email_pattern = r'^[^\s@]+@[^\s@]+\.[^\s@]+$'
         if not re.match(email_pattern, email):
-            return jsonify({'success': False, 'message': 'Invalid email format'}), 400
+            return render_template('register.html', error='Invalid email format')
 
         if User.query.filter_by(email=email).first():
-            return jsonify({'success': False, 'message': 'Email already exists'}), 400
+            return render_template('register.html', error='Email already exists')
     
 
         # Password validation
         if not password:
-            return jsonify({'success': False, 'message': 'Password is required'}), 400
+            return render_template('register.html', error='Password is required')
 
         if len(password) < 8 or len(password) > 12:
-            return jsonify({'success': False, 'message': 'Password must be 8-12 characters'}), 400
+            return render_template('register.html', error='Password must be 8-12 characters')
 
         if not re.search(r"[A-Z]", password):
-            return jsonify({'success': False, 'message': 'Must include uppercase letter'}), 400
+            return render_template('register.html', error='Must include uppercase letter')
 
         if not re.search(r"[a-z]", password):
-            return jsonify({'success': False, 'message': 'Must include lowercase letter'}), 400
+            return render_template('register.html', error='Must include lowercase letter')
 
         if not re.search(r"[0-9]", password):
-            return jsonify({'success': False, 'message': 'Must include a number'}), 400
+            return render_template('register.html', error='Must include a number')
 
         if not re.search(r"[^A-Za-z0-9]", password):
-            return jsonify({'success': False, 'message': 'Must include a symbol'}), 400
+            return render_template('register.html', error='Must include a symbol')
     
         # Confirm password
         if password != confirm:
-            return jsonify({'success': False, 'message': 'Passwords do not match'}), 400
-    
+            return render_template('register.html', error='Passwords do not match')
+
 
         # Hash password
         hashed_password = generate_password_hash(password)
@@ -156,7 +153,7 @@ def register():
 
 
 #================================================
-# Login API
+# Login API (LAWRENCE)
 #================================================
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -175,17 +172,18 @@ def login():
         
 
         if not username or not password:
-            return "Username and password required"
+            return render_template('login.html', error="Username and password required")
+
         
         # Search user
         user = User.query.filter_by(username=username).first()
         
         # Verify password
         if not user:
-            return "Invalid username or password"
+            return render_template('login.html', error="Invalid username or password")
     
         if not check_password_hash(user.password, password):
-            return "Invalid username or password"   
+            return render_template('login.html', error="Invalid username or password")  
     
         session['user_id'] = user.id
 
@@ -200,7 +198,7 @@ def login():
 
 
 # ================================================
-# Logout API
+# Logout API (LAWRENCE)
 # ================================================
 @app.route('/logout')
 def logout():
@@ -209,7 +207,7 @@ def logout():
 
 
 # ================================================
-# Start route (check question status)
+# Start route (check question status) (LAWRENCE)
 # ================================================
 @app.route('/start')
 def start():
@@ -229,7 +227,7 @@ def start():
 
 
 # ================================================
-# Plan btn (check question status)
+# Plan btn (check question status) (LAWRENCE)
 # ================================================
 @app.route('/plan')
 def plan():
@@ -245,7 +243,7 @@ def plan():
 
 
 # ================================================
-# Chat btn (check question status)
+# Chat btn (check question status) (LAWRENCE)
 # ================================================
 @app.route('/chat')
 def chat():
@@ -261,7 +259,7 @@ def chat():
 
 
 # ================================================
-# Submit Question API
+# Submit Question API (LAWRENCE)
 # ================================================
 @app.route('/question', methods=['GET','POST'])
 @login_required 
@@ -329,7 +327,7 @@ def question():
 
 
 # ================================================
-# Reset Questionnaire API
+# Reset Questionnaire API (LAWRENCE)
 # ================================================
 @app.route('/reset_questionnaire', methods=['POST'])
 def reset_questionnaire():
@@ -354,7 +352,7 @@ def reset_questionnaire():
 
 
 # ================================================
-# Dashboard 
+# Dashboard (LAWRENCE)
 # ================================================
 @app.route('/dashboard')
 @login_required
@@ -419,14 +417,14 @@ def dashboard():
                            weight=profile.weight)
 
 # ================================================
-# Upload folder 
+# Upload folder (LAWRENCE)
 # ================================================
 UPLOAD_FOLDER = 'static/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # ================================================
-# Update Profile (Protected + Avatar upload) 
+# Update Profile (Protected + Avatar upload) (LAWRENCE)
 # ================================================
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -452,7 +450,7 @@ def profile():
 
 
 # ================================================
-# Admin Login API 
+# Admin Login API (LAWRENCE)    
 # ================================================
 @app.route('/admin/login', methods=['GET','POST'])
 def admin_login():
@@ -471,7 +469,7 @@ def admin_login():
 
 
 # ================================================
-# Admin Dashboard 
+# Admin Dashboard (LAWRENCE)
 # ================================================
 @app.route('/admin/dashboard')
 @admin_required
@@ -481,7 +479,7 @@ def admin_dashboard():
 
 
 # ================================================
-# Recommendation Sport API
+# Recommendation Sport API (LAWRENCE)
 # ================================================
 @app.route('/recommendation', methods=['GET','POST'])
 @login_required
@@ -506,7 +504,7 @@ def recommendation():
 
 
 # ================================================
-# Recommendation Result API
+# Recommendation Result API (LAWRENCE)
 # ================================================
 @app.route('/recommendation-result')
 @login_required
@@ -644,7 +642,7 @@ def recommendation_result():
 
 
 #================================================
-# Start 
+# Start (LAWRENCE)
 #================================================
 if __name__ == '__main__':
     with app.app_context():
@@ -666,11 +664,3 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# ALOYSIUS CHUAH MING YI (252FC2539X)
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# LIM SHAO QI (252FC2530B)
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
