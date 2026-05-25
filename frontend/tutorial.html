@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tutorial Library</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#f4f4f4;
+        }
+
+        .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 40px;
+        background-color: #0539d3;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1001;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #042ba8;
+        }
+
+        /* Sidebar - below navbar */
+        .sidebar {
+            width: 220px;
+            background: #111;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            padding-top: 80px;  
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .category {
+            padding: 12px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .category:hover {
+            background: #333;
+        }
+
+        .active {
+            background: #444;
+        }
+
+        /* Content - avoid navbar & sidebar */
+        .content {
+            margin-left: 260px;
+            margin-top: 70px;
+            padding: 20px;
+            min-height: calc(100vh - 70px);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Video Grid - 2x2 */
+        #videos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* video iframe styles */
+        .video-card iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+        }
+
+        /* Responsive: Automatically switch to 1 column on small screens */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 180px;
+            }
+            .content {
+                margin-left: 200px;
+            }
+            #videos {
+                grid-template-columns: 1fr;
+            }
+            .navbar a {
+                padding: 5px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="container">
+    <div class="navbar">
+
+    <a href="/">Home</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/plan">Plan</a>
+    <a href="/tutorial">Tutorial</a>
+    <a href="/chat">Chat</a>
+    <a href="/profile">Profile</a>
+
+    </div>
+</div>
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+    <h2>🏆 Sports</h2>
+
+    <div class="category active" onclick="showVideos('Football')">
+        ⚽ Football
+    </div>
+
+    <div class="category" onclick="showVideos('Basketball')">
+        🏀 Basketball
+    </div>
+
+    <div class="category" onclick="showVideos('Gym')">
+        🏋️ Gym
+    </div>
+
+    <div class="category" onclick="showVideos('Swimming')">
+        🏊 Swimming
+    </div>
+
+    <div class="category" onclick="showVideos('Badminton')">
+        🏸 Badminton
+    </div>
+
+    <div class="category" onclick="showVideos('Cycling')">
+        🚴 Cycling
+    </div>
+
+    <div class="category" onclick="showVideos('Running')">
+        🏃 Running
+    </div>
+
+</div>
+
+<!-- Content -->
+
+<div class="content">
+
+    <h1 id="title">
+        Football Tutorials
+    </h1>
+
+    <div id="videos"></div>
+
+</div>
+
+<script>
+
+const tutorials = JSON.parse(`{{ tutorials | tojson | safe }}`);
+
+function showVideos(sport){
+
+    // change title
+
+    document.getElementById("title").innerText =
+        sport + " Tutorials";
+
+    // get video container
+
+    let container =
+        document.getElementById("videos");
+
+    // clear old videos
+
+    container.innerHTML = "";
+
+    // generate videos
+
+    tutorials[sport].forEach(videoID => {
+
+        container.innerHTML += `
+
+            <div class="video-card">
+
+                <iframe
+                    src="https://www.youtube.com/embed/${videoID}"
+                    allowfullscreen>
+                </iframe>
+
+            </div>
+
+        `;
+
+    });
+
+    // active sidebar
+
+    document.querySelectorAll(".category")
+    .forEach(el => {
+
+        el.classList.remove("active");
+
+        if(el.innerText.includes(sport)){
+            el.classList.add("active");
+        }
+
+    });
+
+}
+
+// default page
+
+showVideos("Football");
+
+</script>
+
+</body>
+</html>
