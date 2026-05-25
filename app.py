@@ -72,7 +72,7 @@ def home():
 
 
 #================================================
-# Registration API (LAWRENCE)
+# Register (LAWRENCE)
 #================================================
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -154,7 +154,7 @@ def register():
 
 
 #================================================
-# Login API (LAWRENCE)
+# Login (LAWRENCE)
 #================================================
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -199,7 +199,7 @@ def login():
 
 
 # ================================================
-# Logout API (LAWRENCE)
+# Logout (LAWRENCE)
 # ================================================
 @app.route('/logout')
 def logout():
@@ -244,7 +244,7 @@ def chat():
 
 
 # ================================================
-# Submit Question API (LAWRENCE)
+# Submit Question (LAWRENCE)
 # ================================================
 @app.route('/question', methods=['GET','POST'])
 @login_required 
@@ -312,7 +312,7 @@ def question():
 
 
 # ================================================
-# Reset Questionnaire API (LAWRENCE)
+# Reset Questionn (LAWRENCE)
 # ================================================
 @app.route('/reset_questionnaire', methods=['POST'])
 def reset_questionnaire():
@@ -337,7 +337,7 @@ def reset_questionnaire():
 
 
 # ================================================
-# Dashboard (LAWRENCE)
+# Dashboard
 # ================================================
 @app.route('/dashboard')
 @login_required
@@ -441,7 +441,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 # ================================================
-# Update Profile (Protected + Avatar upload) (LAWRENCE)
+# Update Profile (Avatar upload) (LAWRENCE)
 # ================================================
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -467,7 +467,7 @@ def profile():
 
 
 # ================================================
-# Admin Login API (LAWRENCE)    
+# Admin Login (LAWRENCE)    
 # ================================================
 @app.route('/admin/login', methods=['GET','POST'])
 def admin_login():
@@ -496,7 +496,7 @@ def admin_dashboard():
 
 
 # ================================================
-# Recommendation Sport API (LAWRENCE)
+# Recommendation Sport (LAWRENCE)
 # ================================================
 @app.route('/recommendation', methods=['GET','POST'])
 @login_required
@@ -521,9 +521,9 @@ def recommendation():
 
 
 # ================================================
-# Recommendation Result API (LAWRENCE)
+# Recommendation Result (LAWRENCE)
 # ================================================
-@app.route('/recommendation-result')
+@app.route('/recommendation_result')
 @login_required
 def recommendation_result():
     data = session.get('rec_input')
@@ -550,112 +550,234 @@ def recommendation_result():
     # Physically Ability
     #=========================
     if "Running fast" in physically:
-        scores["Football"] += 2
-        scores["Basketball"] += 2
-        scores["Running"] += 2
+        scores["Running"] += 5
+        scores["Football"] += 4
+        scores["Basketball"] += 4  
+        scores["Badminton"] += 3   
 
     if "Long stamina" in physically:
-        scores["Running"] += 2
-        scores["Cycling"] += 2
-        scores["Football"] += 1
-        scores["Basketball"] += 1
+        scores["Running"] += 3
+        scores["Football"] += 3
+        scores["Swimming"] += 3
+        scores["Cycling"] += 3
+        scores["Basketball"] += 2
+        scores["Badminton"] += 2
+        scores["Gym"] += 1
 
     if "Strong upper body" in physically:
-        scores["Gym"] += 3
-        scores["Swimming"] += 2
+        scores["Gym"] += 5
+        scores["Swimming"] += 4
+        scores["Badminton"] += 3
+        scores["Basketball"] += 2
+        scores["Football"] += 1
 
     if "Flexible body" in physically:
-        scores["Swimming"] += 2
-        scores["Badminton"] += 2
+        scores["Swimming"] += 5
+        scores["Badminton"] += 4
+        scores["Basketball"] += 3
+        scores["Gym"] += 2  
+        scores["Football"] += 2
 
     if "Good balance" in physically:
-        scores["Cycling"] += 2
-        scores["Badminton"] += 2
+        scores["Cycling"] += 5
+        scores["Badminton"] += 4
+        scores["Basketball"] += 3
+        scores["Football"] += 2
+        scores["Running"] += 2
+        scores["Swimming"] += 2
+        scores["Gym"] += 1  
 
     if "Quick reflexes" in physically:
-        scores["Basketball"] += 2
-        scores["Football"] += 2
-        scores["Badminton"] += 2
+        scores["Badminton"] += 5
+        scores["Basketball"] += 5
+        scores["Football"] += 4 
+        scores["Gym"] += 1       
 
     #=========================
-    # Activity Preference
+    # Activity Preference 
     #=========================
     if "Team activities" in activity_type:
-        scores["Football"] += 2
-        scores["Basketball"] += 2
+        scores["Football"] += 3
+        scores["Basketball"] += 3
+        scores["Badminton"] += 2  
 
     if "Solo activities" in activity_type:
-        scores["Gym"] += 2
-        scores["Swimming"] += 2
+        scores["Gym"] += 3
+        scores["Swimming"] += 3
+        scores["Running"] += 2
+        scores["Cycling"] += 2
 
     if "Indoor activities" in activity_type:
-        scores["Gym"] += 1
-        scores["Badminton"] += 1
+        scores["Gym"] += 2
+        scores["Badminton"] += 2
+        scores["Swimming"] += 1 
 
     if "Outdoor activities" in activity_type:
-        scores["Cycling"] += 2
-        scores["Running"] += 2
-
-    #=========================
-    # Daily Activity Level
-    #=========================
-    if daily == "Very active":
-        scores["Football"] += 2
-        scores["Basketball"] += 2
-        scores["Running"] += 2
-
-    elif daily == "Moderately active":
-        scores["Badminton"] += 2
-        scores["Swimming"] += 2
-        scores["Gym"] += 2
-
-    elif daily == "Slightly active":
-        scores["Gym"] += 2
-        scores["Swimming"] += 1
-
-    elif daily == "Rarely active":
-        scores["Swimming"] += 2
-        scores["Gym"] += 2
-
-    #=========================
-    # Goal
-    #=========================
-    if goal == "Lose weight":
-        scores["Running"] += 2
-        scores["Cycling"] += 2
-        scores["Swimming"] += 2
-
-    if goal == "Build muscle":
-        scores["Gym"] += 3
-
-    if goal == "Improve stamina":
+        scores["Cycling"] += 3
         scores["Running"] += 3
         scores["Football"] += 2
+        scores["Basketball"] += 2
+
+    #=========================
+    # Daily Activity Level 
+    #=========================
+    if daily == "Very active":
+        scores["Running"] += 3
+        scores["Football"] += 3
+        scores["Basketball"] += 3
+        scores["Badminton"] += 2
+        scores["Swimming"] += 2
+
+    elif daily == "Moderately active":
+        scores["Badminton"] += 3
+        scores["Swimming"] += 3
+        scores["Gym"] += 3
+        scores["Cycling"] += 2
+        scores["Football"] += 1
+
+    elif daily == "Slightly active":
+        scores["Gym"] += 3
+        scores["Swimming"] += 3
+        scores["Cycling"] += 2
+        scores["Badminton"] += 1
+
+    elif daily == "Rarely active":
+        scores["Swimming"] += 4  
+        scores["Gym"] += 3       
+        scores["Cycling"] += 2   
+        scores["Running"] += 1   
+
+    #=========================
+    # Goal 
+    #=========================
+    if goal == "Lose weight":
+        scores["Running"] += 4
+        scores["Cycling"] += 3
+        scores["Swimming"] += 3
+        scores["Football"] += 2
+        scores["Basketball"] += 2
+
+    if goal == "Build muscle":
+        scores["Gym"] += 5
+        scores["Swimming"] += 2
+        scores["Football"] += 1
+
+    if goal == "Improve stamina":
+        scores["Running"] += 4
+        scores["Swimming"] += 3
+        scores["Cycling"] += 3
+        scores["Football"] += 2
+        scores["Basketball"] += 2
 
     if goal == "Reduce stress":
-        scores["Swimming"] += 2
-        scores["Yoga"] = scores.get("Yoga", 0) + 3
+        scores["Swimming"] += 4
+        scores["Cycling"] += 3
+        scores["Running"] += 2
+        scores["Gym"] += 2
 
     if goal == "Have fun & socialize":
-        scores["Basketball"] += 2
-        scores["Football"] += 2
-        scores["Badminton"] += 2
+        scores["Basketball"] += 4
+        scores["Football"] += 4
+        scores["Badminton"] += 4
+        scores["Swimming"] += 2
 
     #=========================
     # Result Calculation
     #=========================
     best_sport = max(scores, key=scores.get)
 
-    # match percentage
     max_score = scores[best_sport]
-    percentage = min(100, max_score * 10)
+
+    # normalize against best possible score in system
+    max_possible = max(scores.values())
+
+    if max_possible == 0:
+        percentage = 0
+    else:
+        percentage = int((max_score / max_possible) * 100)
+
+    videos = {
+        "Football": "https://www.youtube.com/embed/XJIqk0hQY3Y",
+        "Basketball": "https://www.youtube.com/embed/wQk1qZ8Qy9s",
+        "Gym": "https://www.youtube.com/embed/U0bhE67HuDY",
+        "Swimming": "https://www.youtube.com/embed/6Jv0KXQ1x4A",
+        "Badminton": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        "Cycling": "https://www.youtube.com/embed/2eZ9XQ0mQ0k",
+        "Running": "https://www.youtube.com/embed/5Q4K8r9xQ2A"
+    }
 
     return render_template(
         "recommendation_result.html",
         sport=best_sport,
         percentage=percentage,
-        scores=scores
+        scores=scores,
+        video = videos.get(best_sport, "https://www.youtube.com")
     )
+
+# ================================================
+# Tutorial (LAWRENCE)
+# ================================================
+@app.route('/tutorial')
+@login_required
+def tutorial():
+
+    tutorials = {
+
+        "Football": [
+            "3z0uB0rVg7M",
+            "M1S0v8QGJ6I",
+            "0Uqf71muwWc",
+            "YJbV5Q6K5sA",
+            "t6h2tK4fQ7o",
+            "XJIqk0hQY3Y"
+        ],
+
+        "Basketball": [
+            "LAr6oAKieHk",
+            "wPDxUzJ8Jzw",
+            "oyjYgmsM00Q",
+            "rWOaROd9v7A",
+            "x6a4hMyiwBo"
+        ],
+
+        "Gym": [
+            "U0bhE67HuDY",
+            "ml6cT4AZdqI",
+            "2pLT-olgUJs",
+            "gC_L9qAHVJ8",
+            "ixkQaZXVQjs"
+        ],
+
+        "Swimming": [
+            "6Jv0KXQ1x4A",
+            "SX2N7gWmL6E",
+            "I5GaxSYLCSc",
+            "jQ4L9M8Y7s0"
+        ],
+
+        "Badminton": [
+            "pf8R8T0Xk3g",
+            "iD9Jq1K8G4Y",
+            "8Wb8L5Y8x8g",
+            "x6nEPn9YQ8Q"
+        ],
+
+        "Cycling": [
+            "2eZ9XQ0mQ0k",
+            "U3xK1z0J8vM",
+            "Q4w2R8M9Y0s"
+        ],
+
+        "Running": [
+            "5Q4K8r9xQ2A",
+            "brFHyOtTwH4",
+            "sTANio_2E0Q",
+            "g_tea8ZNk5A"
+        ]
+    }
+
+    return render_template("tutorial.html", tutorials=tutorials)
+
 #================================================
 # Plan (check question status + generate schedule)
 #================================================
@@ -773,5 +895,6 @@ if __name__ == '__main__':
             print("Admin created!")
 
     app.run(debug=True)
+
 
 

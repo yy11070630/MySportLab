@@ -10,6 +10,7 @@
     <a href="/">Home</a>
     <a href="/dashboard">Dashboard</a>
     <a href="/plan">Plan</a>
+    <a href="/tutorial">Tutorial</a>
     <a href="/chat">Chat</a>
     <a href="/profile">Profile</a>
 </div>
@@ -23,6 +24,22 @@
         Based on your physical ability, activity preference, and goal,
         this sport is the best match for you.
     </p>
+
+    <h2>🎥 Recommended Tutorial</h2>
+
+    {% if video %}
+    <iframe width="560" height="315"
+        src="{{ video }}"
+        frameborder="0"
+        allowfullscreen>
+    </iframe>
+    {% endif %}
+
+    <br><br>
+
+    <a href="/tutorial">
+        <button>Get More Tutorials →</button>
+    </a>
 
     <a href="/dashboard">Back</a>
 
