@@ -339,7 +339,7 @@ def reset_questionnaire():
 # ================================================
 # Dashboard
 # ================================================
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     user = User.query.get(session['user_id'])
@@ -352,6 +352,8 @@ def dashboard():
     today_sport = "Not set"
     today_time = "Not set"
     
+    calorie_logs = session.get('calorie_logs', [])
+
     if profile and profile.height and profile.weight:
         height = profile.height
         weight = profile.weight
@@ -413,16 +415,51 @@ def dashboard():
   
         today_sport = "No plan generated"
         today_time = "Go to Planner →"
+# =========================================
+# CALORIE TRACKER
+# =========================================
+        if request.method == 'POST':
 
-    return render_template('dashboard.html',
-                           user=user, 
-                           bmi=bmi, 
-                           category=category,
-                           height=profile.height,
-                           weight=profile.weight,
-                           today_sport=today_sport,
-                           today_time=today_time
-                           )
+           food = request.form.get('food')
+
+           calories = int(request.form.get('calories'))
+
+           calorie_logs.append({
+
+              'food': food,
+
+              'calories': calories
+
+            })
+
+           session['calorie_logs'] = calorie_logs
+
+
+        total_calories = sum(
+           item['calories']
+           for item in calorie_logs
+        )
+    return render_template(
+    'dashboard.html',
+
+    user=user,
+
+    bmi=bmi,
+
+    category=category,
+
+    height=profile.height,
+
+    weight=profile.weight,
+
+    today_sport=today_sport,
+
+    today_time=today_time,
+
+    calorie_logs=calorie_logs,
+
+    total_calories=total_calories
+)
 
 
 
