@@ -83,6 +83,50 @@
     <button>Recommendation Sports</button>
 </a>
 <div>
+    
+<div class="box">
+
+    <h2>FitBalance Calories Tracker</h2>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="food"
+            placeholder="Food Name"
+            required
+        >
+
+        <input
+            type="number"
+            name="calories"
+            placeholder="Calories"
+            required
+        >
+
+        <button type="submit">
+            Add Food
+        </button>
+
+    </form>
+
+    <hr>
+
+    {% for item in calorie_logs %}
+
+        <p>
+            {{ item.food }}
+            - {{ item.calories }} kcal
+        </p>
+
+    {% endfor %}
+
+    <h3>
+        Total Calories:
+        {{ total_calories }} kcal
+    </h3>
+
+</div>
 
 </body>
 </html>
