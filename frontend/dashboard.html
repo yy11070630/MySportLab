@@ -83,7 +83,7 @@
     <button>Recommendation Sports</button>
 </a>
 <div>
-    
+
 <div class="box">
 
     <h2>FitBalance Calories Tracker</h2>
@@ -125,6 +125,42 @@
         Total Calories:
         {{ total_calories }} kcal
     </h3>
+
+</div>
+
+<div class="box">
+
+    <h2>Daily Calorie Goal</h2>
+
+    <p>
+        Recommended:
+        {{ recommended_calories }} kcal
+    </p>
+
+    <p>
+        Consumed:
+        {{ total_calories }} kcal
+    </p>
+
+    <p>
+        Remaining:
+        {{ remaining_calories }} kcal
+    </p>
+
+    <div class="progress-container">
+
+        <div
+            class="progress-bar"
+            style="width: {{ progress }}%;"
+        >
+            {{ progress|round(0) }}%
+        </div>
+
+    </div>
+
+    <p>
+        {{ calorie_status }}
+    </p>
 
 </div>
 

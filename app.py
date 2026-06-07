@@ -1,3 +1,5 @@
+from unicodedata import category
+
 from flask import Flask, request, render_template, redirect, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
@@ -439,29 +441,59 @@ def dashboard():
            item['calories']
            for item in calorie_logs
         )
+
+# =========================================
+# CALORIE RECOMMENDATION
+# =========================================
+
+    if category and "Underweight" in category:
+        recommended_calories = 2500
+
+    elif category == "Normal":
+        recommended_calories = 2000
+
+    elif category and "Overweight" in category:
+        recommended_calories = 1800
+
+    else:
+        recommended_calories = 1600
+
+
+    remaining_calories = recommended_calories - total_calories
+
+
+    progress = (
+        total_calories / recommended_calories
+    ) * 100
+
+    progress = min(progress, 100)
+
+
+    if progress < 50:
+        calorie_status = "You can eat more today."
+
+    elif progress < 100:
+        calorie_status = "You are within your daily target."
+
+    else:
+        calorie_status = "Daily calorie goal exceeded."
+
     return render_template(
-    'dashboard.html',
-
-    user=user,
-
-    bmi=bmi,
-
-    category=category,
-
-    height=profile.height,
-
-    weight=profile.weight,
-
-    today_sport=today_sport,
-
-    today_time=today_time,
-
-    calorie_logs=calorie_logs,
-
-    total_calories=total_calories
-)
-
-
+     'dashboard.html',
+     user=user,
+     bmi=bmi,
+     category=category,
+     height=profile.height,
+     weight=profile.weight,
+     today_sport=today_sport,
+     today_time=today_time,
+     calorie_logs=calorie_logs,
+     total_calories=total_calories,
+     recommended_calories=recommended_calories,
+     remaining_calories=remaining_calories,
+     progress=progress,
+     calorie_status=calorie_status,
+    )
 
 
 
