@@ -3,7 +3,7 @@ from unicodedata import category
 from flask import Flask, request, render_template, redirect, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
-from datetime import datetime, timedelta   # Processing time (Token expiration time)
+from datetime import datetime, timedelta, date  # Processing time (Token expiration time)
 from database import db, User, UserProfile, Admin
 from functools import wraps
 import os                                  # File handling (for avatar uploads)
@@ -353,7 +353,17 @@ def dashboard():
     category = None
     today_sport = "Not set"
     today_time = "Not set"
-    
+
+    today = str(date.today())
+
+    last_date = session.get('calorie_date')
+
+    if last_date != today:
+
+        session['calorie_logs'] = []
+
+        session['calorie_date'] = today
+
     calorie_logs = session.get('calorie_logs', [])
 
     if profile and profile.height and profile.weight:
@@ -420,27 +430,27 @@ def dashboard():
 # =========================================
 # CALORIE TRACKER
 # =========================================
-        if request.method == 'POST':
+    if request.method == 'POST':
 
-           food = request.form.get('food')
+        food = request.form.get('food')
 
-           calories = int(request.form.get('calories'))
+        calories = int(request.form.get('calories'))
 
-           calorie_logs.append({
+        calorie_logs.append({
 
-              'food': food,
+          'food': food,
 
-              'calories': calories
+          'calories': calories
 
-            })
+         })
 
-           session['calorie_logs'] = calorie_logs
+        session['calorie_logs'] = calorie_logs
 
 
-        total_calories = sum(
-           item['calories']
-           for item in calorie_logs
-        )
+    total_calories = sum(
+        item['calories']
+        for item in calorie_logs
+    )
 
 # =========================================
 # CALORIE RECOMMENDATION
@@ -479,21 +489,22 @@ def dashboard():
         calorie_status = "Daily calorie goal exceeded."
 
     return render_template(
-     'dashboard.html',
-     user=user,
-     bmi=bmi,
-     category=category,
-     height=profile.height,
-     weight=profile.weight,
-     today_sport=today_sport,
-     today_time=today_time,
-     calorie_logs=calorie_logs,
-     total_calories=total_calories,
-     recommended_calories=recommended_calories,
-     remaining_calories=remaining_calories,
-     progress=progress,
-     calorie_status=calorie_status,
-    )
+        'dashboard.html',
+        user=user,
+        bmi=bmi,
+        category=category,
+        height=profile.height,
+        weight=profile.weight,
+        today_sport=today_sport,
+        today_time=today_time,
+        calorie_logs=calorie_logs,
+        total_calories=total_calories,
+        recommended_calories=recommended_calories,
+        remaining_calories=remaining_calories,
+        progress=progress,
+        calorie_status=calorie_status,
+        today=today
+        )
 
 
 
