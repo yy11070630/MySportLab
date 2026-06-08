@@ -65,3 +65,22 @@ class Admin(db.Model):
 
     def __repr__(self):
         return f"<Admin {self.username}>"
+
+#=========================
+# #Schedule Table (Aloysius)
+#=========================   
+class Schedule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False
+    )
+
+    day = db.Column(db.String(20))
+    sport = db.Column(db.String(50))
+    duration = db.Column(db.String(50))
+    intensity = db.Column(db.String(50))
+    start_time = db.Column(db.String(10))
+    end_time = db.Column(db.String(10))

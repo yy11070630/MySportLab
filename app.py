@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, redirect, session, url_for, j
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
 from datetime import datetime, timedelta, date  # Processing time (Token expiration time)
-from database import db, User, UserProfile, Admin
+from database import db, User, UserProfile, Admin,Schedule
 from functools import wraps
 import os                                  # File handling (for avatar uploads)
 import random                                
@@ -859,7 +859,7 @@ def tutorial():
     return render_template("tutorial.html", tutorials=tutorials)
 
 #================================================
-# Plan (check question status + generate schedule)
+# Plan (check question status + generate schedule) (Aloysius)
 #================================================
 @app.route('/plan', methods=['GET','POST'])
 @login_required
@@ -881,6 +881,9 @@ def plan():
     # POST
     # =========================================
     if request.method == 'POST':
+
+        # Remove old schedule
+        Schedule.query.filter_by(user_id=user.id).delete()
 
         sports = request.form.getlist('sports')
         days = request.form.getlist('days')
@@ -910,28 +913,48 @@ def plan():
         #==================================
         for day in days:
 
-            # Random preferred sport
-            sport = random.choice(sports)
+            starts = request.form.getlist(f"{day.lower()}_from")
+            ends = request.form.getlist(f"{day.lower()}_to")
 
-            # Get selected time
-            start = request.form.get(f"{day.lower()}_from")
-            end = request.form.get(f"{day.lower()}_to")
+            # Process multiple time slots for the same day
+            for start, end in zip(starts, ends):
 
-            schedule.append({
+             # Skip empty time slots
+                if not start or not end:
+                    continue
 
-                "day": day,
+                start_time = datetime.strptime(start, "%H:%M")
+                end_time = datetime.strptime(end, "%H:%M")
 
-                "sport": sport,
+                # Validate time slot for at least 30 min duration
+                if end_time < start_time + timedelta(minutes=30):
+                    return f"{day}: End time must be at least 30 minutes after start time", 400
 
-                "duration": duration,
+        # Randomly select a sport
+                sport = random.choice(sports)
 
-                "intensity": intensity,
+                schedule.append({
+                    "day": day,
+                    "sport": sport,
+                    "duration": duration,
+                    "intensity": intensity,
+                    "from": start,
+                    "to": end
+        })
 
-                "from": start,
+                new_schedule = Schedule(
+                    user_id=user.id,
+                    day=day,
+                    sport=sport,
+                    duration=duration,
+                    intensity=intensity,
+                    start_time=start,
+                    end_time=end
+)
 
-                "to": end
-
-            })
+                db.session.add(new_schedule)
+        #end of all loops
+        db.session.commit()
 
         # ==================================
         # Save into session
@@ -943,17 +966,34 @@ def plan():
             user=user,
             schedule=schedule
         )
-
+       
+        
     # =========================================
     # GET existing schedule
     # =========================================
-    saved_schedule = session.get('schedule')
+    saved_schedule = Schedule.query.filter_by(
+    user_id=user.id
+    ).all()
 
     return render_template(
         'plan.html',
         user=user,
         schedule=saved_schedule
     )
+# =========================================
+# Edit Schedule (Aloysius)
+# =========================================
+@app.route('/edit_schedule', methods=['POST'])
+@login_required
+def edit_schedule():
+
+    user = User.query.get(session['user_id'])
+
+    Schedule.query.filter_by(user_id=user.id).delete()
+
+    db.session.commit()
+
+    return redirect(url_for('plan'))
 #================================================
 # Start (LAWRENCE)
 #================================================
