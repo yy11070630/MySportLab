@@ -1,5 +1,4 @@
 from unicodedata import category
-
 from flask import Flask, request, render_template, redirect, session, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
@@ -214,14 +213,14 @@ def logout():
 # ================================================
 @app.route('/start')
 def start():
-    user = get_user()
 
     if 'user_id' not in session:
         return redirect(url_for('login'))
     
-    profile = user.profile
-
     user = User.query.get(session['user_id'])
+
+    if not user:
+        return redirect(url_for('login'))
 
     if not user.profile or not user.profile.has_completed_question:
         return redirect(url_for('question'))
