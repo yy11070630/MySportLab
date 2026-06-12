@@ -48,11 +48,21 @@
 
                 <div id="monday-time" class="time-box">
 
-                    From:
-                    <input type="time" name="monday_from">
+                     Slot 1:
+                     From:
+                        <input type="time" name="monday_from">
 
-                    To:
-                    <input type="time" name="monday_to">
+                         To:
+                         <input type="time" name="monday_to">
+
+                         <br><br>
+
+                        Slot 2:
+                        From:
+                        <input type="time" name="monday_from">
+
+                        To:
+                        <input type="time" name="monday_to">
 
                 </div>
 
@@ -68,13 +78,22 @@
 
                 <div id="tuesday-time" class="time-box">
 
-                    From:
-                    <input type="time" name="tuesday_from">
+                      Slot 1:
+    From:
+    <input type="time" name="tuesday_from">
 
-                    To:
-                    <input type="time" name="tuesday_to">
+    To:
+    <input type="time" name="tuesday_to">
 
-                </div>
+    <br><br>
+
+    Slot 2:
+    From:
+    <input type="time" name="tuesday_from">
+
+    To:
+    <input type="time" name="tuesday_to">
+</div>
 
                 <!-- Wednesday -->
                 <label>
@@ -88,11 +107,21 @@
 
                 <div id="wednesday-time" class="time-box">
 
-                    From:
-                    <input type="time" name="wednesday_from">
+                     Slot 1:
+    From:
+    <input type="time" name="wednesday_from">
 
-                    To:
-                    <input type="time" name="wednesday_to">
+    To:
+    <input type="time" name="wednesday_to">
+
+    <br><br>
+
+    Slot 2:
+    From:
+    <input type="time" name="wednesday_from">
+
+    To:
+    <input type="time" name="wednesday_to">
 
                 </div>
 
@@ -105,14 +134,22 @@
 
                     Thursday
                 </label>
-
                 <div id="thursday-time" class="time-box">
+Slot 1:
+    From:
+    <input type="time" name="thursday_from">
 
-                    From:
-                    <input type="time" name="thursday_from">
+    To:
+    <input type="time" name="thursday_to">
 
-                    To:
-                    <input type="time" name="thursday_to">
+    <br><br>
+
+    Slot 2:
+    From:
+    <input type="time" name="thursday_from">
+
+    To:
+    <input type="time" name="thursday_to">
 
                 </div>
 
@@ -128,11 +165,21 @@
 
                 <div id="friday-time" class="time-box">
 
-                    From:
-                    <input type="time" name="friday_from">
+                     Slot 1:
+    From:
+    <input type="time" name="friday_from">
 
-                    To:
-                    <input type="time" name="friday_to">
+    To:
+    <input type="time" name="friday_to">
+
+    <br><br>
+
+    Slot 2:
+    From:
+    <input type="time" name="friday_from">
+
+    To:
+    <input type="time" name="friday_to">
 
                 </div>
 
@@ -148,11 +195,21 @@
 
                 <div id="saturday-time" class="time-box">
 
-                    From:
-                    <input type="time" name="saturday_from">
+                    Slot 1:
+    From:
+    <input type="time" name="saturday_from">
 
-                    To:
-                    <input type="time" name="saturday_to">
+    To:
+    <input type="time" name="saturday_to">
+
+    <br><br>
+
+    Slot 2:
+    From:
+    <input type="time" name="saturday_from">
+
+    To:
+    <input type="time" name="saturday_to">
 
                 </div>
 
@@ -168,11 +225,21 @@
 
                 <div id="sunday-time" class="time-box">
 
-                    From:
-                    <input type="time" name="sunday_from">
+                   Slot 1:
+    From:
+    <input type="time" name="sunday_from">
 
-                    To:
-                    <input type="time" name="sunday_to">
+    To:
+    <input type="time" name="sunday_to">
+
+    <br><br>
+
+    Slot 2:
+    From:
+    <input type="time" name="sunday_from">
+
+    To:
+    <input type="time" name="sunday_to">
 
                 </div>
 
@@ -238,62 +305,42 @@
 
     <h1 class="schedule-title">Weekly Schedule</h1>
 
-    <div class="schedule-grid">
+   <table class="schedule-table">
+
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Sport</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th>Intensity</th>
+        </tr>
+    </thead>
+
+    <tbody>
 
         {% for item in schedule %}
 
-        <div class="schedule-card">
-
-            <h3>{{ item.day }}</h3>
-
-            <p><strong>Sport:</strong> {{ item.sport }}</p>
-
-            <p><strong>Time:</strong>
-                {{ item.from }} - {{ item.to }}
-            </p>
-
-            <p><strong>Duration:</strong>
-                {{ item.duration }}
-            </p>
-
-            <p class="intensity">
-                {{ item.intensity }} Intensity
-            </p>
-
-        </div>
+        <tr>
+            <td>{{ item.day }}</td>
+            <td>{{ item.sport }}</td>
+            <td>{{ item.start_time }} - {{ item.end_time }}</td>
+            <td>{{ item.duration }}</td>
+            <td>{{ item.intensity }}</td>
+        </tr>
 
         {% endfor %}
 
-    </div>
+    </tbody>
 
-    <!-- CALENDAR -->
-    <div class="calendar">
+</table>
+<form action="/edit_schedule" method="POST">
+    <button type="submit">
+        Edit Schedule
+    </button>
+</form>
 
-        <h2>Weekly Calendar</h2>
-
-        <div class="calendar-grid">
-
-            {% for item in schedule %}
-
-            <div class="calendar-day">
-
-                <h4>{{ item.day }}</h4>
-
-                <p>{{ item.sport }}</p>
-
-                <p>{{ item.from }}</p>
-
-            </div>
-
-            {% endfor %}
-
-        </div>
-
-    </div>
-
-    {% endif %}
-
-</div>
+   {% endif %}
 
 <script>
 
