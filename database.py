@@ -51,6 +51,27 @@ class UserProfile(db.Model):
     def __repr__(self):
         return f"<Profile user_id={self.user_id}>"
 
+# =========================
+# Food Table (SHAO QI)
+# =========================
+class Food(db.Model):
+    __tablename__ = 'food'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    food_name = db.Column(
+        db.String(100),
+        nullable=False,
+        unique=True
+    )
+
+    calories = db.Column(
+        db.Float,
+        nullable=False
+    )
+
+    def __repr__(self):
+        return f"<Food {self.food_name}>"
 
 # =========================
 # Admin Table (ALOYSIUS)

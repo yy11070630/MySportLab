@@ -88,48 +88,46 @@
 
     <h2>FitBalance Calories Tracker</h2>
 
-    <p>
-        Tracking Date:
-        {{ today }}
-    </p>
-
     <form method="POST">
 
+        <label>Food</label><br>
+
         <input
-            type="text"
-            name="food"
-            placeholder="Food Name"
+            list="foods"
+            name="food_name"
+            placeholder="Search food..."
             required
         >
+
+        <datalist id="foods">
+
+            {% for food in foods %}
+
+                <option value="{{ food.food_name }}">
+
+            {% endfor %}
+
+        </datalist>
+
+        <br><br>
+
+        <label>Quantity</label><br>
 
         <input
             type="number"
-            name="calories"
-            placeholder="Calories"
+            name="quantity"
+            min="1"
+            value="1"
             required
         >
 
+        <br><br>
+
         <button type="submit">
-            Add Food
+            Calculate Calories
         </button>
 
     </form>
-
-    <hr>
-
-    {% for item in calorie_logs %}
-
-        <p>
-            {{ item.food }}
-            - {{ item.calories }} kcal
-        </p>
-
-    {% endfor %}
-
-    <h3>
-        Total Calories:
-        {{ total_calories }} kcal
-    </h3>
 
 </div>
 
