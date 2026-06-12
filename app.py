@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, redirect, session, url_for, j
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
 from datetime import datetime, timedelta, date  # Processing time (Token expiration time)
-from database import db, User, UserProfile, Admin
+from database import db, User, UserProfile, Admin, Food  # Import your database models
 from functools import wraps
 import os                                  # File handling (for avatar uploads)
 import random                                
@@ -432,19 +432,35 @@ def dashboard():
 # =========================================
     if request.method == 'POST':
 
-        food = request.form.get('food')
+        food_name = request.form.get(
+            'food_name'
+     )
 
-        calories = int(request.form.get('calories'))
+        quantity = int(
+            request.form.get(
+                'quantity'
+            )
+        )
 
-        calorie_logs.append({
+        food = Food.query.filter_by(
+            food_name=food_name
+        ).first()
 
-          'food': food,
+        if food:
 
-          'calories': calories
+            total_food_calories = (
+                food.calories * quantity
+            )    
 
-         })
+            calorie_logs.append({
 
-        session['calorie_logs'] = calorie_logs
+                'food': food.food_name,
+
+                'calories': total_food_calories
+
+            })
+
+            session['calorie_logs'] = calorie_logs
 
 
     total_calories = sum(
@@ -488,6 +504,10 @@ def dashboard():
     else:
         calorie_status = "Daily calorie goal exceeded."
 
+    foods = Food.query.order_by(
+        Food.food_name
+    ).all()
+
     return render_template(
         'dashboard.html',
         user=user,
@@ -503,12 +523,129 @@ def dashboard():
         remaining_calories=remaining_calories,
         progress=progress,
         calorie_status=calorie_status,
-        today=today
+        today=today,
+        foods=foods
         )
 
 
 
+@app.route('/load_foods')
+def load_foods():
 
+    foods = [
+
+        # Malay Food
+        ("Nasi Lemak", 322),
+        ("Nasi Goreng", 550),
+        ("Nasi Kandar", 700),
+        ("Nasi Kerabu", 500),
+        ("Nasi Dagang", 520),
+        ("Nasi Minyak", 480),
+        ("Nasi Ayam Penyet", 650),
+        ("Satay Chicken", 250),
+        ("Satay Beef", 280),
+        ("Rendang Chicken", 450),
+        ("Rendang Beef", 500),
+        ("Ayam Goreng", 350),
+        ("Sambal Sotong", 300),
+        ("Ikan Bakar", 280),
+        ("Mee Rebus", 450),
+
+        # Chinese Food
+        ("Chicken Rice", 607),
+        ("Duck Rice", 650),
+        ("Roast Pork Rice", 700),
+        ("Char Kuey Teow", 740),
+        ("Hokkien Mee", 650),
+        ("Wantan Mee", 500),
+        ("Pan Mee", 550),
+        ("Yong Tau Foo", 350),
+        ("Fried Rice", 600),
+        ("Sweet and Sour Chicken", 550),
+        ("Dim Sum", 350),
+        ("Fish Ball Noodles", 450),
+
+        # Indian Food
+        ("Roti Canai", 301),
+        ("Roti Telur", 350),
+        ("Roti Tissue", 450),
+        ("Roti Planta", 420),
+        ("Roti Bom", 550),
+        ("Thosai", 250),
+        ("Capati", 180),
+        ("Mee Goreng Mamak", 600),
+        ("Maggi Goreng", 650),
+        ("Tandoori Chicken", 400),
+
+        # Noodles
+        ("Mee Goreng", 520),
+        ("Laksa", 432),
+        ("Curry Mee", 500),
+        ("Mee Bandung", 550),
+        ("Mee Kari", 580),
+        ("Bee Hoon Soup", 350),
+        ("Fried Bee Hoon", 500),
+        ("Kuey Teow Soup", 400),
+
+        # Drinks
+        ("Teh Tarik", 120),
+        ("Teh O", 60),
+        ("Kopi O", 50),
+        ("Kopi", 90),
+        ("Milo", 180),
+        ("Bandung", 160),
+        ("Lemon Tea", 70),
+        ("Barley Drink", 90),
+        ("Soy Milk", 130),
+        ("100 Plus", 80),
+
+        # Fruits
+        ("Apple", 95),
+        ("Banana", 105),
+        ("Orange", 62),
+        ("Watermelon", 46),
+        ("Papaya", 60),
+        ("Mango", 99),
+        ("Guava", 68),
+        ("Dragon Fruit", 60),
+        ("Pineapple", 82),
+        ("Durian", 357),
+
+        # Fast Food
+        ("Burger", 354),
+        ("Cheeseburger", 400),
+        ("French Fries", 365),
+        ("Fried Chicken", 390),
+        ("Pizza Slice", 285),
+        ("Hot Dog", 290),
+        ("Chicken Nugget", 270),
+
+        # Desserts
+        ("Cendol", 250),
+        ("ABC", 300),
+        ("Ais Kacang", 280),
+        ("Kuih Lapis", 120),
+        ("Onde Onde", 90),
+        ("Kuih Seri Muka", 180)
+
+    ]
+
+    for name, kcal in foods:
+
+        if not Food.query.filter_by(
+            food_name=name
+        ).first():
+
+            db.session.add(
+                Food(
+                    food_name=name,
+                    calories=kcal
+                )
+            )
+
+    db.session.commit()
+
+    return "Foods Loaded"
 
 
 

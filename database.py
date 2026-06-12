@@ -51,6 +51,27 @@ class UserProfile(db.Model):
     def __repr__(self):
         return f"<Profile user_id={self.user_id}>"
 
+# =========================
+# Food Table (SHAO QI)
+# =========================
+class Food(db.Model):
+    __tablename__ = 'food'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    food_name = db.Column(
+        db.String(100),
+        nullable=False,
+        unique=True
+    )
+
+    calories = db.Column(
+        db.Float,
+        nullable=False
+    )
+
+    def __repr__(self):
+        return f"<Food {self.food_name}>"
 
 # =========================
 # Admin Table (ALOYSIUS)
@@ -65,3 +86,22 @@ class Admin(db.Model):
 
     def __repr__(self):
         return f"<Admin {self.username}>"
+
+#=========================
+# #Schedule Table (Aloysius)
+#=========================   
+class Schedule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False
+    )
+
+    day = db.Column(db.String(20))
+    sport = db.Column(db.String(50))
+    duration = db.Column(db.String(50))
+    intensity = db.Column(db.String(50))
+    start_time = db.Column(db.String(10))
+    end_time = db.Column(db.String(10))
