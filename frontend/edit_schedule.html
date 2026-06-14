@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Schedule</title>
+</head>
+
+<body>
+
+<h1>Edit Schedule</h1>
+
+{% if error %}
+<p style="color:red;">
+    {{ error }}
+</p>
+{% endif %}
+
+<form method="POST">
+
+    <p>
+        <strong>Day:</strong>
+        {{ schedule.day }}
+    </p>
+
+    <label>Sport:</label>
+
+<select name="sport">
+
+    <option value="Football"
+        {% if schedule.sport == 'Football' %}selected{% endif %}>
+        Football
+    </option>
+
+    <option value="Basketball"
+        {% if schedule.sport == 'Basketball' %}selected{% endif %}>
+        Basketball
+    </option>
+
+    <option value="Badminton"
+        {% if schedule.sport == 'Badminton' %}selected{% endif %}>
+        Badminton
+    </option>
+
+    <option value="Swimming"
+        {% if schedule.sport == 'Swimming' %}selected{% endif %}>
+        Swimming
+    </option>
+
+    <option value="Gym"
+        {% if schedule.sport == 'Gym' %}selected{% endif %}>
+        Gym
+    </option>
+
+    <option value="Cycling"
+        {% if schedule.sport == 'Cycling' %}selected{% endif %}>
+        Cycling
+    </option>
+
+    <option value="Running"
+        {% if schedule.sport == 'Running' %}selected{% endif %}>
+        Running
+    </option>
+
+</select>
+
+<br><br>
+
+    <label>Start Time:</label>
+    <input
+        type="time"
+        name="start_time"
+        value="{{ schedule.start_time }}"
+    >
+
+    <br><br>
+
+    <label>End Time:</label>
+    <input
+        type="time"
+        name="end_time"
+        value="{{ schedule.end_time }}"
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Save Changes
+    </button>
+
+    <br><br>
+
+<form action="/delete_schedule/{{ schedule.id }}" method="POST">
+
+    <button
+        type="submit"
+        onclick="return confirm('Are you sure you want to delete this slot?')">
+        🗑 Delete Slot
+    </button>
+</form>
+
+<br>
+
+<a href="/plan">
+    Back to Schedule
+</a>
+
+</body>
+</html>
