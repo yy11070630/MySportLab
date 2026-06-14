@@ -1023,6 +1023,19 @@ def plan():
 
         sports = request.form.getlist('sports')
         days = request.form.getlist('days')
+        if not sports:
+            return render_template(
+            'plan.html',
+            user=user,
+            error="Please select at least one sport"
+        )
+
+        if not days:
+            return render_template(
+            'plan.html',
+            user=user,
+            error="Please select at least one day"
+        )
 
         schedule = []
 
@@ -1052,21 +1065,42 @@ def plan():
             starts = request.form.getlist(f"{day.lower()}_from")
             ends = request.form.getlist(f"{day.lower()}_to")
 
-            # Process multiple time slots for the same day
+            for i in range(len(starts)):
+                for j in range(i + 1, len(starts)):
+
+                 if starts[i] == starts[j] and ends[i] == ends[j]:
+                     return render_template(
+                    'plan.html',
+                    user=user,
+                    error=f"{day}: Slot times cannot be the same"
+            )
+            # End time must be later than start time
             for start, end in zip(starts, ends):
 
-             # Skip empty time slots
+                 # Skip empty slots
                 if not start or not end:
                     continue
 
                 start_time = datetime.strptime(start, "%H:%M")
                 end_time = datetime.strptime(end, "%H:%M")
 
+                if end_time <= start_time:
+                    return render_template(
+                    'plan.html',
+                    user=user,
+                    error=f"{day}: End time must be later than start time"
+            )
+           
+
                 # Validate time slot for at least 30 min duration
                 if end_time < start_time + timedelta(minutes=30):
-                    return f"{day}: End time must be at least 30 minutes after start time", 400
+                    return render_template(
+                        'plan.html',
+                        user=user,
+                        error=f"{day}: End time must be at least 30 minutes after start time"
+                    )
 
-        # Randomly select a sport
+                # Randomly select a sport
                 sport = random.choice(sports)
 
                 schedule.append({
@@ -1076,7 +1110,7 @@ def plan():
                     "intensity": intensity,
                     "from": start,
                     "to": end
-        })
+                })
 
                 new_schedule = Schedule(
                     user_id=user.id,
@@ -1086,23 +1120,26 @@ def plan():
                     intensity=intensity,
                     start_time=start,
                     end_time=end
-)
+                )
 
                 db.session.add(new_schedule)
-        #end of all loops
-        db.session.commit()
+                #end of all loops
+                db.session.commit()
 
         # ==================================
         # Save into session
         # ==================================
         session['schedule'] = schedule
 
+        saved_schedule = Schedule.query.filter_by(
+        user_id=user.id
+        ).all()
+
         return render_template(
             'plan.html',
             user=user,
-            schedule=schedule
+            schedule=saved_schedule
         )
-       
         
     # =========================================
     # GET existing schedule
@@ -1114,22 +1151,50 @@ def plan():
     return render_template(
         'plan.html',
         user=user,
-        schedule=saved_schedule
+        schedule=saved_schedule,
+        error=None
     )
 # =========================================
 # Edit Schedule (Aloysius)
 # =========================================
-@app.route('/edit_schedule', methods=['POST'])
+@app.route('/edit_schedule/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_schedule():
+def edit_schedule(id):
 
-    user = User.query.get(session['user_id'])
+    schedule = Schedule.query.get_or_404(id)
 
-    Schedule.query.filter_by(user_id=user.id).delete()
+    if request.method == 'POST':
 
-    db.session.commit()
+        start_time = datetime.strptime(
+            request.form['start_time'],
+            "%H:%M"
+        )
 
-    return redirect(url_for('plan'))
+        end_time = datetime.strptime(
+            request.form['end_time'],
+            "%H:%M"
+        )
+
+        if end_time <= start_time:
+            return render_template(
+                'edit_schedule.html',
+                schedule=schedule,
+                error="End time must be later than start time"
+            )
+
+        schedule.start_time = request.form['start_time']
+        schedule.end_time = request.form['end_time']
+        schedule.sport = request.form['sport']
+
+        db.session.delete(schedule)
+        db.session.commit()
+
+        return redirect('/plan')
+    
+    return render_template(
+        'edit_schedule.html',
+        schedule=schedule
+    )
 #================================================
 # Start (LAWRENCE)
 #================================================
