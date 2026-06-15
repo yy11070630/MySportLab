@@ -20,6 +20,7 @@
 
 <div class="container">
 
+<div class="planner-box">
    <h1 class="plan-title">
     Smart Sport Planning System
 </h1>
@@ -356,8 +357,9 @@
         <button type="submit" class="generate-btn">
             Generate Weekly Schedule
         </button>
-
+        
     </form>
+</div>
 
     <!-- GENERATED SCHEDULE -->
     {% if schedule %}
@@ -389,7 +391,7 @@
             <td>{{ item.intensity }}</td>
             <td>
             <a href="/edit_schedule/{{ item.id }}">
-            ✏️ Edit
+             Edit
             </a>
             </td>
         </tr>
@@ -399,7 +401,18 @@
     </tbody>
 
 </table>
+<form action="/delete_all_schedule" method="POST" class="delete-all-form">
 
+    <button
+        type="submit"
+        class="delete-all-btn"
+        onclick="return confirm('Delete ALL schedules?')">
+
+         Delete Whole Schedule
+
+    </button>
+
+</form>
    {% endif %}
 
 <script>

@@ -1,0 +1,135 @@
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Poppins', sans-serif;
+}
+
+body {
+background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+position: relative;
+overflow-x: hidden;
+}
+
+        /* navbar */
+        .header {
+            background: #0046e4;
+            box-shadow: 0 4px 12px rgba(0, 70, 228, 0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 18px 20px;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 0 20px;
+            transition: all 0.3s ease;
+            opacity: 0.85;
+        }
+
+        nav a:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        /* main content */
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 120px 20px 40px 20px;
+            z-index: 10;
+        }
+
+        /* card */
+        .card {
+            background: #ffffff;
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+        }
+
+        /* icon bell */
+        .icon-bell {
+            font-size: 60px;
+            color: #0046e4;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: pulse 2s infinite; /* bell effect */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* website name */
+        .card h1 {
+            font-size: 40px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #0046e4, #00c6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        /* 副标题 */
+        .card p.subtitle {
+            font-size: 17px;
+            color: #4a5568;
+            margin-bottom: 35px;
+        }
+
+        /* 开始按钮 */
+        .btn-start {
+            display: inline-block;
+            background: linear-gradient(45deg, #0046e4, #0072ff);
+            color: white;
+            text-decoration: none;
+            padding: 14px 50px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(0, 70, 228, 0.4);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 70, 228, 0.5);
+        }
+
+        /* login mention */
+        .login-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        

@@ -1018,9 +1018,7 @@ def plan():
     # =========================================
     if request.method == 'POST':
 
-        # Remove old schedule
-        Schedule.query.filter_by(user_id=user.id).delete()
-
+        
         sports = request.form.getlist('sports')
         days = request.form.getlist('days')
         if not sports:
@@ -1186,7 +1184,6 @@ def edit_schedule(id):
         schedule.end_time = request.form['end_time']
         schedule.sport = request.form['sport']
 
-        db.session.delete(schedule)
         db.session.commit()
 
         return redirect('/plan')
@@ -1195,6 +1192,31 @@ def edit_schedule(id):
         'edit_schedule.html',
         schedule=schedule
     )
+#========================================
+# delete schedule (Aloysius)
+#========================================
+@app.route('/delete_schedule/<int:id>', methods=['POST'])
+@login_required
+def delete_schedule(id):
+
+    schedule = Schedule.query.get_or_404(id)
+
+    db.session.delete(schedule)
+    db.session.commit()
+
+    return redirect('/plan')
+
+@app.route('/delete_all_schedule', methods=['POST'])
+@login_required
+def delete_all_schedule():
+
+    Schedule.query.filter_by(
+        user_id=session['user_id']
+    ).delete()
+
+    db.session.commit()
+
+    return redirect('/plan')
 #================================================
 # Start (LAWRENCE)
 #================================================
