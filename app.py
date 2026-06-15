@@ -200,6 +200,45 @@ def login():
 
 
 # ================================================
+# Forgot Password (LAWRENCE)
+# ================================================
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+
+    if request.method == 'POST':
+
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+
+        user = User.query.filter_by(
+            username=username,
+            email=email
+        ).first()
+
+        if not user:
+            return render_template(
+                'forgot_password.html',
+                error="Username or Email incorrect"
+            )
+
+        if password != confirm:
+            return render_template(
+                'forgot_password.html',
+                error="Passwords do not match"
+            )
+
+        user.password = generate_password_hash(password)
+
+        db.session.commit()
+
+        return redirect(url_for('login'))
+
+    return render_template('forgot_password.html')
+
+
+# ================================================
 # Logout (LAWRENCE)
 # ================================================
 @app.route('/logout')
@@ -1152,6 +1191,7 @@ def plan():
         schedule=saved_schedule,
         error=None
     )
+
 # =========================================
 # Edit Schedule (Aloysius)
 # =========================================
