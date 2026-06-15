@@ -1,0 +1,226 @@
+/* =========================================
+   PROFILE PAGE
+========================================= */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.navbar {
+    background: #0046e4;
+    padding: 15px;
+    text-align: center;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: 600;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* =========================================
+   PROFILE LAYOUT
+========================================= */
+
+.profile-layout {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* =========================================
+   LEFT CARD
+========================================= */
+
+.profile-left {
+    width: 35%;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* =========================================
+   RIGHT CARD
+========================================= */
+
+.profile-right {
+    flex: 1;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   AVATAR
+========================================= */
+
+.profile-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #0046e4;
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   FORM
+========================================= */
+
+input[type="file"] {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: none;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn {
+    background: linear-gradient(45deg, #0046e4, #0072ff);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* =========================================
+   PERSONAL INFO
+========================================= */
+
+.profile-right h3 {
+    margin-bottom: 20px;
+    color: #0046e4;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info-row span:first-child {
+    font-weight: bold;
+    color: #666;
+}
+
+.info-row span:last-child {
+    color: #222;
+}
+
+/* =========================================
+   FITNESS STATS
+========================================= */
+
+.stats {
+    display: flex;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.stat-card {
+    flex: 1;
+    background: #f4f6f9;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-card h4 {
+    margin: 0;
+    color: #666;
+}
+
+.stat-card p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0046e4;
+    margin-top: 10px;
+}
+
+/* =========================================
+   LOGOUT BUTTON
+========================================= */
+
+.logout-btn {
+    display: inline-block;
+    margin-top: 25px;
+    background: #dc3545;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+}
+
+.logout-btn:hover {
+    background: #b52a37;
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+.profile-layout {
+     flex-direction: column;
+}
+
+.profile-left {
+    width: auto;
+}
+
+.stats {
+    flex-direction: column;
+}
+
+.navbar a {
+    display: block;
+    margin: 10px 0;
+}
+}

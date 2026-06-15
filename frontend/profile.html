@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Profile - MySportLab</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
 </head>
 
 <body>
@@ -18,16 +18,21 @@
     <a href="/profile">Profile</a>
 
     </div>
-    
-    <div class="box">
+
+    <div class="profile-layout">
+
+    <div class="profile-left">
 
     <h2>Profile</h2>
 
     <!-- Avatar -->
     {% if profile.avatar %}
-        <img src="/{{ profile.avatar }}">
+    <img class="profile-avatar" src="/{{ profile.avatar }}">
+     <p>{{ profile.avatar }}</p>
     {% else %}
-        <img src="{{ url_for('static', filename='default.png') }}">
+   
+    <img class="profile-avatar"
+         src="{{ url_for('static', filename='default.png') }}">
     {% endif %}
 
     <!-- Upload avatar -->
@@ -39,22 +44,52 @@
 
         <button class="btn">Update</button>
     </form>
+     </div>
+   
 
-    <hr>
+    <div class="profile-right">
 
-    <!-- Info -->
-    <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>Gender: {{ profile.gender }}</p>
-    <p>Height: {{ profile.height }}</p>
-    <p>Weight: {{ profile.weight }}</p>
-    <p>Country: {{ profile.country }}</p>
-    <p>DOB: {{ profile.date_of_birth }}</p>
+        <h3>Personal Information</h3>
 
-</div>
-        <a href="/logout">Logout</a>
+        <div class="info-row">
+            <span>Username</span>
+            <span>{{ user.username }}</span>
+        </div>
+
+        <div class="info-row">
+            <span>Email</span>
+            <span>{{ user.email }}</span>
+        </div>
+        <div class="info-row">
+            <span>Gender</span>
+            <span>{{ profile.gender }}</span>
+        </div>
+
+        <div class="info-row">
+            <span>Height</span>
+            <span>{{ profile.height }}</span>
+        </div>
+
+        <div class="info-row">
+            <span>Weight</span>
+            <span>{{ profile.weight }}</span>
+        </div>
+
+        <div class="info-row">
+            <span>Country</span>
+            <span>{{ profile.country }}</span>
+        </div>
+
+        <div class="info-row">
+            <span>DOB</span>
+            <span>{{ profile.date_of_birth }}</span>
+        </div>
 
     </div>
+
+</div>
+        <a href="/logout" class="logout-btn">Logout</a>
+
 </div>
 
 </body>
