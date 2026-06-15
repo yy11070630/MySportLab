@@ -2,46 +2,43 @@
 <html>
 <head>
     <title>MySportLab</title>
-    <link rel="stylesheet" href="{{ url_for( 'static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for( 'static', filename='index.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
-<div class="navbar">
-
-    <a href="/">Home</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/plan">Plan</a>
-    <a href="/tutorial">Tutorial</a>
-    <a href="/chat">Chat</a>
-
-    {% if logged_in %}
-        <a href="/profile">Profile</a>
-    {% else %}
-        <a href="/login">Login</a>
-    {% endif %}
-
-</div>
+ <div class="header">
+    <nav>
+        <h1>MySportLab</h1>
+    </nav>
+ </div>
 
 <div class="container">
+    <div class="card">
+        <div class="icon-bell">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+        <h1>Welcome to MySportLab</h1>
+        <p class="subtitle">Your fitness journey starts here.</p>
 
-    <h1>Welcome to MySportLab</h1>
-    <p>Your fitness journey starts here.</p>
+        <form action="/start">
+            <button class="btn-start">Start</button>
+        </form>
 
-    <form action="/start">
-        <button class="btn">Start</button>
-    </form>
+        <div class="login-box">
+            <i class="fa-solid fa-lock"></i>
+            {% if not logged_in %}
+                <p>Please login to continue.</p>
 
-    {% if not logged_in %}
-        <p>Please login to continue.</p>
+            {% elif not completed %}
+                <p>Please complete your questionnaire.</p>
 
-    {% elif not completed %}
-        <p>Please complete your questionnaire.</p>
-
-    {% else %}
-        <p>Welcome back! Go to your dashboard.</p>
-    {% endif %}
-
+            {% else %}
+                <p>Welcome back! Go to your dashboard.</p>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
 </body>
