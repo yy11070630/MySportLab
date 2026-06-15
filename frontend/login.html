@@ -2,32 +2,66 @@
 <html>
 <head>
     <title>Login - MySportLab</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
-<div class="container">
-    <div class="box">
+    <div class="card">
 
-        <h2>Login</h2>
+        <a href="/" class="back-home">
+            <i class="fa-solid fa-arrow-left"></i>
+            Home
+        </a>
+
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Login to check your fitness dashboard</p>
 
         {% if error %}
             <div class="error"> {{ error }}</div>
         {% endif %}
 
         <form method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
 
-            <button type="submit">Login</button>
+            <div class="input-box">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="form-options">
+                <label>
+                    <input type="checkbox">
+                    Remember me
+                </label>
+
+                <a href="/forgot_password" class="forgot-password">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+
         </form>
 
-        <a href="/register">Don't have an account? Register</a>
-        <a href="/admin/login">Login as Admin</a>
+            <p class="register-tip">
+                Don't have an account?
+                <a href="/register">Register</a>
+            </p>
+
+            <p class="admin-login-tip">
+                Are you an admin?
+                <a href="/admin/login">
+                    Here
+                </a>
+            </p>
+
+        </div>
 
     </div>
-</div>
 
 </body>
 </html>
