@@ -562,7 +562,8 @@ def dashboard():
         progress=progress,
         calorie_status=calorie_status,
         today=today,
-        foods=foods
+        foods=foods,
+        profile=profile
         )
 
 
