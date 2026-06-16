@@ -6,10 +6,7 @@
 </head>
 
 <body>
-
-<div class="container">
-    <div class="navbar">
-
+ <div class="navbar">
     <a href="/">Home</a>
     <a href="/dashboard">Dashboard</a>
     <a href="/plan">Plan</a>
@@ -17,8 +14,10 @@
     <a href="/chat">Chat</a>
     <a href="/profile">Profile</a>
 
-    </div>
+ </div>
 
+<div class="container">
+   
     <div class="profile-layout">
 
     <div class="profile-left">
@@ -85,12 +84,13 @@
             <span>{{ profile.date_of_birth }}</span>
         </div>
 
+    <div class="logout-container">
+        <a href="/logout" class="logout-btn">Logout</a>
     </div>
 
-</div>
-        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
 
-</div>
+
 
 </body>
 </html>

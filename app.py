@@ -1111,6 +1111,7 @@ def plan():
                     user=user,
                     error=f"{day}: Slot times cannot be the same"
             )
+                 
             # End time must be later than start time
             for start, end in zip(starts, ends):
 
@@ -1127,6 +1128,14 @@ def plan():
                     user=user,
                     error=f"{day}: End time must be later than start time"
             )
+                
+                # Maximum 6 hours per slot
+                if end_time > start_time + timedelta(hours=6):
+                    return render_template(
+                        'plan.html',
+                        user=user,
+                        error=f"{day}: Each slot cannot exceed 6 hours"
+    )
            
 
                 # Validate time slot for at least 30 min duration
