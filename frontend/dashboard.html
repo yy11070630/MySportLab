@@ -77,11 +77,15 @@
 
     <div class="dashboard-grid">
 
-        <h1>Welcome, {{ user.username if user else 'Athlete' }} </h1>
-
         <div class="left-column">
 
+            <div class="welcome-section">
+                <h1>Welcome, {{ user.username if user else 'Athlete' }} </h1>
+                <p>Check your fitness dashboard and track your progress.</p>
+            </div>
+            
             <div class="biometrics-card">
+
                 <div class="model-container">
                     <svg class="human-svg" viewBox="0 0 24 24">
                         <path d="M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6A2,2 0 0,1 10,4A2,2 0 0,1 12,2M10.5,22V16H7.5V11C7.5,9.9 8.4,9 9.5,9H14.5C15.6,9 16.5,9.9 16.5,11V16H13.5V22H10.5Z" />
@@ -89,29 +93,33 @@
                 </div>
 
                 <div class="bio-data-content">
-                    <div class="bio-item">
-                        <i class="fa-solid fa-arrows-up-down"></i>
-                        <div class="bio-text">
-                            <p class="label">Height</p>
-                            <p class="value">{{ height if height else 'Not set' }}<p class="bio-value-unit">cm</p></p>
+
+                    <div class="bio-left-column">
+
+                        <div class="bio-item">
+                            <i class="fa-solid fa-arrows-up-down"></i>
+                            <div class="bio-text">
+                                <p class="label">Height</p>
+                                <p class="value">{{ height if height else 'Not set' }}<p style="font-size: 13px; font-weight: 500; color: #a0aec0; margin-left: 2px;">cm</p></p>
+                            </div>
                         </div>
-                    </div>
                     
-                    <div class="bio-item">
-                        <i class="fa-solid fa-weight-scale"></i>
-                        <div class="bio-text">
-                            <p class="label">Weight</p>
-                            <p class="value">{{ weight if weight else 'Not set' }}<p class="bio-value-unit">kg</p></p>
+                        <div class="bio-item">
+                            <i class="fa-solid fa-weight-scale"></i>
+                            <div class="bio-text">
+                                <p class="label">Weight</p>
+                                <p class="value">{{ weight if weight else 'Not set' }}<p style="font-size: 13px; font-weight: 500; color: #a0aec0; margin-left: 2px;">kg</p></p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="bmi-icon">
+                    <div class="bio-right-column">
                         <i class="fa-solid fa-calculator"></i>
                         <div class="bmi-text">
-                            <p class="label">BMI</p>
+                            <p class="bmi-label">Body Mass Index(BMI)</p>
                             {% if bmi %}
-                                <h1 class="value">{{ bmi|round(2) }}</h1>
-                                <p class="category">{{ category }}</p>
+                                <h1 class="bmi-value">{{ bmi|round(2) }}</h1>
+                                <p class="bmi-category">{{ category }}</p>
                             {% else %}
                                 <p class="bmi-result">Please complete questionnaire first</p>
                             {% endif %}
