@@ -396,6 +396,104 @@ body {
     font-weight: 600;
 }
 
+.plan-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.01);
+    border: 1px solid #edf2f7;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    min-width: 380px;
+}
+
+.plan-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 2px solid #f7fafc;
+    padding-bottom: 14px;
+}
+
+.plan-header i {
+    font-size: 18px;
+    color: #0052cc;
+}
+
+.plan-header h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a202c;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.schedule-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    background: #f7fafc;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1px solid #edf2f7;
+    transition: all 0.2s ease;
+}
+
+.schedule-item:hover {
+    background: #ffffff;
+    border-color: #0052cc;
+    box-shadow: 0 6px 16px rgba(0, 82, 204, 0.04);
+    transform: translateY(-1px);
+}
+
+.sport-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sport-icon-bg {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(0, 82, 204, 0.06);
+    color: #0052cc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+
+.sport-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.sport-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: #718096;
+    background: #ffffff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #edf2f7;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sport-time i {
+    color: #a0aec0;
+    font-size: 12px;
+}
+
 .bulletin-list {
     list-style: none;
 }
@@ -408,70 +506,74 @@ body {
     align-items: center;
 }
 
-        .bulletin-item:last-child { border-bottom: none; }
+.bulletin-item:last-child { 
+    border-bottom: none; 
+}
 
-        .bulletin-main {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+.bulletin-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
 
-        .bulletin-tag {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: #edf2f7;
-            color: #4a5568;
-        }
+.bulletin-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: #edf2f7;
+    color: #4a5568;
+}
 
-        .bulletin-tag.new {
-            background: #fff5f5;
-            color: #e53e3e;
-        }
+.bulletin-tag.new {
+    background: #fff5f5;
+    color: #e53e3e;
+}
 
-        .bulletin-title {
-            font-size: 14px;
-            font-weight: 500;
-            color: #2d3748;
-            cursor: pointer;
-        }
-        .bulletin-title:hover { color: #0046e4; }
+.bulletin-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2d3748;
+    cursor: pointer;
+}
 
-        .bulletin-date {
-            font-size: 13px;
-            color: #a0aec0;
-        }
+.bulletin-title:hover {
+    color: #0046e4;
+}
 
-        /* --- 右侧侧边栏区 --- */
-        .right-column {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+.bulletin-date {
+    font-size: 13px;
+    color: #a0aec0;
+}
 
-        /* 近期活动/事件排版 */
-        .event-item {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
 
-        .event-date-badge {
-            width: 50px;
-            height: 55px;
-            background: #0046e4;
-            color: white;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-weight: 700;
-            box-shadow: 0 4px 10px rgba(0, 70, 228, 0.2);
-        }
+.event-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
 
-        .event-date-badge span { font-size: 11px; font-weight: 400; text-transform: uppercase; }
+.event-date-badge {
+    width: 50px;
+    height: 55px;
+    background: #0046e4;
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0, 70, 228, 0.2);
+}
 
-        .event-info .event-name { font-size: 14px; font-weight: 600; color: #2d3748; margin-top: 4px;}
-        .event-info .event-desc { font-size: 12px; color: #718096; }
+.event-date-badge span { font-size: 11px; font-weight: 400; text-transform: uppercase; }
+
+.event-info .event-name { font-size: 14px; font-weight: 600; color: #2d3748; margin-top: 4px;}
+
+.event-info .event-desc { font-size: 12px; color: #718096; }

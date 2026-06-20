@@ -255,17 +255,19 @@ def start():
 
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    
+
     user = User.query.get(session['user_id'])
 
     if not user:
         return redirect(url_for('login'))
 
-    if not user.profile or not user.profile.has_completed_question:
+    if not user.profile:
         return redirect(url_for('question'))
 
-    return render_template('restart_question.html')
+    if not user.profile.has_completed_question:
+        return redirect(url_for('question'))
 
+    return redirect(url_for('dashboard'))
 
 # ================================================
 # Chat btn (check question status) (LAWRENCE)
@@ -352,28 +354,28 @@ def question():
 
 
 # ================================================
-# Reset Questionn (LAWRENCE)
+# Reset Question (LAWRENCE)
 # ================================================
-@app.route('/reset_questionnaire', methods=['POST'])
-def reset_questionnaire():
-    # check user login
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    
+@app.route('/reset_question', methods=['GET', 'POST'])
+@login_required
+def reset_question():
+
     user = User.query.get(session['user_id'])
+
     if not user:
         return redirect(url_for('login'))
-    
-    # restart questionnaire
-    if user.profile:
-        user.profile.has_completed_question = False
-        # clean questionnaire answers (if any)
-        if hasattr(user.profile, 'questionnaire_answers'):
-            user.profile.questionnaire_answers = None
-        db.session.commit()
-    
-    # redirect to question page
-    return redirect(url_for('question'))
+
+    if request.method == 'POST':
+
+        if user.profile:
+
+            user.profile.has_completed_question = False
+
+            db.session.commit()
+
+        return redirect(url_for('question'))
+
+    return render_template('reset_question.html')
 
 
 # ================================================

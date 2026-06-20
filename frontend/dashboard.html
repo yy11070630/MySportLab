@@ -127,10 +127,98 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="right-column">
 
+            <div class="plan-card">
+                <div class="plan-header">
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <h3>Today's Plan</h3>
+                </div>
+            
+                <div class="schedule-list">
 
+                    {% if today_schedules %}
+                        {% for schedule in today_schedules %}
 
+                        <div class="schedule-item">
 
+                            <div class="sport-info">
+
+                                <div class="sport-icon-bg">
+
+                                    {% if schedule.sport == "Basketball" %}
+                                        <i class="fa-solid fa-basketball"></i>
+
+                                    {% elif schedule.sport == "Running" %}
+                                        <i class="fa-solid fa-person-running"></i>
+
+                                    {% elif schedule.sport == "Gym" %}
+                                        <i class="fa-solid fa-dumbbell"></i>
+
+                                    {% elif schedule.sport == "Football" %}
+                                        <i class="fa-solid fa-futbol"></i>
+
+                                    {% elif schedule.sport == "Badminton" %}
+                                        <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+
+                                    {% elif schedule.sport == "Swimming" %}
+                                        <i class="fa-solid fa-person-swimming"></i>
+
+                                    {% elif schedule.sport == "Cycling" %}
+                                        <i class="fa-solid fa-bicycle"></i>
+
+                                    {% else %}
+                                        <i class="fa-solid fa-heart-pulse"></i>
+                                    {% endif %}
+
+                                </div>
+
+                                <span class="sport-name">
+                                    {{ schedule.sport }}
+                                </span>
+
+                            </div>
+
+                            <div class="sport-time">
+
+                                <i class="fa-regular fa-clock"></i>
+
+                                <span>
+                                    {{ schedule.start_time }}
+                                    -
+                                    {{ schedule.end_time }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="schedule-item">
+
+                            <div class="sport-info">
+
+                                <div class="sport-icon-bg">
+                                    <i class="fa-solid fa-calendar-xmark"></i>
+                                </div>
+
+                                <span class="sport-name">
+                                    No Training Today
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
 
         </div>
 
