@@ -465,86 +465,6 @@ def dashboard():
   
         today_sport = "No plan generated"
         today_time = "Go to Planner →"
-# =========================================
-# CALORIE TRACKER
-# =========================================
-    if request.method == 'POST':
-
-        food_name = request.form.get(
-            'food_name'
-     )
-
-        quantity = int(
-            request.form.get(
-                'quantity'
-            )
-        )
-
-        food = Food.query.filter_by(
-            food_name=food_name
-        ).first()
-
-        if food:
-
-            total_food_calories = (
-                food.calories * quantity
-            )    
-
-            calorie_logs.append({
-
-                'food': food.food_name,
-
-                'calories': total_food_calories
-
-            })
-
-            session['calorie_logs'] = calorie_logs
-
-
-    total_calories = sum(
-        item['calories']
-        for item in calorie_logs
-    )
-
-# =========================================
-# CALORIE RECOMMENDATION
-# =========================================
-
-    if category and "Underweight" in category:
-        recommended_calories = 2500
-
-    elif category == "Normal":
-        recommended_calories = 2000
-
-    elif category and "Overweight" in category:
-        recommended_calories = 1800
-
-    else:
-        recommended_calories = 1600
-
-
-    remaining_calories = recommended_calories - total_calories
-
-
-    progress = (
-        total_calories / recommended_calories
-    ) * 100
-
-    progress = min(progress, 100)
-
-
-    if progress < 50:
-        calorie_status = "You can eat more today."
-
-    elif progress < 100:
-        calorie_status = "You are within your daily target."
-
-    else:
-        calorie_status = "Daily calorie goal exceeded."
-
-    foods = Food.query.order_by(
-        Food.food_name
-    ).all()
 
     return render_template(
         'dashboard.html',
@@ -556,17 +476,164 @@ def dashboard():
         today_sport=today_sport,
         today_time=today_time,
         calorie_logs=calorie_logs,
-        total_calories=total_calories,
-        recommended_calories=recommended_calories,
-        remaining_calories=remaining_calories,
-        progress=progress,
-        calorie_status=calorie_status,
         today=today,
-        foods=foods,
         profile=profile
         )
 
+# =========================================
+# CALORIE TRACKER
+# =========================================
+@app.route('/calorie_tracker', methods=['GET', 'POST'])
+@login_required
+def calorie_tracker():
 
+    user = User.query.get(session['user_id'])
+    profile = user.profile
+
+    height = None
+    weight = None
+    bmi = None
+    category = None
+
+    if profile and profile.height and profile.weight:
+
+        height = profile.height
+        weight = profile.weight
+
+        bmi = weight / ((height / 100) ** 2)
+
+        if bmi < 18.5:
+            category = "Underweight"
+
+        elif bmi < 23:
+            category = "Normal"
+
+        elif bmi < 27.5:
+            category = "Overweight"
+
+        else:
+            category = "Obese"
+
+    today = str(date.today())
+
+    if session.get('calorie_date') != today:
+        session['calorie_logs'] = []
+        session['calorie_date'] = today
+
+    calorie_logs = session.get('calorie_logs', [])
+
+    if request.method == 'POST':
+
+        food_name = request.form.get('food_name')
+
+        quantity = int(
+            request.form.get('quantity', 1)
+        )
+
+        food = Food.query.filter_by(
+            food_name=food_name
+        ).first()
+
+        if food:
+
+            total_food_calories = (
+                food.calories * quantity
+            )
+
+            calorie_logs.append({
+
+                'food': food.food_name,
+
+                'quantity': quantity,
+
+                'calories': total_food_calories
+
+            })
+
+            session['calorie_logs'] = calorie_logs
+
+    total_calories = sum(
+        item['calories']
+        for item in calorie_logs
+    )
+
+    if category and "Underweight" in category:
+
+        recommended_calories = 2500
+
+    elif category == "Normal":
+
+        recommended_calories = 2000
+
+    elif category and "Overweight" in category:
+
+        recommended_calories = 1800
+
+    else:
+
+        recommended_calories = 1600
+
+
+    remaining_calories = (
+        recommended_calories -
+        total_calories
+    )
+
+    progress = (
+        total_calories /
+        recommended_calories
+    ) * 100
+
+    progress = min(progress, 100)
+
+    if progress < 50:
+
+        calorie_status = "You can eat more today."
+
+    elif progress < 100:
+
+        calorie_status = "You are within your daily target."
+
+    else:
+
+        calorie_status = "Daily calorie goal exceeded."
+
+    foods = Food.query.order_by(
+        Food.food_name
+    ).all()
+
+    return render_template(
+    'calorie_tracker.html',
+
+    user=user,
+    profile=profile,
+    calorie_logs=calorie_logs,
+    total_calories=total_calories,
+    recommended_calories=recommended_calories,
+    remaining_calories=remaining_calories,
+    progress=progress,
+    calorie_status=calorie_status,
+    foods=foods
+)
+
+@app.route('/delete_food/<int:index>')
+@login_required
+def delete_food(index):
+
+    calorie_logs = session.get(
+        'calorie_logs',
+        []
+    )
+
+    if 0 <= index < len(calorie_logs):
+
+        calorie_logs.pop(index)
+
+        session['calorie_logs'] = calorie_logs
+
+    return redirect(
+        url_for('calorie_tracker')
+    )
 
 @app.route('/load_foods')
 def load_foods():
