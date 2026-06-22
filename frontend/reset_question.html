@@ -8,17 +8,17 @@
 <body>
     <div class="card">
         <div class="warning-icon">⚠️</div>
-        <h1>Restart Questionnaire</h1>
+        <h1>Reset Questionnaire</h1>
         <div class="message">
             You have already completed the questionnaire.<br>
-            Are you sure you want to restart?<br>
+            Are you sure you want to reset?<br>
             Your previous answers will be <strong>permanently deleted</strong>.
         </div>
 
         <div class="btn-group">
             <a href="/dashboard" class="btn btn-secondary">Cancel</a>
-            <form action="/reset_questionnaire" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-danger">Yes, Restart</button>
+            <form action="/reset_question" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Yes, Reset</button>
             </form>
         </div>
     </div>

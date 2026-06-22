@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calorie Tracker - MySportLab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='calorie_tracker.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="sidebar">
+
+    <div class="logo">
+        MySportLab
+    </div>
+
+    <div class="user-profile">
+        {% if profile.avatar %}
+        <img class="avatar" src="/{{ profile.avatar }}">
+        {% else %}
+   
+        <img class="avatar" src="{{ url_for('static', filename='default.png') }}">
+        {% endif %}
+        
+        <div class="user-info">
+            <h3>{{ user.username if user else 'Athlete' }}</h3>
+            <div class="status">
+                <i class="fa-solid fa-circle" style="font-size: 8px;"></i> Online
+            </div>
+        </div>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/profile"><i class="fa-solid fa-user-gear"></i>Profile</a>
+        </li>
+        
+        <li>
+            <a href="/"><i class="fa-solid fa-house"></i>Home</a>
+        </li>
+
+        <li>
+            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i>Dashboard</a>
+        </li>
+
+        <li>
+            <a href="/plan"><i class="fa-solid fa-calendar-days"></i>Plan</a>
+        </li>
+
+        <li>
+            <a href="/recommendation"><i class="fa-solid fa-person-running"></i>Recommendation Sports</a>
+        </li>
+
+        <li>
+            <a href="/tutorial"><i class="fa-solid fa-clapperboard"></i>Tutorial</a>
+        </li>
+        
+        <li>
+            <a href="/calorie_tracker"><i class="fa-solid fa-utensils"></i>Calorie Tracker</a>
+        </li>
+    </ul>
+    
+    <div class="logout-btn">
+        <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    </div>
+    
+    </div>
+
+<div class="main-content">
+
+    <div class="top-bar">
+        <div class="page-title">
+            <i class="fa-solid fa-utensils"></i>
+            Calorie Tracker
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="left-column">
+
+            <div class="card">
+                <div class="card-header">
+                    Add Food
+                </div>
+
+                <form method="POST">
+
+                    <label>Food</label>
+
+                    <input
+                        list="foods"
+                        name="food_name"
+                        placeholder="Search food..."
+                        required
+                    >
+
+                    <datalist id="foods">
+                        {% for food in foods %}
+                        <option value="{{ food.food_name }}">
+                        {% endfor %}
+                    </datalist>
+
+                    <br><br>
+
+                    <label>Quantity</label>
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        min="1"
+                        value="1"
+                        required
+                    >
+
+                    <br><br>
+
+                    <button type="submit">
+                        Add Food
+                    </button>
+
+                </form>
+            </div>
+
+<div class="card">
+
+    <div class="card-header">
+        Today's Food
+    </div>
+
+    <table class="food-table">
+
+        <tr>
+            <th>Food</th>
+            <th>Calories</th>
+            <th>Action</th>
+        </tr>
+
+        {% for item in calorie_logs %}
+        <tr>
+
+            <td>
+                {{ item.food }} x {{ item.quantity }}
+            </td>
+
+            <td>
+                {{ item.calories }} kcal
+            </td>
+
+            <td>
+                <a href="/delete_food/{{ loop.index0 }}">
+                    🗑 Delete
+                </a>
+            </td>
+
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</div>
+
+        </div>
+
+        <div class="right-column">
+
+            <div class="card">
+
+    <div class="card-header">
+        Daily Calories
+    </div>
+
+    <h1>{{ total_calories }} kcal</h1>
+
+    <div class="calorie-stats">
+
+        <div class="stat-row">
+            <span>Recommended</span>
+            <strong>{{ recommended_calories }} kcal</strong>
+        </div>
+
+        <div class="stat-row">
+            <span>Remaining</span>
+            <strong>{{ remaining_calories }} kcal</strong>
+        </div>
+
+    </div>
+
+    <div class="progress-bar">
+
+        <div
+            class="progress-fill"
+            style="width: {{ progress }}%;"
+        ></div>
+
+    </div>
+
+    <p class="status-text">
+        {{ calorie_status }}
+    </p>
+
+</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

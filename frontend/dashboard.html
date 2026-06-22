@@ -2,170 +2,233 @@
 <html>
 <head>
     <title>Dashboard - MySportLab</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="navbar">
-    <a href="/">Home</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/plan">Plan</a>
-    <a href="/tutorial">Tutorial</a>
-    <a href="/chat">Chat</a>
-    <a href="/profile">Profile</a>
-</div>
+<div class="sidebar">
 
-<div class="box">
-    <h2>Your Body Data</h2>
-    <p>Height: {{ height if height else 'Not set' }} cm</p>
-    <p>Weight: {{ weight if weight else 'Not set' }} kg</p>
-</div>
-
-<div class="box">
-    <h2>Your BMI</h2>
-
-    {% if bmi %}
-        <h1>{{ bmi|round(2) }}</h1>
-        <p>{{ category }}</p>
-    {% else %}
-        <p>Please complete questionnaire first</p>
-    {% endif %}
-</div>
-
-<div class="analytics-container">
-
-    <!-- Greeting Card -->
-    <div class="greeting-card">
-
-        <h1>
-            Welcome, {{ user.username if user else 'Athlete' }} 
-        </h1>
-
-        <p>
-            Stay consistent and achieve your fitness goals today.
-        </p>
-
+    <div class="logo">
+        MySportLab
     </div>
 
-    <!-- Today's Plan -->
-    <div class="today-plan-card">
-
-        <div class="plan-header">
-            <h2>Today's Plan</h2>
+    <div class="user-profile">
+        {% if profile.avatar %}
+        <img class="avatar" src="/{{ profile.avatar }}">
+        {% else %}
+   
+        <img class="avatar" src="{{ url_for('static', filename='default.png') }}">
+        {% endif %}
+        
+        <div class="user-info">
+            <h3>{{ user.username if user else 'Athlete' }}</h3>
+            <div class="status">
+                <i class="fa-solid fa-circle" style="font-size: 8px;"></i> Online
+            </div>
         </div>
+    </div>
 
-        <div class="plan-content">
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/profile"><i class="fa-solid fa-user-gear"></i>Profile</a>
+        </li>
+        
+        <li>
+            <a href="/"><i class="fa-solid fa-house"></i>Home</a>
+        </li>
 
-            <div class="plan-item">
-                <h3>Preferred Sport</h3>
-                <p>{{ today_sport if today_sport else 'No plan generated' }}</p>
+        <li>
+            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i>Dashboard</a>
+        </li>
+
+        <li>
+            <a href="/plan"><i class="fa-solid fa-calendar-days"></i>Plan</a>
+        </li>
+
+        <li>
+            <a href="/recommendation"><i class="fa-solid fa-person-running"></i>Recommendation Sports</a>
+        </li>
+
+        <li>
+            <a href="/tutorial"><i class="fa-solid fa-clapperboard"></i>Tutorial</a>
+        </li>
+        
+        <li>
+            <a href="/calorie_tracker"><i class="fa-solid fa-utensils"></i>Calorie Tracker</a>
+        </li>
+    </ul>
+    
+    <div class="logout-btn">
+        <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    </div>
+    
+</div>
+
+<div class="main-content">
+
+    <div class="top-bar">
+        <div class="page-title">
+            <i class="fa-solid fa-gauge-high"></i>Dashboard Portal
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="left-column">
+
+            <div class="welcome-section">
+                <h1>Welcome, {{ user.username if user else 'Athlete' }} </h1>
+                <p>Check your fitness dashboard and track your progress.</p>
+            </div>
+            
+            <div class="biometrics-card">
+
+                <div class="model-container">
+                    <svg class="human-svg" viewBox="0 0 24 24">
+                        <path d="M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6A2,2 0 0,1 10,4A2,2 0 0,1 12,2M10.5,22V16H7.5V11C7.5,9.9 8.4,9 9.5,9H14.5C15.6,9 16.5,9.9 16.5,11V16H13.5V22H10.5Z" />
+                    </svg>
+                </div>
+
+                <div class="bio-data-content">
+
+                    <div class="bio-left-column">
+
+                        <div class="bio-item">
+                            <i class="fa-solid fa-arrows-up-down"></i>
+                            <div class="bio-text">
+                                <p class="label">Height</p>
+                                <p class="value">{{ height if height else 'Not set' }}<p style="font-size: 13px; font-weight: 500; color: #a0aec0; margin-left: 2px;">cm</p></p>
+                            </div>
+                        </div>
+                    
+                        <div class="bio-item">
+                            <i class="fa-solid fa-weight-scale"></i>
+                            <div class="bio-text">
+                                <p class="label">Weight</p>
+                                <p class="value">{{ weight if weight else 'Not set' }}<p style="font-size: 13px; font-weight: 500; color: #a0aec0; margin-left: 2px;">kg</p></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bio-right-column">
+                        <i class="fa-solid fa-calculator"></i>
+                        <div class="bmi-text">
+                            <p class="bmi-label">Body Mass Index(BMI)</p>
+                            {% if bmi %}
+                                <h1 class="bmi-value">{{ bmi|round(2) }}</h1>
+                                <p class="bmi-category">{{ category }}</p>
+                            {% else %}
+                                <p class="bmi-result">Please complete questionnaire first</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="right-column">
+
+            <div class="plan-card">
+                <div class="plan-header">
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <h3>Today's Plan</h3>
+                </div>
+            
+                <div class="schedule-list">
+
+                    {% if today_schedules %}
+                        {% for schedule in today_schedules %}
+
+                        <div class="schedule-item">
+
+                            <div class="sport-info">
+
+                                <div class="sport-icon-bg">
+
+                                    {% if schedule.sport == "Basketball" %}
+                                        <i class="fa-solid fa-basketball"></i>
+
+                                    {% elif schedule.sport == "Running" %}
+                                        <i class="fa-solid fa-person-running"></i>
+
+                                    {% elif schedule.sport == "Gym" %}
+                                        <i class="fa-solid fa-dumbbell"></i>
+
+                                    {% elif schedule.sport == "Football" %}
+                                        <i class="fa-solid fa-futbol"></i>
+
+                                    {% elif schedule.sport == "Badminton" %}
+                                        <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+
+                                    {% elif schedule.sport == "Swimming" %}
+                                        <i class="fa-solid fa-person-swimming"></i>
+
+                                    {% elif schedule.sport == "Cycling" %}
+                                        <i class="fa-solid fa-bicycle"></i>
+
+                                    {% else %}
+                                        <i class="fa-solid fa-heart-pulse"></i>
+                                    {% endif %}
+
+                                </div>
+
+                                <span class="sport-name">
+                                    {{ schedule.sport }}
+                                </span>
+
+                            </div>
+
+                            <div class="sport-time">
+
+                                <i class="fa-regular fa-clock"></i>
+
+                                <span>
+                                    {{ schedule.start_time }}
+                                    -
+                                    {{ schedule.end_time }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="schedule-item">
+
+                            <div class="sport-info">
+
+                                <div class="sport-icon-bg">
+                                    <i class="fa-solid fa-calendar-xmark"></i>
+                                </div>
+
+                                <span class="sport-name">
+                                    No Training Today
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
             </div>
 
-            <div class="plan-item">
-                <h3>Available Time</h3>
-                <p>{{ today_time if today_time else 'Go to Planner →' }}</p>
-            </div>
-
         </div>
 
-        <a href="/plan">
-            <button class="planner-btn">
-                View Full Planner
-            </button>
-        </a>
-
-    </div>
-</div>
-
-<div class="box">
-<a href="/recommendation">
-    <button>Recommendation Sports</button>
-</a>
-<div>
-
-<div class="box">
-
-    <h2>FitBalance Calories Tracker</h2>
-
-    <form method="POST">
-
-        <label>Food</label><br>
-
-        <input
-            list="foods"
-            name="food_name"
-            placeholder="Search food..."
-            required
-        >
-
-        <datalist id="foods">
-
-            {% for food in foods %}
-
-                <option value="{{ food.food_name }}">
-
-            {% endfor %}
-
-        </datalist>
-
-        <br><br>
-
-        <label>Quantity</label><br>
-
-        <input
-            type="number"
-            name="quantity"
-            min="1"
-            value="1"
-            required
-        >
-
-        <br><br>
-
-        <button type="submit">
-            Calculate Calories
-        </button>
-
-    </form>
-
-</div>
-
-<div class="box">
-
-    <h2>Daily Calorie Goal</h2>
-
-    <p>
-        Recommended:
-        {{ recommended_calories }} kcal
-    </p>
-
-    <p>
-        Consumed:
-        {{ total_calories }} kcal
-    </p>
-
-    <p>
-        Remaining:
-        {{ remaining_calories }} kcal
-    </p>
-
-    <div class="progress-container">
-
-        <div
-            class="progress-bar"
-            style="width: {{ progress }}%;"
-        >
-            {{ progress|round(0) }}%
-        </div>
 
     </div>
 
-    <p>
-        {{ calorie_status }}
-    </p>
-
 </div>
+
+
+  
 
 </body>
 </html>
