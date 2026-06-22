@@ -2,313 +2,399 @@
 <html>
 <head>
     <title>Questionnaire - MySportLab</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='question.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
+<div class="question-container">
 
-<div class="box">
-    <h2>Questionnaire</h2>
+    <h1 class="portal-logo">MySportLab</h1>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+        <p class="progress-text">Q1 of 7</p>
+    </div>
 
     <form method="POST" id="form">
-
+        <div class="question-card">
         <!-- Q1 -->
-        <div class="step active">
-            <h3>Q1: Age Range</h3>
-            <select name="age_range" required>
-                <option value="">Select</option>
-                <option>0-17</option>
-                <option>18-64</option>
-                <option>65+</option>
-            </select>
-        </div>
+            <div class="step active">
+                
+                <div class="question-header">
+                    <span class="question-id-badge">Question 01</span>
+                    <h2 class="question-text">Select your age range</h2>
+                </div>
+        
+                <div class="options-list">
+                    <label class="option-item">
+                        <input type="radio" name="age_range" value="0-17" required>
+                        <span class="option-text">Under 18 years old</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="age_range" value="18-64">
+                        <span class="option-text">18 - 64 years old</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="age_range" value="65+">
+                        <span class="option-text">65 years old or above</span>
+                    </label>
+                </div>
+            </div>
+        
+            <!-- Q2 -->
+            <div class="step">
+                <div class="question-header">
+                    <span class="question-id-badge">Question 02</span>
+                    <h2 class="question-text">Select your gender</h2>
+                </div>
 
-        <!-- Q2 -->
-        <div class="step">
-            <h3>Q2: Gender</h3>
-                <label class="radio-option">
-                    <input type="radio" name="gender" value="Male" required>
-                    <span>Male</span>
-                </label>
+                <div class="options-list">
+                    <label class="option-item">
+                        <input type="radio" name="gender" value="Male" required>
+                        <span class="option-text">Male</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="gender" value="Female" required>
+                        <span class="option-text">Female</span>
+                    </label>
+                </div>
+            </div>
 
-                <label class="radio-option">
-                    <input type="radio" name="gender" value="Female" required>
-                    <span>Female</span>
-                </label>
-            </select>
-        </div>
+            <!-- Q3 -->
+            <div class="step">
+                <div class="question-header">
+                    <span class="question-id-badge">Question 03</span>
+                    <h2 class="question-text">Enter your height</h2>
+                </div>
+                
+                <div class="input-container">
+                    <input type="number" name="height" class="height-input" placeholder="e.g. 175" min="50" max="300" required>
+                    <span class="input-unit">cm</span>
+                </div>
+            </div>
 
-        <!-- Q3 -->
-        <div class="step">
-            <h3>Q3: Height (cm)</h3>
-            <input type="number" name="height" min="50" max="300" required>
-        </div>
+            <!-- Q4 -->
+            <div class="step">
+                <div class="question-header">
+                    <span class="question-id-badge">Question 04</span>
+                    <h2 class="question-text">Enter your weight</h2>
+                </div>
+                <div class="input-container">
+                    <input type="number" name="weight" class="height-input" placeholder="e.g. 70" min="20" max="300" required>
+                    <span class="input-unit">kg</span>
+                </div>
+            </div>
 
-        <!-- Q4 -->
-        <div class="step">
-            <h3>Q4: Weight (kg)</h3>
-            <input type="number" name="weight" min="20" max="300" required>
-        </div>
+            <!-- Q5 -->
+            <div class="step">
+                <div class="question-header">
+                    <span class="question-id-badge">Question 05</span>
+                    <h2 class="question-text">Fitness Level</h2>
+                </div>
 
-        <!-- Q5 -->
-        <div class="step">
-            <h3>Q5: Fitness Level</h3>
-            <select name="fitness_level">
-                <option>Beginner</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
-            </select>
-        </div>
+                <div class="options-list">
+                    <label class="option-item">
+                        <input type="radio" name="fitness_level" value="beginner" required>
+                        <span class="option-text">Beginner</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="fitness_level" value="intermediate">
+                        <span class="option-text">Intermediate</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="fitness_level" value="advanced">
+                        <span class="option-text">Advanced</span>
+                    </label>
+                </div>
+            </div>
 
-        <!-- Q6 -->
-        <div class="step">
-            <h3>Q6: Country</h3>
-            <input type="text" name="country" id="country" list="countries" placeholder="Search country" required>
-                <datalist id="countries">
-                    <option value="Afghanistan">
-                    <option value="Albania">
-                    <option value="Algeria">
-                    <option value="Andorra">
-                    <option value="Angola">
-                    <option value="Antigua and Barbuda">
-                    <option value="Argentina">
-                    <option value="Armenia">
-                    <option value="Australia">
-                    <option value="Austria">
-                    <option value="Azerbaijan">
-                    <option value="Bahamas">
-                    <option value="Bahrain">
-                    <option value="Bangladesh">
-                    <option value="Barbados">
-                    <option value="Belarus">
-                    <option value="Belgium">
-                    <option value="Belize">
-                    <option value="Benin">
-                    <option value="Bhutan">
-                    <option value="Bolivia">
-                    <option value="Bosnia and Herzegovina">
-                    <option value="Botswana">
-                    <option value="Brazil">
-                    <option value="Brunei">
-                    <option value="Bulgaria">
-                    <option value="Burkina Faso">
-                    <option value="Burundi">
-                    <option value="Cabo Verde">
-                    <option value="Cambodia">
-                    <option value="Cameroon">
-                    <option value="Canada">
-                    <option value="Central African Republic">
-                    <option value="Chad">
-                    <option value="Chile">
-                    <option value="China">
-                    <option value="Colombia">
-                    <option value="Comoros">
-                    <option value="Congo">
-                    <option value="Costa Rica">
-                    <option value="Cote d'Ivoire">
-                    <option value="Croatia">
-                    <option value="Cuba">
-                    <option value="Cyprus">
-                    <option value="Czech Republic">
-                    <option value="Denmark">
-                    <option value="Djibouti">
-                    <option value="Dominica">
-                    <option value="Dominican Republic">
-                    <option value="Ecuador">
-                    <option value="Egypt">
-                    <option value="El Salvador">
-                    <option value="Equatorial Guinea">
-                    <option value="Eritrea">
-                    <option value="Estonia">
-                    <option value="Eswatini">
-                    <option value="Ethiopia">
-                    <option value="Fiji">
-                    <option value="Finland">
-                    <option value="France">
-                    <option value="Gabon">
-                    <option value="Gambia">
-                    <option value="Georgia">
-                    <option value="Germany">
-                    <option value="Ghana">
-                    <option value="Greece">
-                    <option value="Grenada">
-                    <option value="Guatemala">
-                    <option value="Guinea">
-                    <option value="Guinea-Bissau">
-                    <option value="Guyana">
-                    <option value="Haiti">
-                    <option value="Honduras">
-                    <option value="Hungary">
-                    <option value="Iceland">
-                    <option value="India">
-                    <option value="Indonesia">
-                    <option value="Iran">
-                    <option value="Iraq">
-                    <option value="Ireland">
-                    <option value="Israel">
-                    <option value="Italy">
-                    <option value="Jamaica">
-                    <option value="Japan">
-                    <option value="Jordan">
-                    <option value="Kazakhstan">
-                    <option value="Kenya">
-                    <option value="Kiribati">
-                    <option value="Korea, North">
-                    <option value="Korea, South">
-                    <option value="Kosovo">
-                    <option value="Kuwait">
-                    <option value="Kyrgyzstan">
-                    <option value="Laos">
-                    <option value="Latvia">
-                    <option value="Lebanon">
-                    <option value="Lesotho">
-                    <option value="Liberia">
-                    <option value="Libya">
-                    <option value="Liechtenstein">
-                    <option value="Lithuania">
-                    <option value="Luxembourg">
-                    <option value="Madagascar">
-                    <option value="Malawi">
-                    <option value="Malaysia">
-                    <option value="Maldives">
-                    <option value="Mali">
-                    <option value="Malta">
-                    <option value="Marshall Islands">
-                    <option value="Mauritania">
-                    <option value="Mauritius">
-                    <option value="Mexico">
-                    <option value="Micronesia">
-                    <option value="Moldova">
-                    <option value="Monaco">
-                    <option value="Mongolia">
-                    <option value="Montenegro">
-                    <option value="Morocco">
-                    <option value="Mozambique">
-                    <option value="Myanmar">
-                    <option value="Namibia">
-                    <option value="Nauru">
-                    <option value="Nepal">
-                    <option value="Netherlands">
-                    <option value="New Zealand">
-                    <option value="Nicaragua">
-                    <option value="Niger">
-                    <option value="Nigeria">
-                    <option value="North Macedonia">
-                    <option value="Norway">
-                    <option value="Oman">
-                    <option value="Pakistan">
-                    <option value="Palau">
-                    <option value="Palestine">
-                    <option value="Panama">
-                    <option value="Papua New Guinea">
-                    <option value="Paraguay">
-                    <option value="Peru">
-                    <option value="Philippines">
-                    <option value="Poland">
-                    <option value="Portugal">
-                    <option value="Qatar">
-                    <option value="Romania">
-                    <option value="Russia">
-                    <option value="Rwanda">
-                    <option value="Saint Kitts and Nevis">
-                    <option value="Saint Lucia">
-                    <option value="Saint Vincent and the Grenadines">
-                    <option value="Samoa">
-                    <option value="San Marino">
-                    <option value="Sao Tome and Principe">
-                    <option value="Saudi Arabia">
-                    <option value="Senegal">
-                    <option value="Serbia">
-                    <option value="Seychelles">
-                    <option value="Sierra Leone">
-                    <option value="Singapore">
-                    <option value="Slovakia">
-                    <option value="Slovenia">
-                    <option value="Solomon Islands">
-                    <option value="Somalia">
-                    <option value="South Africa">
-                    <option value="South Sudan">
-                    <option value="Spain">
-                    <option value="Sri Lanka">
-                    <option value="Sudan">
-                    <option value="Suriname">
-                    <option value="Sweden">
-                    <option value="Switzerland">
-                    <option value="Syria">
-                    <option value="Taiwan">
-                    <option value="Tajikistan">
-                    <option value="Tanzania">
-                    <option value="Thailand">
-                    <option value="Timor-Leste">
-                    <option value="Togo">
-                    <option value="Tonga">
-                    <option value="Trinidad and Tobago">
-                    <option value="Tunisia">
-                    <option value="Turkey">
-                    <option value="Turkmenistan">
-                    <option value="Tuvalu">
-                    <option value="Uganda">
-                    <option value="Ukraine">
-                    <option value="United Arab Emirates">
-                    <option value="United Kingdom">
-                    <option value="United States">
-                    <option value="Uruguay">
-                    <option value="Uzbekistan">
-                    <option value="Vanuatu">
-                    <option value="Vatican City">
-                    <option value="Venezuela">
-                    <option value="Vietnam">
-                    <option value="Yemen">
-                    <option value="Zambia">
-                    <option value="Zimbabwe">
-                </datalist>
+            <!-- Q6 -->
+            <div class="step">
+                <div class="question-header">
+                    <span class="question-id-badge">Question 06</span>
+                    <h2 class="question-text">Your country</h2>
+                </div>
+                
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass icon"></i>
+                    <input type="text" name="country" class="input" id="country" list="countries" placeholder="Search country" required>
+                        <datalist id="countries">
+                            <option value="Afghanistan">
+                            <option value="Albania">
+                            <option value="Algeria">
+                            <option value="Andorra">
+                            <option value="Angola">
+                            <option value="Antigua and Barbuda">
+                            <option value="Argentina">
+                            <option value="Armenia">
+                            <option value="Australia">
+                            <option value="Austria">
+                            <option value="Azerbaijan">
+                            <option value="Bahamas">
+                            <option value="Bahrain">
+                            <option value="Bangladesh">
+                            <option value="Barbados">
+                            <option value="Belarus">
+                            <option value="Belgium">
+                            <option value="Belize">
+                            <option value="Benin">
+                            <option value="Bhutan">
+                            <option value="Bolivia">
+                            <option value="Bosnia and Herzegovina">
+                            <option value="Botswana">
+                            <option value="Brazil">
+                            <option value="Brunei">
+                            <option value="Bulgaria">
+                            <option value="Burkina Faso">
+                            <option value="Burundi">
+                            <option value="Cabo Verde">
+                            <option value="Cambodia">
+                            <option value="Cameroon">
+                            <option value="Canada">
+                            <option value="Central African Republic">
+                            <option value="Chad">
+                            <option value="Chile">
+                            <option value="China">
+                            <option value="Colombia">
+                            <option value="Comoros">
+                            <option value="Congo">
+                            <option value="Costa Rica">
+                            <option value="Cote d'Ivoire">
+                            <option value="Croatia">
+                            <option value="Cuba">
+                            <option value="Cyprus">
+                            <option value="Czech Republic">
+                            <option value="Denmark">
+                            <option value="Djibouti">
+                            <option value="Dominica">
+                            <option value="Dominican Republic">
+                            <option value="Ecuador">
+                            <option value="Egypt">
+                            <option value="El Salvador">
+                            <option value="Equatorial Guinea">
+                            <option value="Eritrea">
+                            <option value="Estonia">
+                            <option value="Eswatini">
+                            <option value="Ethiopia">
+                            <option value="Fiji">
+                            <option value="Finland">
+                            <option value="France">
+                            <option value="Gabon">
+                            <option value="Gambia">
+                            <option value="Georgia">
+                            <option value="Germany">
+                            <option value="Ghana">
+                            <option value="Greece">
+                            <option value="Grenada">
+                            <option value="Guatemala">
+                            <option value="Guinea">
+                            <option value="Guinea-Bissau">
+                            <option value="Guyana">
+                            <option value="Haiti">
+                            <option value="Honduras">
+                            <option value="Hungary">
+                            <option value="Iceland">
+                            <option value="India">
+                            <option value="Indonesia">
+                            <option value="Iran">
+                            <option value="Iraq">
+                            <option value="Ireland">
+                            <option value="Israel">
+                            <option value="Italy">
+                            <option value="Jamaica">
+                            <option value="Japan">
+                            <option value="Jordan">
+                            <option value="Kazakhstan">
+                            <option value="Kenya">
+                            <option value="Kiribati">
+                            <option value="Korea, North">
+                            <option value="Korea, South">
+                            <option value="Kosovo">
+                            <option value="Kuwait">
+                            <option value="Kyrgyzstan">
+                            <option value="Laos">
+                            <option value="Latvia">
+                            <option value="Lebanon">
+                            <option value="Lesotho">
+                            <option value="Liberia">
+                            <option value="Libya">
+                            <option value="Liechtenstein">
+                            <option value="Lithuania">
+                            <option value="Luxembourg">
+                            <option value="Madagascar">
+                            <option value="Malawi">
+                            <option value="Malaysia">
+                            <option value="Maldives">
+                            <option value="Mali">
+                            <option value="Malta">
+                            <option value="Marshall Islands">
+                            <option value="Mauritania">
+                            <option value="Mauritius">
+                            <option value="Mexico">
+                            <option value="Micronesia">
+                            <option value="Moldova">
+                            <option value="Monaco">
+                            <option value="Mongolia">
+                            <option value="Montenegro">
+                            <option value="Morocco">
+                            <option value="Mozambique">
+                            <option value="Myanmar">
+                            <option value="Namibia">
+                            <option value="Nauru">
+                            <option value="Nepal">
+                            <option value="Netherlands">
+                            <option value="New Zealand">
+                            <option value="Nicaragua">
+                            <option value="Niger">
+                            <option value="Nigeria">
+                            <option value="North Macedonia">
+                            <option value="Norway">
+                            <option value="Oman">
+                            <option value="Pakistan">
+                            <option value="Palau">
+                            <option value="Palestine">
+                            <option value="Panama">
+                            <option value="Papua New Guinea">
+                            <option value="Paraguay">
+                            <option value="Peru">
+                            <option value="Philippines">
+                            <option value="Poland">
+                            <option value="Portugal">
+                            <option value="Qatar">
+                            <option value="Romania">
+                            <option value="Russia">
+                            <option value="Rwanda">
+                            <option value="Saint Kitts and Nevis">
+                            <option value="Saint Lucia">
+                            <option value="Saint Vincent and the Grenadines">
+                            <option value="Samoa">
+                            <option value="San Marino">
+                            <option value="Sao Tome and Principe">
+                            <option value="Saudi Arabia">
+                            <option value="Senegal">
+                            <option value="Serbia">
+                            <option value="Seychelles">
+                            <option value="Sierra Leone">
+                            <option value="Singapore">
+                            <option value="Slovakia">
+                            <option value="Slovenia">
+                            <option value="Solomon Islands">
+                            <option value="Somalia">
+                            <option value="South Africa">
+                            <option value="South Sudan">
+                            <option value="Spain">
+                            <option value="Sri Lanka">
+                            <option value="Sudan">
+                            <option value="Suriname">
+                            <option value="Sweden">
+                            <option value="Switzerland">
+                            <option value="Syria">
+                            <option value="Taiwan">
+                            <option value="Tajikistan">
+                            <option value="Tanzania">
+                            <option value="Thailand">
+                            <option value="Timor-Leste">
+                            <option value="Togo">
+                            <option value="Tonga">
+                            <option value="Trinidad and Tobago">
+                            <option value="Tunisia">
+                            <option value="Turkey">
+                            <option value="Turkmenistan">
+                            <option value="Tuvalu">
+                            <option value="Uganda">
+                            <option value="Ukraine">
+                            <option value="United Arab Emirates">
+                            <option value="United Kingdom">
+                            <option value="United States">
+                            <option value="Uruguay">
+                            <option value="Uzbekistan">
+                            <option value="Vanuatu">
+                            <option value="Vatican City">
+                            <option value="Venezuela">
+                            <option value="Vietnam">
+                            <option value="Yemen">
+                            <option value="Zambia">
+                            <option value="Zimbabwe">
+                        </datalist>
+                </div>    
+            </div>
 
-        </div>
+            <!-- Q7 -->
+            <div class="step">
+                <div class="question-header">
+                    <span class="question-id-badge">Question 07</span>
+                    <h2 class="question-text">Select your date of birth</h2>
+                </div>
 
-        <!-- Q7 -->
-        <div class="step">
-            <h3>Q7: Date of Birth</h3>
-            <input type="text" id="dob" name="dob" placeholder="YYYY/MM/DD" autocomplete="off" required>
-            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        </div>
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-calendar-days icon"></i>
+                    <input type="text" id="dob" class="input" name="dob" placeholder="YYYY/MM/DD" autocomplete="off" required>
+                    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+                </div>
+            </div>
+        
             
-        <div>
-            <button type="button" onclick="prevStep()">Back</button>
-            <button type="button" onclick="nextStep()">Next</button>
-            <button type="submit" id="submitBtn" style="display:none;">Submit</button>
+            <div class="question-footer">
+                <button type="button" class="btn back-btn" onclick="prevStep()"><i class="fa-solid fa-arrow-left" style="font-size: 12px;"></i> Back</i></button>
+                <button type="button" class="btn next-btn" onclick="nextStep()">Next Question <i class="fa-solid fa-arrow-right" style="font-size: 12px;"></i></button>
+                <button type="submit" class="btn submit-btn" id="submitBtn" style="display:none;">Submit Question <i class="fa-solid fa-check" style="font-size: 12px;"></i></button>
+            </div>
         </div>
-
     </form>
 </div>
 
 <script>
+
 let currentStep = 0;
+
 const steps = document.querySelectorAll(".step");
 
+const progressBarFill = document.getElementById("progress-bar-fill");
+
+const progressText = document.querySelector(".progress-text");
+
 function showStep(index) {
+
     steps.forEach((step, i) => {
         step.classList.remove("active");
-        if (i === index) step.classList.add("active");
+        if (i === index) {
+            step.classList.add("active");
+        }
     });
 
     const submitBtn = document.getElementById("submitBtn");
+
     const nextBtn = document.querySelector("button[onclick='nextStep()']");
+
     const prevBtn = document.querySelector("button[onclick='prevStep()']");
 
-    // Submit only shows on last step
-    submitBtn.style.display = (index === steps.length - 1) ? "inline-block" : "none";
+    if (index === steps.length - 1) {
+        submitBtn.style.display = "inline-block";
+        nextBtn.style.display = "none";
+    } else {
+        submitBtn.style.display = "none";
+        nextBtn.style.display = "inline-block";
+    }
 
-    // Next only shows before last step
-    nextBtn.style.display = (index === steps.length - 1) ? "none" : "inline-block";
-
-    // Back only shows after first step
-    prevBtn.style.display = (index === 0) ? "none" : "inline-block";
+    if (index === 0) {
+        prevBtn.style.display = "none";
+    } else {
+        prevBtn.style.display = "inline-block";
+    }
+    updateProgressBar();
 }
 
 function nextStep() {
-    // validate step input / select
-    const currentInputs = steps[currentStep].querySelectorAll("input, select");
+
+    const currentInputs =
+        steps[currentStep].querySelectorAll(
+            "input, select"
+        );
 
     for (let input of currentInputs) {
         if (!input.checkValidity()) {
@@ -324,24 +410,30 @@ function nextStep() {
 }
 
 function prevStep() {
+
     if (currentStep > 0) {
         currentStep--;
         showStep(currentStep);
     }
 }
 
-// init
-showStep(0);
-// flatpickr
+function updateProgressBar() {
+
+    let progress = ((currentStep + 1) / steps.length) * 100;
+    progressBarFill.style.width = progress + "%";
+    progressText.innerText = `Q${currentStep + 1} of ${steps.length}`;
+}
+
 flatpickr("#dob", {
     dateFormat: "Y-m-d",
     maxDate: "today",
     disableMobile: true,
     allowInput: false,
     monthSelectorType: "dropdown",
-    yearSelectorType: "dropdown",
-    defaultDate: null
+    yearSelectorType: "dropdown"
 });
+
+showStep(0);
 
 </script>
 
