@@ -1105,12 +1105,23 @@ def plan():
             for i in range(len(starts)):
                 for j in range(i + 1, len(starts)):
 
-                 if starts[i] == starts[j] and ends[i] == ends[j]:
-                     return render_template(
-                    'plan.html',
-                    user=user,
-                    error=f"{day}: Slot times cannot be the same"
-            )
+                    if not starts[i] or not ends[i] or not starts[j] or not ends[j]:
+                        continue
+
+                    start1 = datetime.strptime(starts[i], "%H:%M")
+                    end1 = datetime.strptime(ends[i], "%H:%M")
+
+                    start2 = datetime.strptime(starts[j], "%H:%M")
+                    end2 = datetime.strptime(ends[j], "%H:%M")
+
+                    # Check overlap
+                    if start1 < end2 and start2 < end1:
+                        return render_template(
+                            'plan.html',
+                            user=user,
+                            error=f"{day}: Time slots cannot overlap"
+                        )
+                    
                  
             # End time must be later than start time
             for start, end in zip(starts, ends):
@@ -1145,7 +1156,34 @@ def plan():
                         user=user,
                         error=f"{day}: End time must be at least 30 minutes after start time"
                     )
+                
+                
+                existing_schedules = Schedule.query.filter_by(
+                    user_id=user.id,
+                    day=day
+                ).all()
 
+                for existing in existing_schedules:
+
+                    existing_start = datetime.strptime(
+                        existing.start_time,
+                        "%H:%M"
+                    )
+
+                    existing_end = datetime.strptime(
+                        existing.end_time,
+                        "%H:%M"
+                    )
+
+                    if start_time < existing_end and existing_start < end_time:
+
+                        return render_template(
+                            'plan.html',
+                            user=user,
+                            error=f"{day}: This time slot overlaps with an existing schedule"
+                        )
+                
+                
                 # Randomly select a sport
                 sport = random.choice(sports)
 
@@ -1180,12 +1218,29 @@ def plan():
         saved_schedule = Schedule.query.filter_by(
         user_id=user.id
         ).all()
+        day_order = {
+        "Monday": 1,
+        "Tuesday": 2,
+        "Wednesday": 3,
+        "Thursday": 4,
+        "Friday": 5,
+        "Saturday": 6,
+        "Sunday": 7
+    }
+
+        saved_schedule.sort(
+        key=lambda x: (
+            day_order.get(x.day, 99),
+            x.start_time
+        )
+    )
 
         return render_template(
             'plan.html',
             user=user,
             schedule=saved_schedule
         )
+    
         
     # =========================================
     # GET existing schedule

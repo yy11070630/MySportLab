@@ -182,7 +182,7 @@ background: #f4f6f9;
    CONTAINER
 ========================================= */
 
-.container {
+.profile-container {
 max-width: 1200px;
 margin: auto;
 padding: 20px;
@@ -193,9 +193,10 @@ padding: 20px;
 ========================================= */
 
 .profile-layout {
-display: flex;
-gap: 30px;
-margin-top: 30px;
+display:flex;
+gap:40px;
+align-items:flex-start;
+justify-content:center;
 }
 
 /* =========================================
@@ -203,7 +204,7 @@ margin-top: 30px;
 ========================================= */
 
 .profile-left {
-width: 35%;
+width: 400px;
 background: white;
 padding: 25px;
 border-radius: 15px;
@@ -216,11 +217,12 @@ text-align: center;
 ========================================= */
 
 .profile-right {
-flex: 1;
+flex: none;
 background: white;
 padding: 25px;
 border-radius: 15px;
 box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+width:500px;
 }
 
 /* =========================================
@@ -338,7 +340,7 @@ margin-top: 10px;
     margin-top:40px;
 }
 
-.logout-btn {
+.profile-logout-btn {
 display: inline-block;
 margin-top: 20px;
 background: #5c3ab9;
@@ -349,7 +351,7 @@ border-radius: 8px;
 font-weight:600;
 }
 
-.logout-btn:hover {
+.profile-logout-btn:hover {
     background: #b52a37;
 }
 
