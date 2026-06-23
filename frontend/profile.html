@@ -1,81 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Profile - MySportLab</title>
+    <title>MySportLab - Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    <div class="sidebar">
- <div class="logo">
+<div class="sidebar">
+
+    <div class="logo">
         MySportLab
     </div>
 
     <div class="user-profile">
-
         {% if profile.avatar %}
         <img class="avatar" src="/{{ profile.avatar }}">
         {% else %}
+   
         <img class="avatar" src="{{ url_for('static', filename='default.png') }}">
         {% endif %}
-
+        
         <div class="user-info">
-            <h3>{{ user.username }}</h3>
+            <h3>{{ user.username if user else 'Athlete' }}</h3>
             <div class="status">
-                ● Online
+                <i class="fa-solid fa-circle" style="font-size: 8px;"></i> Online
             </div>
         </div>
-
     </div>
 
     <ul class="sidebar-menu">
-
-        <li class="active">
-            <a href="/profile">Profile</a>
+        <li>
+            <a href="/profile"><i class="fa-solid fa-user-gear"></i>Profile</a>
+        </li>
+        
+        <li>
+            <a href="/"><i class="fa-solid fa-house"></i>Home</a>
         </li>
 
         <li>
-            <a href="/">Home</a>
+            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i>Dashboard</a>
         </li>
 
         <li>
-            <a href="/dashboard">Dashboard</a>
+            <a href="/plan"><i class="fa-solid fa-calendar-days"></i>Plan</a>
         </li>
 
         <li>
-            <a href="/plan">Plan</a>
+            <a href="/recommendation"><i class="fa-solid fa-person-running"></i>Recommendation Sports</a>
         </li>
 
         <li>
-            <a href="/recommendation">Recommendation Sports</a>
+            <a href="/tutorial"><i class="fa-solid fa-clapperboard"></i>Tutorial</a>
         </li>
-
+        
         <li>
-            <a href="/tutorial">Tutorial</a>
+            <a href="/calorie_tracker"><i class="fa-solid fa-utensils"></i>Calorie Tracker</a>
         </li>
-
-        <li>
-            <a href="/calorie_tracker">Calorie Tracker</a>
-        </li>
-
     </ul>
-
+    
     <div class="logout-btn">
-        <a href="/logout">Logout</a>
+        <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
     </div>
-
+    
 </div>
 
 <div class="main-content">
 
     <div class="top-bar">
-
         <div class="page-title">
-            Profile Portal
+            <i class="fa-solid fa-calendar-days"></i>Planner Portal
         </div>
-
     </div>
+
 
 <div class="profile-container">
    

@@ -199,10 +199,20 @@ body{
     text-decoration: underline;
 }
 
-.error-box{
-    background:#fee2e2;
+.error{
+    background:#fff1f2;
     color:#dc2626;
+
+    border:1px solid #fecaca;
+
     padding:12px;
-    border-radius:10px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
     margin-bottom:20px;
 }
