@@ -3,24 +3,145 @@
 <head>
     <title>MySportLab - Planner</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='planedit.css') }}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <a href="/">Home</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/plan">Plan</a>
-    <a href="/tutorial">Tutorial</a>
-    <a href="/chat">Chat</a>
-    <a href="/profile">Profile</a>
+<div class="sidebar">
+
+    <div class="logo">
+        MySportLab
+    </div>
+
+    <div class="user-profile">
+        {% if profile.avatar %}
+        <img class="avatar" src="/{{ profile.avatar }}">
+        {% else %}
+   
+        <img class="avatar" src="{{ url_for('static', filename='default.png') }}">
+        {% endif %}
+        
+        <div class="user-info">
+            <h3>{{ user.username if user else 'Athlete' }}</h3>
+            <div class="status">
+                <i class="fa-solid fa-circle" style="font-size: 8px;"></i> Online
+            </div>
+        </div>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/profile"><i class="fa-solid fa-user-gear"></i>Profile</a>
+        </li>
+        
+        <li>
+            <a href="/"><i class="fa-solid fa-house"></i>Home</a>
+        </li>
+
+        <li>
+            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i>Dashboard</a>
+        </li>
+
+        <li>
+            <a href="/plan"><i class="fa-solid fa-calendar-days"></i>Plan</a>
+        </li>
+
+        <li>
+            <a href="/recommendation"><i class="fa-solid fa-person-running"></i>Recommendation Sports</a>
+        </li>
+
+        <li>
+            <a href="/tutorial"><i class="fa-solid fa-clapperboard"></i>Tutorial</a>
+        </li>
+        
+        <li>
+            <a href="/calorie_tracker"><i class="fa-solid fa-utensils"></i>Calorie Tracker</a>
+        </li>
+    </ul>
+    
+    <div class="logout-btn">
+        <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    </div>
+    
 </div>
+<div class="main-content">
+
+    <div class="top-bar">
+        <div class="page-title">
+            <i class="fa-solid fa-calendar-days"></i>
+            Planner Portal
+        </div>
+    </div>
+    <!-- GENERATED SCHEDULE -->
+    {% if schedule %}
+
+    <h1  id="weekly-schedule" class="schedule-title">Weekly Schedule</h1>
+
+   <table class="schedule-table">
+
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Sport</th>
+            <th>Time</th>
+            <th>Duration</th>
+            <th>Intensity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for item in schedule %}
+
+        <tr>
+            <td>{{ item.day }}</td>
+            <td>{{ item.sport }}</td>
+            <td>{{ item.start_time }} - {{ item.end_time }}</td>
+            <td>{{ item.duration }}</td>
+            <td>{{ item.intensity }}</td>
+            <td>
+            <a href="/edit_schedule/{{ item.id }}">
+             Edit
+            </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+<div class="action-buttons">
+
+    <a href="#planner-section" class="free-time-btn">
+        Select Free Time
+    </a>
+
+    <form action="/delete_all_schedule"
+          method="POST"
+          class="delete-all-form">
+
+        <button
+            type="submit"
+            class="delete-all-btn"
+            onclick="return confirm('Delete ALL schedules?')">
+
+            Delete Whole Schedule
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endif %}
 
 <div class="container">
 
-<div class="planner-box">
+<div id="planner-section" class="planner-box">
    <h1 class="plan-title">
     Smart Sport Planning System
 </h1>
@@ -32,7 +153,8 @@
     {% endif %}
 
     <form method="POST" class="form-wrapper">
-
+    
+    <div class="plan-row">
         <!-- AVAILABLE DAYS -->
         <div class="plan-card">
 
@@ -352,68 +474,20 @@
 
         </div>
 
-        <!-- BUTTON -->
+
        
+
+    
+</div>
+ <!-- BUTTON -->
+       <div class="generate-container">
         <button type="submit" class="generate-btn">
             Generate Weekly Schedule
         </button>
-        
-    </form>
-</div>
-
-    <!-- GENERATED SCHEDULE -->
-    {% if schedule %}
-
-    <h1 class="schedule-title">Weekly Schedule</h1>
-
-   <table class="schedule-table">
-
-    <thead>
-        <tr>
-            <th>Day</th>
-            <th>Sport</th>
-            <th>Time</th>
-            <th>Duration</th>
-            <th>Intensity</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        {% for item in schedule %}
-
-        <tr>
-            <td>{{ item.day }}</td>
-            <td>{{ item.sport }}</td>
-            <td>{{ item.start_time }} - {{ item.end_time }}</td>
-            <td>{{ item.duration }}</td>
-            <td>{{ item.intensity }}</td>
-            <td>
-            <a href="/edit_schedule/{{ item.id }}">
-             Edit
-            </a>
-            </td>
-        </tr>
-
-        {% endfor %}
-
-    </tbody>
-
-</table>
-<form action="/delete_all_schedule" method="POST" class="delete-all-form">
-
-    <button
-        type="submit"
-        class="delete-all-btn"
-        onclick="return confirm('Delete ALL schedules?')">
-
-         Delete Whole Schedule
-
-    </button>
-
+        </div>
 </form>
-   {% endif %}
+
+
 
 <script>
 
