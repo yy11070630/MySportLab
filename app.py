@@ -1128,9 +1128,9 @@ def plan():
     if request.method == 'POST':
 
         
-        sports = request.form.getlist('sports')
-        days = request.form.getlist('days')
-        if not sports:
+        sports = request.form.get('sports')
+        days = request.form.get('days')
+        if not sport:
             return render_template(
             'plan.html',
             user=user,
@@ -1138,7 +1138,7 @@ def plan():
             error="Please select at least one sport"
         )
 
-        if not days:
+        if not day:
             return render_template(
             'plan.html',
             user=user,
