@@ -1134,6 +1134,7 @@ def plan():
             return render_template(
             'plan.html',
             user=user,
+            profile=user.profile,
             error="Please select at least one sport"
         )
 
@@ -1141,6 +1142,7 @@ def plan():
             return render_template(
             'plan.html',
             user=user,
+            profile=user.profile,
             error="Please select at least one day"
         )
 
@@ -1189,6 +1191,7 @@ def plan():
                         return render_template(
                             'plan.html',
                             user=user,
+                            profile=user.profile,
                             error=f"{day}: Time slots cannot overlap"
                         )
                     
@@ -1207,6 +1210,7 @@ def plan():
                     return render_template(
                     'plan.html',
                     user=user,
+                    profile=user.profile,
                     error=f"{day}: End time must be later than start time"
             )
                 
@@ -1215,6 +1219,7 @@ def plan():
                     return render_template(
                         'plan.html',
                         user=user,
+                        profile=user.profile,
                         error=f"{day}: Each slot cannot exceed 6 hours"
     )
            
@@ -1224,6 +1229,7 @@ def plan():
                     return render_template(
                         'plan.html',
                         user=user,
+                        profile=user.profile,
                         error=f"{day}: End time must be at least 30 minutes after start time"
                     )
                 
@@ -1250,6 +1256,7 @@ def plan():
                         return render_template(
                             'plan.html',
                             user=user,
+                            profile=user.profile,
                             error=f"{day}: This time slot overlaps with an existing schedule"
                         )
                 
@@ -1305,12 +1312,7 @@ def plan():
         )
     )
 
-        return render_template(
-            'plan.html',
-            user=user,
-            schedule=saved_schedule
-        )
-    
+        return redirect(url_for('plan') + '#weekly-schedule')
         
     # =========================================
     # GET existing schedule
@@ -1322,6 +1324,7 @@ def plan():
     return render_template(
         'plan.html',
         user=user,
+        profile=user.profile,
         schedule=saved_schedule,
         error=None
     )
@@ -1351,6 +1354,7 @@ def edit_schedule(id):
             return render_template(
                 'edit_schedule.html',
                 schedule=schedule,
+            
                 error="End time must be later than start time"
             )
 
