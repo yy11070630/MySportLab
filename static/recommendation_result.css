@@ -1,0 +1,322 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    color: #2d3748;
+}
+
+.sidebar {
+    width: 260px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 100;
+    box-shadow: 4px 0 25px rgba(0, 0, 0, 0.05);
+}
+
+
+.logo {
+    padding: 30px 24px;
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(45deg, #0046e4, #00c6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+        
+.user-profile {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #0046e4, #0072ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+}
+
+.user-info h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.user-info .status {
+    font-size: 12px;
+    color: #48bb78;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 24px 16px;
+    flex: 1;
+}
+
+.sidebar-menu li {
+    margin-bottom: 8px;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu li.active a, .sidebar-menu a:hover {
+    background: #0046e4;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 70, 228, 0.25);
+}
+
+.logout-btn {
+    padding: 24px;
+    border-top: 1px solid #edf2f7;
+}
+
+.logout-btn a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: #fff5f5;
+    color: #e53e3e;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.logout-btn a:hover {
+    background: #e53e3e;
+    color: white;
+}
+
+.main-content {
+    margin-left: 260px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.top-bar {
+    background: #0046e4;
+    color: white;
+    padding: 18px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 70, 228, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+}
+
+.page-title {
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.content-view {
+    padding: 40px 48px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.result-container {
+    width: 100%;
+    max-width: 850px;
+    background-color: #ffffff;
+    border: 1px solid #eef2f6;
+    border-radius: 24px;
+    padding: 40px 48px;
+    box-shadow: 0 10px 35px rgba(15, 23, 42, 0.02);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.result-icon {
+    font-size: 48px;
+    color: #10b981;
+    margin-bottom: 16px;
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.result-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 12px 0;
+}
+
+.sport-name {
+    color: #0066ff;
+    background: #e6f0ff;
+    padding: 2px 14px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.match-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.result-description {
+    font-size: 15px;
+    color: #64748b;
+    max-width: 600px;
+    margin: 0 auto 36px auto;
+    line-height: 1.6;
+}
+
+.tutorial-section {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 36px;
+    margin-top: 12px;
+}
+
+.tutorial-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.tutorial-heading i {
+    color: #ff4b4b; /* 优雅播放红 */
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto 36px auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+    background-color: #000000;
+    aspect-ratio: 16 / 9;
+}
+
+.video-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.result-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px; 
+}
+
+.btn-retake {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 140px;
+    padding: 14px 24px;
+    background-color: #f1f5f9;
+    color: #64748b;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.btn-retake:hover {
+    background-color: #e2e8f0;
+    color: #334155;
+    transform: translateY(-1px);
+}
+
+.btn-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 190px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #0052cc 0%, #0066ff 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 102, 255, 0.15);
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+    }
+
+.btn-more:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 102, 255, 0.25);
+    background: linear-gradient(135deg, #0047b3 0%, #0052cc 100%);
+}
