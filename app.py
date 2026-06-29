@@ -826,6 +826,10 @@ def admin_dashboard():
 @app.route('/recommendation', methods=['GET','POST'])
 @login_required
 def recommendation():
+
+    user = User.query.get(session['user_id'])
+    profile = user.profile
+
     if request.method == 'POST':
         physically = request.form.getlist('physically')
         activity_type = request.form.getlist('activity_type')
@@ -842,7 +846,11 @@ def recommendation():
 
         return redirect(url_for('recommendation_result'))
 
-    return render_template('recommendation.html')
+    return render_template(
+        "recommendation.html",
+        user=user,
+        profile=profile
+        )
 
 
 # ================================================
@@ -855,6 +863,9 @@ def recommendation_result():
 
     if not data:
         return redirect(url_for('recommendation'))
+
+    user = User.query.get(session['user_id'])
+    profile = user.profile
 
     physically = data['physically']
     activity_type = data['activity_type']
@@ -1036,6 +1047,8 @@ def recommendation_result():
         sport=best_sport,
         percentage=percentage,
         scores=scores,
+        user=user,
+        profile=profile,
         video = videos.get(best_sport, "https://www.youtube.com")
     )
 
@@ -1045,6 +1058,9 @@ def recommendation_result():
 @app.route('/tutorial')
 @login_required
 def tutorial():
+
+    user = User.query.get(session['user_id'])
+    profile = user.profile
 
     tutorials = {
 
@@ -1101,7 +1117,12 @@ def tutorial():
         ]
     }
 
-    return render_template("tutorial.html", tutorials=tutorials)
+    return render_template(
+        "tutorial.html", 
+        user=user,
+        profile=profile,
+        tutorials=tutorials,
+        )
 
 #================================================
 # Plan (check question status + generate schedule) (Aloysius)
