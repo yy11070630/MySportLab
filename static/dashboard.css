@@ -92,7 +92,9 @@ body {
     font-size: 15px;
     border-radius: 12px;
     transition: all 0.3s ease;
+   
 }
+
 
 .sidebar-menu li.active a, .sidebar-menu a:hover {
     background: #0046e4;
