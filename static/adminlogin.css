@@ -1,0 +1,188 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f7fafc; 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 登录卡片 */
+        .login-container {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+            border: 1px solid #edf2f7;
+            text-align: center;
+        }
+
+        /* 头部区域 */
+        .login-header {
+            margin-bottom: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+       
+        .brand-logo {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #0046e4, #00c6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+      
+        .admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #2d3748; 
+            color: #ffffff;
+            padding: 5px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
+        /* 输入框组合 */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .input-field-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-field-wrapper i.field-icon {
+            position: absolute;
+            left: 16px;
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        .input-field-wrapper input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            border-radius: 12px;
+            border: 1px solid #edf2f7;
+            background: #ffffff;
+            font-size: 14px;
+            color: #1a202c;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-field-wrapper input::placeholder {
+            color: #cbd5e0;
+        }
+
+        .input-field-wrapper input:focus {
+            border-color: #0046e4;
+            box-shadow: 0 0 0 4px rgba(0, 70, 228, 0.05);
+        }
+
+  
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #718096;
+            cursor: pointer;
+        }
+
+        .remember-me input {
+            accent-color: #0046e4;
+            cursor: pointer;
+        }
+
+        .encrypted-status {
+            color: #38a169;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #2d3748;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(45, 55, 72, 0.08);
+        }
+
+        .submit-btn:hover {
+            background: #1a202c;
+        }
+
+  
+        .login-footer {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .login-footer a {
+            color: #0046e4;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }

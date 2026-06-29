@@ -1,24 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Admin Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - MySportLab</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='adminlogin.css') }}">
 </head>
 
 <body>
 
-<div class="box">
-    <h2>Admin Login</h2>
+<div class="login-container">
+
+    <div class="login-header">
+        <div class="brand-logo">MySportLab</div>
+
+        <div class="admin-badge">
+            <i class="fa-solid fa-user-gear"></i>
+            PORTAL ADMIN
+        </div>
+    </div>
 
     {% if error %}
-        <p class="error">{{ error }}</p>
+    <div class="error-box">
+        {{ error }}
+    </div>
     {% endif %}
 
-    <form method="POST">
-        <input type="text" name="username" placeholder="Admin Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button class="btn">Login</button>
+    <form class="login-form" method="POST">
+
+        <div class="input-group">
+
+            <label>Admin Username</label>
+
+            <div class="input-field-wrapper">
+
+                <i class="fa-solid fa-user-shield field-icon"></i>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter admin username"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label>Security Password</label>
+
+            <div class="input-field-wrapper">
+
+                <i class="fa-solid fa-lock field-icon"></i>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="••••••••"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="form-options">
+
+            <label class="remember-me">
+                <input type="checkbox">
+                <span>Remember session</span>
+            </label>
+
+            <div class="encrypted-status">
+                <i class="fa-solid fa-shield-halved"></i>
+                Encrypted
+            </div>
+
+        </div>
+
+
+        <button type="submit" class="submit-btn">
+
+            <span>Secure Sign In</span>
+
+            <i class="fa-solid fa-key"></i>
+
+        </button>
+
     </form>
+
+    <div class="login-footer">
+
+        Not an administrator?
+
+        <a href="{{ url_for('login') }}">
+            User Login
+        </a>
+
+    </div>
+
 </div>
 
 </body>

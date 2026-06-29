@@ -275,6 +275,13 @@ width: 100%;
 
 .btn:hover {
 opacity: 0.9;
+
+}.reset-btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 25px;
 }
 
 /* =========================================
