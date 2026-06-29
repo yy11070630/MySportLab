@@ -79,7 +79,8 @@
 
         <div class="sports-submenu">
             <div class="submenu-title">
-                <span style="font-size: 28px;">&#127942;</span><h2>Sports Categories</h2></div>
+                <span style="font-size: 28px;">&#127942;</span><h2>Sports Categories</h2>
+            </div>
             <div class="sport-btn" onclick="showVideos('Football')">&#9917; Football</div>
             <div class="sport-btn" onclick="showVideos('Basketball')">&#127936; Basketball</div>
             <div class="sport-btn" onclick="showVideos('Gym')">&#127947; Gym</div>
@@ -134,10 +135,7 @@ function showVideos(sport){
 
                 <div class="video-wrapper">
 
-                    <iframe
-                        src="https://www.youtube.com/embed/${videoID}"
-                        allowfullscreen>
-                    </iframe>
+                    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/${videoID}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 
                 </div>
 

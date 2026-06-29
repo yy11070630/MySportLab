@@ -1033,13 +1033,13 @@ def recommendation_result():
         percentage = int((max_score / max_possible) * 100)
 
     videos = {
-        "Football": "https://www.youtube.com/embed/XJIqk0hQY3Y",
-        "Basketball": "https://www.youtube.com/embed/wQk1qZ8Qy9s",
+        "Football": "https://www.youtube-nocookie.com/embed/48rdiDt_PZs?si=miLRYuGvso6WE7GL",
+        "Basketball": "https://www.youtube-nocookie.com/embed/CGRJdBA6hGc?si=ijRnfIlhBhQNUr-1",
         "Gym": "https://www.youtube.com/embed/U0bhE67HuDY",
-        "Swimming": "https://www.youtube.com/embed/6Jv0KXQ1x4A",
-        "Badminton": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-        "Cycling": "https://www.youtube.com/embed/2eZ9XQ0mQ0k",
-        "Running": "https://www.youtube.com/embed/5Q4K8r9xQ2A"
+        "Swimming": "https://www.youtube-nocookie.com/embed/oM4sHl1hTEE?si=buthrWXjQbfKVUTS",
+        "Badminton": "https://www.youtube.com/embed/Laiu3Myd4J0?si=ju4mrmHJLHwa9syH",
+        "Cycling": "https://www.youtube.com/embed/4ssLDk1eX9w?si=fSqlA60gEFIqNn5F",
+        "Running": "https://www.youtube.com/embed/kVnyY17VS9Y?si=MiKp1SbOUmmi2s2n"
     }
 
     return render_template(
@@ -1065,55 +1065,89 @@ def tutorial():
     tutorials = {
 
         "Football": [
-            "3z0uB0rVg7M",
-            "M1S0v8QGJ6I",
-            "0Uqf71muwWc",
-            "YJbV5Q6K5sA",
-            "t6h2tK4fQ7o",
-            "XJIqk0hQY3Y"
+            "WpgS5P9nCWw?si=UQxGtyop-WY7xIqx",
+            "43aMiMpa8LE?si=nYk8bycmlef53lo0",
+            "bHGW2apqfEE?si=yY7swtrh_R2OWMo8",
+            "upRMrDHttPw?si=cfqLxnva9HlJRZpT",
+            "2BPWHqgUqD0?si=m09TlgjBb5zHFGfs",
+            "MAVjhxdSfmg?si=UDXrP-5hGqWgMGu2",
+            "dRS5EgJp-98?si=IHXzRLDshHO1D7WO",
+            "4-jOdpR_TQw?si=KkoiFKwrk6SB791v",
+            "xIcUvrTn7FE?si=XSqoosExYvjhx4Ge",
+            "dwccSyeGn9s?si=8DeNwJedVEchTWT4"
         ],
 
         "Basketball": [
-            "LAr6oAKieHk",
-            "wPDxUzJ8Jzw",
-            "oyjYgmsM00Q",
-            "rWOaROd9v7A",
-            "x6a4hMyiwBo"
+            "0_NiW74SVbM?si=n1j7EokY6zOr9Ywn",
+            "JsT6TIBTFm0?si=t2K2RCMV3M8hBLCV",
+            "2lBo1qM5r8g?si=sxUwouc1c3wr2DsO",
+            "2kf6kjBaHbc?si=rHyMLr5ShVPqmkfk",
+            "UprAhvwAUTI?si=ZL8O8Ey6CsVCYzs",
+            "vdBvIaO6pMg?si=89SgA8CAJEMzNeqc",
+            "NeXin_oQDxo?si=N2QYTzNCybMGkivz",
+            "6qCYXlVPC1I?si=DnoZRDFAD4GfWhp0",
+            "pEZy_kAVIDc?si=2F8iK41l-m9Sk4hB",
+            "xWOTZPvWNHc?si=OKLzGpi4PBAKmM86"
         ],
 
         "Gym": [
-            "U0bhE67HuDY",
-            "ml6cT4AZdqI",
-            "2pLT-olgUJs",
-            "gC_L9qAHVJ8",
-            "ixkQaZXVQjs"
+            "U0bhE67HuDY?si=Virq040vAllE1ebI",
+            "ml6cT4AZdqI?si=iknXEn_Sbvx4e2qm",
+            "2pLT-olgUJs?si=Ic3BIU_eNtv0dtH7",
+            "gC_L9qAHVJ8?si=hgMAFQ1B0kWow53u",
+            "ixkQaZXVQjs?si=jL_bIQLB5OWnVCQO",
+            "XIYuxAeKSM0?si=6_JufFKiD31D91Qg",
+            "n_YW24F5HGc?si=p5v66YipohLlCc-i",
+            "u4rTBsWpoSg?si=IfcK6ZG9DMTFDE0_",
+            "1u-NBA2dzyI?si=EKcfzyvKLb_UZuJ2"
         ],
 
         "Swimming": [
-            "6Jv0KXQ1x4A",
-            "SX2N7gWmL6E",
-            "I5GaxSYLCSc",
-            "jQ4L9M8Y7s0"
+            "wrHL1igBhOg?si=Dmlx8JzLpVU3_lcG",
+            "AQy_c30lNjI?si=jjO1_vwt8Zga1DA3",
+            "AhvXzPbz1QA?si=CcKJKvon7GP5c_-o",
+            "6yP9k57OkpA?si=iOA1ncwRtPrtzU2h",
+            "PDfzOY9A2hE?si=EPR1QNE7ToUBcYSb",
+            "-hxlrbzRiXc?si=LGMB1fZP4Syu_VJN",
+            "d-t7rHtk2KI?si=8hRYyMe7RJj6Q2j0",
+            "x-CB6aD4S2s?si=znQptPRvLRDnxGj6",
+            "Y2nLYpmJni4?si=4aZ1c1Dgk1InRzAT",
+            "NcEEHoAYRMw?si=-K-iQkP2xFJ4ADKg"
         ],
 
         "Badminton": [
-            "pf8R8T0Xk3g",
-            "iD9Jq1K8G4Y",
-            "8Wb8L5Y8x8g",
-            "x6nEPn9YQ8Q"
+            "IB4cJxvfXtI?si=4L8kWUMMl2_peFZ6",
+            "k9-vZWgVH-Q?si=iPSFCLs4s33NqUr9",
+            "BQfXztjZcIA?si=z4janNW8hdOL1ZK5",
+            "rXLD8KQjGaU?si=UQI0BR64Cw7VCB-l",
+            "ImqAHrqGM7s?si=pDdNI9OOuQCrLAWD",
+            "vGD-VU0sAc8?si=DPjOt1lurQxG3-jZ",
+            "I1KRx2k_KpI?si=_mDQ5cY5Cv5VkYqH",
+            "cGOyt9ixE5c?si=N4c5lC3_E_hS2VIS",
+            "kzWpvuWeih0?si=Y0sH78MuwSsdWph6",
+            "KuwRpDASsIg?si=4FbhdBkUd_JR3A-5"
         ],
 
         "Cycling": [
-            "2eZ9XQ0mQ0k",
-            "U3xK1z0J8vM",
-            "Q4w2R8M9Y0s"
+            "gUapMtJIb1s?si=MGE_t26uX_kOkwxs",
+            "u0w6g_yU53Q?si=KkjkBnAP7LyJjaE1",
+            "ZiGE3-L4vyg?si=7yFBJjV4AcRJxS2n",
+            "gr2zt2UEJBY?si=PACjHAmGiB21KVIS",
+            "OsXh6wyUlR8?si=cAwBhuMbj1fJ1rdl",
+            "qxm3xZyoxzQ?si=uFJwBBbhZuEJdCUm",
+            "4VrwO-RdMds?si=0EIepgrIT_wvWpiG",
+            "dIO3vvW3l4A?si=GIx9fEzSIF03L5sk"
         ],
 
         "Running": [
-            "5Q4K8r9xQ2A",
-            "brFHyOtTwH4",
-            "sTANio_2E0Q",
-            "g_tea8ZNk5A"
+            "u5EMsxkfswA?si=YEJ24iWn3GYUg4iC",
+            "pxn34Lx3CYY?si=zBxYSrgGgETunmt8",
+            "LMtW9uB2Z1o?si=rF_qzF1RbdbOXmG_",
+            "N1zcps7nQaI?si=qw3XbwU-JacKKor_",
+            "RC1lrx1IhLw?si=pyGhmYq814yV7fy5",
+            "KUKTLUMSll0?si=YmUm98d8SPTMXDvI",
+            "_kGESn8ArrU?si=2u--cqWyfoG0lwWT",
+            "https://www.youtube.com/embed/GwKnceMTw9Y?si=Gi9uNcYZyARZowOF"
         ]
     }
 
