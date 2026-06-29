@@ -2,147 +2,275 @@
 <html>
 <head>
     <title>MySportLab - Recommendation</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='recommendation.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-<div class="navbar">
-    <a href="/">Home</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/plan">Plan</a>
-    <a href="/tutorial">Tutorial</a>
-    <a href="/chat">Chat</a>
-    <a href="/profile">Profile</a>
-</div>
 
-<div class="box">
-    <h1>Recommendation Sport</h1>
+<div class="sidebar">
 
-    <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
+    <div class="logo">
+        MySportLab
     </div>
 
-    <form method="POST">
-
-        <!-- Step 1 -->
-        <div class="step active">
-            <h2>What are you good at physically?</h2>
-
-            <label>
-                <input type="checkbox" name="physically" value="Running fast">
-                Running fast
-            </label>
-
-            <label>
-                <input type="checkbox" name="physically" value="Long stamina">
-                Long stamina
-            </label>
-
-            <label>
-                <input type="checkbox" name="physically" value="Strong upper body">
-                Strong upper body
-            </label>
-
-            <label>
-                <input type="checkbox" name="physically" value="Flexible body">
-                Flexible body
-            </label>
-
-            <label>
-                <input type="checkbox" name="physically" value="Good balance">
-                Good balance
-            </label>
-
-            <label>
-                <input type="checkbox" name="physically" value="Quick reflexes">
-                Quick reflexes
-            </label>
-
-            <div class="progress">
-                <div id="progress-bar"></div>
+    <div class="user-profile">
+        {% if profile.avatar %}
+        <img class="avatar" src="/{{ profile.avatar }}">
+        {% else %}
+   
+        <img class="avatar" src="{{ url_for('static', filename='default.png') }}">
+        {% endif %}
+        
+        <div class="user-info">
+            <h3>{{ user.username if user else 'Athlete' }}</h3>
+            <div class="status">
+                <i class="fa-solid fa-circle" style="font-size: 8px;"></i> Online
             </div>
-
-            <button type="button" onclick="nextStep()">Next</button>
         </div>
+    </div>
 
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/profile"><i class="fa-solid fa-user-gear"></i>Profile</a>
+        </li>
+        
+        <li>
+            <a href="/"><i class="fa-solid fa-house"></i>Home</a>
+        </li>
 
-        <!-- Step 2 -->
-        <div class="step">
-            <h2>Which activity do you enjoy the most?</h2>
+        <li>
+            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i>Dashboard</a>
+        </li>
 
-            <label>
-                <input type="checkbox" name="activity_type" value="Team activities">
-                Team activities
-            </label>
+        <li>
+            <a href="/plan"><i class="fa-solid fa-calendar-days"></i>Plan</a>
+        </li>
 
-            <label>
-                <input type="checkbox" name="activity_type" value="Solo activities">
-                Solo activities
-            </label>
+        <li>
+            <a href="/recommendation"><i class="fa-solid fa-person-running"></i>Recommendation Sports</a>
+        </li>
 
-            <label>
-                <input type="checkbox" name="activity_type" value="Indoor activities">
-                Indoor activities
-            </label>
+        <li>
+            <a href="/tutorial"><i class="fa-solid fa-clapperboard"></i>Tutorial</a>
+        </li>
+        
+        <li>
+            <a href="/calorie_tracker"><i class="fa-solid fa-utensils"></i>Calorie Tracker</a>
+        </li>
+    </ul>
+    
+    <div class="logout-btn">
+        <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    </div>
+    
+</div>
 
-            <label>
-                <input type="checkbox" name="activity_type" value="Outdoor activities">
-                Outdoor activities
-            </label>
+<div class="main-content">
 
-            <div class="progress">
-                <div id="progress-bar"></div>
+    <div class="top-bar">
+        <div class="page-title">
+            <i class="fa-solid fa-person-running"></i>Recommandation Sports
+        </div>
+    </div>
+
+    <div class="recommendation-quiz">
+        <form method="POST" id="form">
+            <div class="quiz-card">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="step active">
+                    <div class="quiz-header">
+                        <span class="quiz-step-badge">Step 1 of 4</span>
+                        <span class="quiz-subtitle">Recommendation Sport Analysis</span>
+                        <h1 class="quiz-question">What are you good at physically?</h1>
+                    </div>
+
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="checkbox" name="physically" value="Running fast" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Running fast</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="physically" value="Long stamina" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Long stamina</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="physically" value="Strong upper body" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Strong upper body</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="physically" value="Flexible body" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Flexible body</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="physically" value="Good balance" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Good balance</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="physically" value="Quick reflexes" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Quick reflexes</span>
+                        </label>
+                    </div>
+
+                    <p class="error-message"></p>
+
+                    <div class="quiz-actions">
+                        <button class="btn-back placeholder">Back</button>
+                        <button type="button" class="btn-next" onclick="nextStep()">Next <i class="fa-solid fa-arrow-right" style="font-size: 13px;"></i></button>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step">
+                    <div class="quiz-header">
+                        <span class="quiz-step-badge">Step 2 of 4</span>
+                        <span class="quiz-subtitle">Recommendation Sport Analysis</span>
+                        <h1 class="quiz-question">Which activity do you enjoy the most?</h1>
+                    </div>
+
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="checkbox" name="activity_type" value="Team activities" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Team activities</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="activity_type" value="Solo activities" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Solo activities</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="activity_type" value="Indoor activities" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Indoor activities</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="activity_type" value="Outdoor activities" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Outdoor activities</span>
+                        </label>
+                    </div>
+
+                    <p class="error-message"></p>
+
+                    <div class="quiz-actions">
+                        <button type="button" class="btn-back" onclick="prevStep()"><i class="fa-solid fa-arrow-left" style="font-size: 12px;"></i> Back</button>
+                        <button type="button" class="btn-next" onclick="nextStep()">Next <i class="fa-solid fa-arrow-right" style="font-size: 13px;"></i></button>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step">
+                    <div class="quiz-header">
+                        <span class="quiz-step-badge">Step 3 of 4</span>
+                        <span class="quiz-subtitle">Recommendation Sport Analysis</span>
+                        <h1 class="quiz-question">How active are you in daily life?</h1>
+                    </div>
+
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="radio" name="daily_activity" value="Very active" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Very active</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="radio" name="daily_activity" value="Moderately active" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Moderately active</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="radio" name="daily_activity" value="Slightly active" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Slightly active</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="radio" name="daily_activity" value="Rarely actives" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Rarely active</span>
+                        </label>
+                    </div>
+
+                    <p class="error-message"></p>
+
+                    <div class="quiz-actions">
+                        <button type="button" class="btn-back" onclick="prevStep()"><i class="fa-solid fa-arrow-left" style="font-size: 12px;"></i> Back</button>
+                        <button type="button" class="btn-next" onclick="nextStep()">Next <i class="fa-solid fa-arrow-right" style="font-size: 13px;"></i></button>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step">
+                    <div class="quiz-header">
+                        <span class="quiz-step-badge">Step 4 of 4</span>
+                        <span class="quiz-subtitle">Recommendation Sport Analysis</span>
+                        <h1 class="quiz-question">What is your goal?</h1>
+                    </div>
+
+                    <div class="options-grid">
+                        <label class="option-label">
+                            <input type="checkbox" name="goal" value="Lose weight" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Lose weight</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="goal" value="Build muscle" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Build muscle</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="goal" value="Improve stamina" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Improve stamina</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="goal" value="Reduce stress" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Reduce stress</span>
+                        </label>
+
+                        <label class="option-label">
+                            <input type="checkbox" name="goal" value="Have fun & socialize" class="option-checkbox">
+                            <span class="custom-checkbox"><i class="fa-solid fa-check"></i></span>
+                            <span class="option-text">Have fun & socialize</span>
+                        </label>
+                    </div>
+
+                    <p class="error-message"></p>
+
+                    <div class="quiz-actions">
+                        <button type="button" class="btn-back" onclick="prevStep()"><i class="fa-solid fa-arrow-left" style="font-size: 12px;"></i> Back</button>
+                        <button type="submit" class="btn-next">Get Recommendation <i class="fa-solid fa-check" style="font-size: 12px;"></i></button>
+                    </div>
+                </div>
+
             </div>
-
-            <button type="button" onclick="prevStep()">Back</button>
-            <button type="button" onclick="nextStep()">Next</button>
-        </div>
-
-
-        <!-- Step 3 -->
-        <div class="step">
-            <h2>How active are you in daily life?</h2>
-
-            <select name="daily_activity">
-                <option value="Very active">Very active</option>
-                <option value="Moderately active">Moderately active</option>
-                <option value="Slightly active">Slightly active</option>
-                <option value="Rarely active">Rarely active</option>
-            </select>
-
-            <br><br>
-            <div class="progress">
-                <div id="progress-bar"></div>
-            </div>
-
-            <button type="button" onclick="prevStep()">Back</button>
-            <button type="button" onclick="nextStep()">Next</button>
-        </div>
-
-
-        <!-- Step 4 -->
-        <div class="step">
-            <h2>What is your goal?</h2>
-
-            <select name="goal">
-                <option value="Lose weight">Lose weight</option>
-                <option value="Build muscle">Build muscle</option>
-                <option value="Improve stamina">Improve stamina</option>
-                <option value="Reduce stress">Reduce stress</option>
-                <option value="Have fun & socialize">Have fun & socialize</option>
-            </select>
-
-            <br><br>
-            <div class="progress">
-                <div id="progress-bar"></div>
-            </div>
-
-            <button type="button" onclick="prevStep()">Back</button>
-            <button type="submit">Get Recommendation</button>
-        </div>
-
-    </form>
-
+        </form> 
+    </div>
 </div>
 
 <script>
@@ -158,15 +286,43 @@ function showStep(index){
     steps.forEach(step => {
         step.classList.remove("active");
     });
-
     steps[index].classList.add("active");
-
     updateProgressBar();
 }
 
 function nextStep(){
 
-    if(currentStep < steps.length - 1){
+    const current = steps[currentStep];
+
+    const error =
+        current.querySelector(".error-message");
+
+    error.textContent = "";
+
+    const inputs =
+        current.querySelectorAll(
+            'input[type="checkbox"],input[type="radio"]'
+        );
+
+    let selected = false;
+
+    inputs.forEach(input=>{
+
+        if(input.checked){
+            selected = true;
+        }
+
+    });
+
+    if(!selected){
+
+        error.textContent =
+        "⚠ Please select at least one option.";
+
+        return;
+    }
+
+    if(currentStep < steps.length-1){
         currentStep++;
         showStep(currentStep);
     }
@@ -175,9 +331,7 @@ function nextStep(){
 function prevStep(){
 
     if(currentStep > 0){
-
         currentStep--;
-
         showStep(currentStep);
     }
 }
@@ -190,6 +344,19 @@ function updateProgressBar(){
 }
 
 showStep(currentStep);
+
+document.querySelectorAll(".option-checkbox").forEach(input=>{
+
+    input.addEventListener("change",function(){
+
+        const step =
+            this.closest(".step");
+
+        step.querySelector(".error-message").textContent="";
+
+    });
+
+});
 
 </script>
 

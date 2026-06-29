@@ -3,196 +3,107 @@
 <head>
     <title>Tutorial Library - MySportLab</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
-    <style>
-
-        body{
-            margin:0;
-            font-family:Arial;
-            background:#f4f4f4;
-        }
-
-        .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 40px;
-        background-color: #0539d3;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1001;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        .navbar a:hover {
-            background-color: #042ba8;
-        }
-
-        /* Sidebar - below navbar */
-        .sidebar {
-            width: 220px;
-            background: #111;
-            color: white;
-            height: 100vh;
-            padding: 20px;
-            padding-top: 80px;  
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-
-        .sidebar h2 {
-            margin-bottom: 30px;
-            font-size: 20px;
-        }
-
-        .category {
-            padding: 12px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            transition: 0.3s;
-        }
-
-        .category:hover {
-            background: #333;
-        }
-
-        .active {
-            background: #444;
-        }
-
-        /* Content - avoid navbar & sidebar */
-        .content {
-            margin-left: 260px;
-            margin-top: 70px;
-            padding: 20px;
-            min-height: calc(100vh - 70px);
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        /* Video Grid - 2x2 */
-        #videos {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .video-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.2s;
-        }
-
-        .video-card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* video iframe styles */
-        .video-card iframe {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border: none;
-        }
-
-        /* Responsive: Automatically switch to 1 column on small screens */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 180px;
-            }
-            .content {
-                margin-left: 200px;
-            }
-            #videos {
-                grid-template-columns: 1fr;
-            }
-            .navbar a {
-                padding: 5px 10px;
-                font-size: 14px;
-            }
-        }
-    </style>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='tutorial.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-<div class="container">
-    <div class="navbar">
+    <div class="sidebar">
 
-    <a href="/">Home</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/plan">Plan</a>
-    <a href="/tutorial">Tutorial</a>
-    <a href="/chat">Chat</a>
-    <a href="/profile">Profile</a>
+    <div class="logo">
+        MySportLab
+    </div>
+
+    <div class="user-profile">
+        {% if profile.avatar %}
+        <img class="avatar" src="/{{ profile.avatar }}">
+        {% else %}
+   
+        <img class="avatar" src="{{ url_for('static', filename='default.png') }}">
+        {% endif %}
+        
+        <div class="user-info">
+            <h3>{{ user.username if user else 'Athlete' }}</h3>
+            <div class="status">
+                <i class="fa-solid fa-circle" style="font-size: 8px;"></i> Online
+            </div>
+        </div>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/profile"><i class="fa-solid fa-user-gear"></i>Profile</a>
+        </li>
+        
+        <li>
+            <a href="/"><i class="fa-solid fa-house"></i>Home</a>
+        </li>
+
+        <li>
+            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i>Dashboard</a>
+        </li>
+
+        <li>
+            <a href="/plan"><i class="fa-solid fa-calendar-days"></i>Plan</a>
+        </li>
+
+        <li>
+            <a href="/recommendation"><i class="fa-solid fa-person-running"></i>Recommendation Sports</a>
+        </li>
+
+        <li>
+            <a href="/tutorial"><i class="fa-solid fa-clapperboard"></i>Tutorial</a>
+        </li>
+        
+        <li>
+            <a href="/calorie_tracker"><i class="fa-solid fa-utensils"></i>Calorie Tracker</a>
+        </li>
+    </ul>
+    
+    <div class="logout-btn">
+        <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    </div>
+    
+</div>
+
+<div class="main-content">
+
+    <div class="top-bar">
+        <div class="page-title">
+            <i class="fa-solid fa-clapperboard"></i>Tutorial
+        </div>
+    </div>
+
+    <div class="tutorial-content-hub">
+
+        <div class="sports-submenu">
+            <div class="submenu-title">
+                <span style="font-size: 28px;">&#127942;</span><h2>Sports Categories</h2>
+            </div>
+            <div class="sport-btn" onclick="showVideos('Football')">&#9917; Football</div>
+            <div class="sport-btn" onclick="showVideos('Basketball')">&#127936; Basketball</div>
+            <div class="sport-btn" onclick="showVideos('Gym')">&#127947; Gym</div>
+            <div class="sport-btn" onclick="showVideos('Swimming')">&#127946; Swimming</div>
+            <div class="sport-btn" onclick="showVideos('Badminton')">&#127992; Badminton</div>
+            <div class="sport-btn" onclick="showVideos('Cycling')">&#128692; Cycling</div>
+            <div class="sport-btn" onclick="showVideos('Running')">&#127939; Running</div>
+        </div> 
+        
+        <div class="tutorial-video">
+
+            <div class="category-header-title">
+                <h1 id="title">Football Tutorials</h1>
+            </div>
+
+            <div class="video-grid" id="videos">
+            </div> 
+
+        </div>
 
     </div>
 </div>
-<!-- Sidebar -->
 
-<div class="sidebar">
-
-    <h2>🏆 Sports</h2>
-
-    <div class="category active" onclick="showVideos('Football')">
-        ⚽ Football
-    </div>
-
-    <div class="category" onclick="showVideos('Basketball')">
-        🏀 Basketball
-    </div>
-
-    <div class="category" onclick="showVideos('Gym')">
-        🏋️ Gym
-    </div>
-
-    <div class="category" onclick="showVideos('Swimming')">
-        🏊 Swimming
-    </div>
-
-    <div class="category" onclick="showVideos('Badminton')">
-        🏸 Badminton
-    </div>
-
-    <div class="category" onclick="showVideos('Cycling')">
-        🚴 Cycling
-    </div>
-
-    <div class="category" onclick="showVideos('Running')">
-        🏃 Running
-    </div>
-
-</div>
-
-<!-- Content -->
-
-<div class="content">
-
-    <h1 id="title">
-        Football Tutorials
-    </h1>
-
-    <div id="videos"></div>
-
-</div>
 
 <script>
 
@@ -222,10 +133,11 @@ function showVideos(sport){
 
             <div class="video-card">
 
-                <iframe
-                    src="https://www.youtube.com/embed/${videoID}"
-                    allowfullscreen>
-                </iframe>
+                <div class="video-wrapper">
+
+                    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/${videoID}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                
+                </div>
 
             </div>
 
