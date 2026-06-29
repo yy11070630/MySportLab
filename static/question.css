@@ -1,3 +1,10 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 body {
     background-color: #f4f7fb; 
     display: flex;
@@ -281,4 +288,4 @@ body {
 .submit-btn:hover,
 .next-btn:hover {
     box-shadow: 0 10px 25px rgba(0, 70, 228, 0.45);
-}
+}	

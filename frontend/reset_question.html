@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Restart Questionnaire - MySportLab</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='reset_question.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>MySportLab - Reset Question</title>
 </head>
 
 <body>
-    <div class="card">
-        <div class="warning-icon">⚠️</div>
-        <h1>Reset Questionnaire</h1>
-        <div class="message">
-            You have already completed the questionnaire.<br>
-            Are you sure you want to reset?<br>
-            Your previous answers will be <strong>permanently deleted</strong>.
-        </div>
+    <div class="reset-question-portal-wrapper">
+        <h1 class="portal-logo">MySportLab</h1>
+        
+        <div class="card">
+            <div class="warning-icon-container">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
 
-        <div class="btn-group">
-            <a href="/dashboard" class="btn btn-secondary">Cancel</a>
-            <form action="/reset_question" method="post" style="display: inline;">
-                <button type="submit" class="btn btn-danger">Yes, Reset</button>
+            <h2 class="question-text">Reset Question</h2>
+
+            <p class="warning-description">
+                You have already completed the questionnaire.<br>
+                Are you sure you want to reset?<br>
+                Your previous answers will be <strong>permanently deleted</strong>.
+            </p>
+
+            <form action="/reset_question" method="post" style="width: 100%;">
+                <div class="btn-group">
+                    <a href="/dashboard" class="btn cancel-btn">Cancel</a>
+
+                    <button type="submit" class="btn reset-btn">Yes, Reset<i class="fa-solid fa-trash-can" style="font-size: 12px;"></i></button>
+                </div>
             </form>
         </div>
     </div>

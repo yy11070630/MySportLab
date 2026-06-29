@@ -1,48 +1,125 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Recommendation Result - MySportLab</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>MySportLab - Recommendation Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='recommendation_result.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-<div class="navbar">
-    <a href="/">Home</a>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/plan">Plan</a>
-    <a href="/tutorial">Tutorial</a>
-    <a href="/chat">Chat</a>
-    <a href="/profile">Profile</a>
+
+<div class="sidebar">
+
+    <div class="logo">
+        MySportLab
+    </div>
+
+    <div class="user-profile">
+        {% if profile.avatar %}
+        <img class="avatar" src="/{{ profile.avatar }}">
+        {% else %}
+   
+        <img class="avatar" src="{{ url_for('static', filename='default.png') }}">
+        {% endif %}
+        
+        <div class="user-info">
+            <h3>{{ user.username if user else 'Athlete' }}</h3>
+            <div class="status">
+                <i class="fa-solid fa-circle" style="font-size: 8px;"></i> Online
+            </div>
+        </div>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/profile"><i class="fa-solid fa-user-gear"></i>Profile</a>
+        </li>
+        
+        <li>
+            <a href="/"><i class="fa-solid fa-house"></i>Home</a>
+        </li>
+
+        <li>
+            <a href="/dashboard"><i class="fa-solid fa-chart-pie"></i>Dashboard</a>
+        </li>
+
+        <li>
+            <a href="/plan"><i class="fa-solid fa-calendar-days"></i>Plan</a>
+        </li>
+
+        <li>
+            <a href="/recommendation"><i class="fa-solid fa-person-running"></i>Recommendation Sports</a>
+        </li>
+
+        <li>
+            <a href="/tutorial"><i class="fa-solid fa-clapperboard"></i>Tutorial</a>
+        </li>
+        
+        <li>
+            <a href="/calorie_tracker"><i class="fa-solid fa-utensils"></i>Calorie Tracker</a>
+        </li>
+    </ul>
+    
+    <div class="logout-btn">
+        <a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    </div>
+    
 </div>
 
-<div class="box">
-    <h1>Recommended Sport: {{ sport }}</h1>
+<div class="main-content">
 
-    <h2>Match: {{ percentage }}%</h2>
+    <div class="top-bar">
+        <div class="page-title">
+            <i class="fa-solid fa-clapperboard"></i>Tutorial
+        </div>
+    </div>
 
-    <p>
-        Based on your physical ability, activity preference, and goal,
-        this sport is the best match for you.
-    </p>
+    <div class="content-view">
+        <div class="result-container">  
 
-    <h2>🎥 Recommended Tutorial</h2>
+            <div class="result-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
 
-    {% if video %}
-    <iframe width="560" height="315"
-        src="{{ video }}"
-        frameborder="0"
-        allowfullscreen>
-    </iframe>
-    {% endif %}
+            <h1 class="result-title">Recommended Sport: <span class="sport-name">{{ sport }}</span></h1>
 
-    <br><br>
+            <div class="match-badge">
+                <i class="fa-solid fa-fire-flame-curved"></i>
+                <span>Match: {{ percentage }}%</span>
+            </div>
 
-    <a href="/tutorial">
-        <button>Get More Tutorials →</button>
-    </a>
+            <p class="result-description">
+                Based on your physical ability, activity preference, and goal,
+                this sport is the best match for you.
+            </p>
 
-    <a href="/dashboard">Back</a>
+            <div class="tutorial-section">
+                <h2 class="tutorial-heading">
+                    <i class="fa-solid fa-circle-play"></i>
+                    <span>Recommended Tutorial</span>
+                </h2>
 
+                <div class="video-wrapper"> 
+                    {% if video %}
+                    <iframe width="560" height="315" src="{{ video }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <a href="/recommendation" class="btn-retake">
+                    <i class="fa-solid fa-rotate-right" style="font-size: 13px;"></i>
+                    <span>Retake Quiz</span>
+                </a>
+                    
+                <a href="/tutorial" class="btn-more">
+                    <span>Get More Tutorials</span>
+                    <i class="fa-solid fa-arrow-right" style="font-size: 13px;"></i>
+                </a>
+            </div>
+        </div>  
+    </div>
 </div>
 
 </body>
