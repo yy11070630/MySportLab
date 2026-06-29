@@ -361,6 +361,19 @@ font-weight:600;
 .profile-logout-btn:hover {
     background: #b52a37;
 }
+.recommendation-text{
+    font-size:inherit;
+    white-space:nowrap;
+}
+.sidebar-menu a{
+    white-space: nowrap;
+}
+
+.sidebar-menu a i{
+    width:20px;
+    text-align:center;
+    flex-shrink:0;
+}
 
 /* =========================================
    MOBILE RESPONSIVE
