@@ -451,22 +451,20 @@ def dashboard():
             else:
                 category = "Obese"
 
-    schedule = session.get('schedule', [])
-    if schedule:
-     
         weekday = datetime.now().strftime('%A')
-    
-        today_plan = next((item for item in schedule if item.get('day') == weekday), None)
-        if today_plan:
-            today_sport = today_plan.get('sport', 'Rest Day')
-            today_time = f"{today_plan.get('from', '--')} - {today_plan.get('to', '--')}"
+
+        today_schedule = Schedule.query.filter_by(
+            user_id=user.id,
+            day=weekday
+        ).all()
+
+        if today_schedule:
+            # Assuming today_schedule is a list, we take the first item
+            today_sport = today_schedule[0].sport
+            today_time = f"{today_schedule[0].start_time} - {today_schedule[0].end_time}"
         else:
-            today_sport = "Rest Day"
-            today_time = "No schedule"
-    else:
-  
-        today_sport = "No plan generated"
-        today_time = "Go to Planner →"
+            today_sport = "No Training Today"
+            today_time = "Go to Planner →"
 
     return render_template(
         'dashboard.html',
@@ -477,6 +475,7 @@ def dashboard():
         weight=profile.weight,
         today_sport=today_sport,
         today_time=today_time,
+        today_schedule=today_schedule,
         calorie_logs=calorie_logs,
         today=today,
         profile=profile
@@ -1183,9 +1182,9 @@ def plan():
     if request.method == 'POST':
 
         
-        sports = request.form.get('sports')
-        days = request.form.get('days')
-        if not sport:
+        sports = request.form.getlist('sports')
+        days = request.form.getlist('days')
+        if not sports:
             return render_template(
             'plan.html',
             user=user,
@@ -1193,7 +1192,7 @@ def plan():
             error="Please select at least one sport"
         )
 
-        if not day:
+        if not days:
             return render_template(
             'plan.html',
             user=user,
