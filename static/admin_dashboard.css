@@ -1,0 +1,176 @@
+/* =========================================
+   GLOBAL
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    background:linear-gradient(
+        135deg,
+        #f5f9ff,
+        #edf4ff
+    );
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+
+    padding:60px;
+}
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container{
+
+    width:900px;
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:40px;
+
+    box-shadow:
+    0 15px 40px rgba(0,70,228,.08);
+
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+h2{
+
+    text-align:center;
+
+    color:#1565ff;
+
+    font-size:36px;
+
+    margin-bottom:35px;
+
+    font-weight:700;
+
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    border:none;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 5px 15px rgba(0,0,0,.05);
+
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+th{
+
+    background:#1565ff;
+
+    color:white;
+
+    padding:18px;
+
+    font-size:16px;
+
+    font-weight:600;
+
+}
+
+/* =========================================
+   BODY
+========================================= */
+
+td{
+
+    padding:16px;
+
+    text-align:center;
+
+    color:#444;
+
+    font-size:15px;
+
+    border-bottom:1px solid #eef2f8;
+
+}
+
+tr:nth-child(even){
+
+    background:#f8fbff;
+
+}
+
+tr:hover{
+
+    background:#edf4ff;
+
+    transition:.25s;
+
+}
+
+/* =========================================
+   LOGOUT BUTTON
+========================================= */
+
+a{
+
+    display:block;
+
+    width:180px;
+
+    margin:35px auto 0;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    background:#1565ff;
+
+    color:white;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+a:hover{
+
+    background:#0046e4;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 10px 25px rgba(21,101,255,.25);
+
+}
