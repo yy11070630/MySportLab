@@ -358,3 +358,38 @@ button:hover{
     color:#666;
     font-size:14px;
 }
+
+.delete-btn{
+
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+
+    padding:8px 16px;
+
+    background:#fff5f5;
+
+    color:#e53e3e;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.delete-btn:hover{
+
+    background:#e53e3e;
+
+    color:white;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 6px 18px rgba(229,62,62,.25);
+
+}
