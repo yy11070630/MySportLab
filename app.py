@@ -3,7 +3,7 @@ from flask import Flask, request, render_template, redirect, session, url_for, j
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS                # Allow the frontend (on a different port) to call the backend API.
 from datetime import datetime, timedelta, date  # Processing time (Token expiration time)
-from database import db, User, UserProfile, Admin, Schedule, Food  # Import your database models
+from database import db, User, UserProfile, Admin, Schedule, Food, CalorieLog # Import your database models
 from functools import wraps
 import os                                  # File handling (for avatar uploads)
 import random                                
@@ -516,13 +516,12 @@ def calorie_tracker():
         else:
             category = "Obese"
 
-    today = str(date.today())
+    today = date.today()
 
-    if session.get('calorie_date') != today:
-        session['calorie_logs'] = []
-        session['calorie_date'] = today
-
-    calorie_logs = session.get('calorie_logs', [])
+    calorie_logs = CalorieLog.query.filter_by(
+        user_id=session['user_id'],
+        date=today
+    ).all()
 
     if request.method == 'POST':
 
@@ -542,20 +541,28 @@ def calorie_tracker():
                 food.calories * quantity
             )
 
-            calorie_logs.append({
+            new_log = CalorieLog(
 
-                'food': food.food_name,
+                user_id=session['user_id'],
 
-                'quantity': quantity,
+                food_name=food.food_name,
 
-                'calories': total_food_calories
+                quantity=quantity,
 
-            })
+                calories=total_food_calories,
 
-            session['calorie_logs'] = calorie_logs
+                date=today
+
+            )
+
+            db.session.add(new_log)
+
+            db.session.commit()
+
+            return redirect(url_for('calorie_tracker'))
 
     total_calories = sum(
-        item['calories']
+        item.calories
         for item in calorie_logs
     )
 
@@ -637,8 +644,10 @@ def delete_food(index):
         url_for('calorie_tracker')
     )
 
-@app.route('/load_foods')
-def load_foods():
+def init_food_database():
+
+    if Food.query.first():
+        return
 
     foods = [
 
@@ -754,9 +763,6 @@ def load_foods():
     db.session.commit()
 
     return "Foods Loaded"
-
-
-
 
 # ================================================
 # Upload folder (LAWRENCE)
@@ -1469,6 +1475,8 @@ if __name__ == '__main__':
             db.session.add(admin)
             db.session.commit()
             print("Admin created!")
+
+        init_food_database()
 
     app.run(debug=True)
 
