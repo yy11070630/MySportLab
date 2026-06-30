@@ -74,6 +74,44 @@ class Food(db.Model):
         return f"<Food {self.food_name}>"
 
 # =========================
+# Calorie Log Table (SHAO QI)
+# =========================
+class CalorieLog(db.Model):
+    __tablename__ = 'calorie_log'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False
+    )
+
+    food_name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    quantity = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    calories = db.Column(
+        db.Float,
+        nullable=False
+    )
+
+    date = db.Column(
+        db.Date,
+        nullable=False,
+        default=datetime.utcnow().date
+    )
+
+    def __repr__(self):
+        return f"<CalorieLog {self.food_name}>"
+
+# =========================
 # Admin Table (ALOYSIUS)
 # =========================
 class Admin(db.Model):
